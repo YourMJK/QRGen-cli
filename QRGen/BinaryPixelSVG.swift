@@ -40,7 +40,7 @@ class BinaryPixelSVG {
 			case .square:
 				contentBuilerString += "\t<rect x=\"\(x)\" y=\"\(y)\" width=\"1\" height=\"1\"/>\n"
 			case .circle:
-				contentBuilerString += "\t<circle cx=\"\(x).5\" cy=\"\(y).5\" radius=\"0.5\"/>\n"
+				contentBuilerString += "\t<circle cx=\"\(x).5\" cy=\"\(y).5\" r=\"0.5\"/>\n"
 		}
 	}
 	
