@@ -7,25 +7,41 @@
 
 import Foundation
 import CoreImage
+import ArgumentParser
 
 
-let correctionLevels = ["L","M","Q","H"]
+typealias ArgumentEnum = ExpressibleByArgument & CaseIterable
 
-guard CommandLine.arguments.count > 3 else {
-	exit(error: "Usage:  \(ProgramName) <input data file> (\(correctionLevels.joined(separator: " | "))) <output directory>", noPrefix: true)
+enum CorrectionLevel: String, ArgumentEnum {
+	case L, M, Q, H
 }
+
+struct Arguments: ParsableCommand {
+	static var configuration: CommandConfiguration {
+		CommandConfiguration(commandName: ProgramName)
+	}
+	
+	@Option(name: .shortAndLong, help: ArgumentHelp("The QR code's correction level (parity)", valueName: "correction level"))
+	var level: CorrectionLevel = .M
+	
+	@Argument(help: ArgumentHelp("File containing the QR code's data", valueName: "input data file"), transform: URL.init(fileURLWithPath:))
+	var inputFile: URL
+	
+	@Argument(help: ArgumentHelp("Directory to write output files to", valueName: "output directory"), transform: URL.init(fileURLWithPath:))
+	var outputDir: URL
+}
+
+// Parse arguments
+let arguments = Arguments.parseOrExit()
+let inputFile = arguments.inputFile
+let outputDir = arguments.outputDir
+let correctionLevel = arguments.level
 
 
 // Read data from file
-let inputFile = URL(fileURLWithPath: CommandLine.arguments[1])
 let inputData = try Data(contentsOf: inputFile)
 
-// Parse correction level argument
-let correctionLevel = CommandLine.arguments[2]
-guard correctionLevels.contains(correctionLevel) else { exit(error: "Invalid correction level \"\(correctionLevel)\"") }
-
 // Check output directory exists
-let outputDir = URL(fileURLWithPath: CommandLine.arguments[3])
 var isDirectory: ObjCBool = false
 guard FileManager.default.fileExists(atPath: outputDir.path, isDirectory: &isDirectory) && isDirectory.boolValue else {
 	exit(error: "No such output directory \"\(outputDir.path)\"")
@@ -35,7 +51,7 @@ guard FileManager.default.fileExists(atPath: outputDir.path, isDirectory: &isDir
 // Create CoreImage filter
 let filter = CIFilter(name: "CIQRCodeGenerator")!
 filter.setValue(inputData, forKey: "inputMessage")
-filter.setValue(correctionLevel, forKey: "inputCorrectionLevel")
+filter.setValue(correctionLevel.rawValue, forKey: "inputCorrectionLevel")
 
 guard let ciimage = filter.outputImage else {
 	exit(error: "Couldn't generate QR code")
