@@ -41,3 +41,25 @@ class BinaryPixelSVG {
 		}
 	}
 }
+
+
+extension BinaryPixelSVG {
+	struct Point: Comparable {
+		let x: Int
+		let y: Int
+		
+		static func < (lhs: Self, rhs: Self) -> Bool {
+			lhs.x < rhs.x && lhs.y < rhs.y
+		}
+	}
+	
+	func addPixel(at point: Point) {
+		addPixel(x: point.x, y: point.y)
+	}
+	
+	func addPixels(isPixel: (Point) -> Bool) {
+		addPixels { x, y in
+			isPixel(Point(x: x, y: y))
+		}
+	}
+}
