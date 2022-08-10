@@ -10,6 +10,7 @@
 		182F7F3728A176C800E72E4D /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F3628A176C800E72E4D /* main.swift */; };
 		182F7F3E28A1770F00E72E4D /* CommandLineUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F3D28A1770F00E72E4D /* CommandLineUtils.swift */; };
 		182F7F4228A18AA700E72E4D /* BinaryPixelSVG.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F4128A18AA700E72E4D /* BinaryPixelSVG.swift */; };
+		182F7F4B28A44C4000E72E4D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 182F7F4A28A44C4000E72E4D /* ArgumentParser */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -37,6 +38,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				182F7F4B28A44C4000E72E4D /* ArgumentParser in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,6 +88,9 @@
 			dependencies = (
 			);
 			name = QRGen;
+			packageProductDependencies = (
+				182F7F4A28A44C4000E72E4D /* ArgumentParser */,
+			);
 			productName = QRGen;
 			productReference = 182F7F3328A176C800E72E4D /* QRGen */;
 			productType = "com.apple.product-type.tool";
@@ -114,6 +119,9 @@
 				Base,
 			);
 			mainGroup = 182F7F2A28A176C700E72E4D;
+			packageReferences = (
+				182F7F4928A44C4000E72E4D /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
+			);
 			productRefGroup = 182F7F3428A176C800E72E4D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -263,7 +271,6 @@
 		};
 		182F7F3C28A176C800E72E4D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 182F7F4028A17EBE00E72E4D /* Config.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -293,6 +300,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		182F7F4928A44C4000E72E4D /* XCRemoteSwiftPackageReference "swift-argument-parser" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/YourMJK/swift-argument-parser";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		182F7F4A28A44C4000E72E4D /* ArgumentParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 182F7F4928A44C4000E72E4D /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
+			productName = ArgumentParser;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 182F7F2B28A176C700E72E4D /* Project object */;
 }

@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "swift-argument-parser",
+        "repositoryURL": "https://github.com/YourMJK/swift-argument-parser",
+        "state": {
+          "branch": "main",
+          "revision": "8f99744db5b9d7e22c69d286420e1caa685e831f",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
