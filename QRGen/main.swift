@@ -62,6 +62,6 @@ guard
 let outputFileSVG = outputFile.appendingPathExtension("svg")
 let svg = BinaryPixelSVG(width: cgimage.width, height: cgimage.height)
 svg.addPixels { x, y in
-	dataPointer[cgimage.bytesPerRow*y + x*4] == 0
+	dataPointer[cgimage.bytesPerRow*y + x*4] == 0 ? .square : nil
 }
 try svg.content.write(to: outputFileSVG, atomically: true, encoding: .utf8)
