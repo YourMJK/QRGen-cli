@@ -96,13 +96,13 @@ struct QRGen {
 		addSafeArea(x: svg.width-positionMarkerSize-1, y: 1, width: positionMarkerSize, height: positionMarkerSize)
 		
 		// Add pixels
-		let pixelStyle: BinaryPixelSVG.PixelStyle = {
+		let pixelShape: BinaryPixelSVG.PixelShape = {
 			switch style {
 				case .standard: return .square
 				case .dots: return .circle
 			}
 		}()
-		let pixelFormat = (pixelStyle, Double(pixelMargin)/100)
+		let pixelFormat = (pixelShape, Double(pixelMargin)/100)
 		svg.addPixels { point in
 			let isPixel = dataPointer[cgimage.bytesPerRow*point.y + point.x*4] == 0
 			guard isPixel else { return nil }

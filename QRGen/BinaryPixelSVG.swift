@@ -9,7 +9,7 @@ import Foundation
 
 class BinaryPixelSVG {
 	
-	enum PixelStyle {
+	enum PixelShape {
 		case square
 		case circle
 	}
@@ -48,10 +48,10 @@ class BinaryPixelSVG {
 		contentBuilerString + "</svg>\n"
 	}
 	
-	func addPixel(x: Int, y: Int, style: PixelStyle = .square, margin: Double = 0) {
+	func addPixel(x: Int, y: Int, shape: PixelShape = .square, margin: Double = 0) {
 		let margin = min(max(margin, 0), 1)
 		let scale = 1 - margin
-		switch style {
+		switch shape {
 			case .square:
 				let size = format(scale)
 				let xPos = format(Double(x) + margin/2)
@@ -63,11 +63,11 @@ class BinaryPixelSVG {
 		}
 	}
 	
-	func addPixels(isPixel: (_ x: Int, _ y: Int) -> (style: PixelStyle, margin: Double)?) {
+	func addPixels(isPixel: (_ x: Int, _ y: Int) -> (shape: PixelShape, margin: Double)?) {
 		for y in 0..<height {
 			for x in 0..<width {
 				if let pixelFormat = isPixel(x, y) {
-					addPixel(x: x, y: y, style: pixelFormat.style, margin: pixelFormat.margin)
+					addPixel(x: x, y: y, shape: pixelFormat.shape, margin: pixelFormat.margin)
 				}
 			}
 		}
@@ -93,11 +93,11 @@ extension BinaryPixelSVG {
 		static func >= (lhs: Point, rhs: Point) -> Bool { rhs <= lhs }
 	}
 	
-	func addPixel(at point: Point, style: PixelStyle = .square, margin: Double = 0) {
-		addPixel(x: point.x, y: point.y, style: style, margin: margin)
+	func addPixel(at point: Point, shape: PixelShape = .square, margin: Double = 0) {
+		addPixel(x: point.x, y: point.y, shape: shape, margin: margin)
 	}
 	
-	func addPixels(isPixel: (Point) -> (style: PixelStyle, margin: Double)?) {
+	func addPixels(isPixel: (Point) -> (shape: PixelShape, margin: Double)?) {
 		addPixels { x, y in
 			isPixel(Point(x: x, y: y))
 		}
