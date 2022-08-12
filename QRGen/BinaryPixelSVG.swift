@@ -61,9 +61,17 @@ extension BinaryPixelSVG {
 		let x: Int
 		let y: Int
 		
+		/// NOTE: Not a strict total order (like `Comparable` actually implies) but a strict partial order (no totality)
 		static func < (lhs: Self, rhs: Self) -> Bool {
-			lhs.x < rhs.x && lhs.y < rhs.y
+			(lhs <= rhs) && lhs != rhs
 		}
+		static func > (lhs: Point, rhs: Point) -> Bool { rhs < lhs }
+		
+		/// NOTE: Non-strict partial order (no totality)
+		static func <= (lhs: Point, rhs: Point) -> Bool {
+			lhs.x <= rhs.x && lhs.y <= rhs.y
+		}
+		static func >= (lhs: Point, rhs: Point) -> Bool { rhs <= lhs }
 	}
 	
 	func addPixel(at point: Point, style: PixelStyle = .square) {
