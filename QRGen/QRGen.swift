@@ -102,11 +102,11 @@ struct QRGen {
 				case .dots: return .circle
 			}
 		}()
-		let pixelFormat = (pixelShape, Double(pixelMargin)/100)
+		let pixelStyle = BinaryPixelSVG.PixelStyle(pixelShape, margin: Double(pixelMargin)/100)
 		svg.addPixels { point in
 			let isPixel = dataPointer[cgimage.bytesPerRow*point.y + point.x*4] == 0
 			guard isPixel else { return nil }
-			return isInSafeArea(point) ? (.square, 0) : pixelFormat
+			return isInSafeArea(point) ? .standard : pixelStyle
 		}
 		
 		// Write file

@@ -14,6 +14,18 @@ class BinaryPixelSVG {
 		case circle
 	}
 	
+	struct PixelStyle {
+		let shape: PixelShape
+		let margin: Double
+		
+		init(_ shape: PixelShape, margin: Double = 0) {
+			self.shape = shape
+			self.margin = min(max(margin, 0), 1)
+		}
+		
+		static let standard = Self(.square)
+	}
+	
 	
 	let width: Int
 	let height: Int
@@ -48,10 +60,10 @@ class BinaryPixelSVG {
 		contentBuilerString + "</svg>\n"
 	}
 	
-	func addPixel(x: Int, y: Int, shape: PixelShape = .square, margin: Double = 0) {
-		let margin = min(max(margin, 0), 1)
+	func addPixel(x: Int, y: Int, style: PixelStyle = .standard) {
+		let margin = style.margin
 		let scale = 1 - margin
-		switch shape {
+		switch style.shape {
 			case .square:
 				let size = format(scale)
 				let xPos = format(Double(x) + margin/2)
@@ -63,11 +75,11 @@ class BinaryPixelSVG {
 		}
 	}
 	
-	func addPixels(isPixel: (_ x: Int, _ y: Int) -> (shape: PixelShape, margin: Double)?) {
+	func addPixels(isPixel: (_ x: Int, _ y: Int) -> PixelStyle?) {
 		for y in 0..<height {
 			for x in 0..<width {
-				if let pixelFormat = isPixel(x, y) {
-					addPixel(x: x, y: y, shape: pixelFormat.shape, margin: pixelFormat.margin)
+				if let pixelStyle = isPixel(x, y) {
+					addPixel(x: x, y: y, style: pixelStyle)
 				}
 			}
 		}
@@ -93,11 +105,11 @@ extension BinaryPixelSVG {
 		static func >= (lhs: Point, rhs: Point) -> Bool { rhs <= lhs }
 	}
 	
-	func addPixel(at point: Point, shape: PixelShape = .square, margin: Double = 0) {
-		addPixel(x: point.x, y: point.y, shape: shape, margin: margin)
+	func addPixel(at point: Point, style: PixelStyle = .standard) {
+		addPixel(x: point.x, y: point.y, style: style)
 	}
 	
-	func addPixels(isPixel: (Point) -> (shape: PixelShape, margin: Double)?) {
+	func addPixels(isPixel: (Point) -> PixelStyle?) {
 		addPixels { x, y in
 			isPixel(Point(x: x, y: y))
 		}
