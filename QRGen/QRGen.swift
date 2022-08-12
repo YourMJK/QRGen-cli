@@ -49,19 +49,28 @@ struct QRGen {
 		}
 		
 		
-		// Write output files
+		// Prepare output files
 		let outputFileName = "\(inputFile.deletingPathExtension().lastPathComponent)_QR-\(correctionLevel)"
-		let outputFileNameStyled = outputFileName + (style != .standard ? "-\(style)" : "") + (pixelMargin != 0 ? "-m\(pixelMargin)" : "") + (ignoreSafeAreas ? "-all" : "")
+		var outputFileNameStyled = outputFileName
+		func addNameTag(_ tag: String, _ condition: Bool) {
+			guard condition else { return }
+			outputFileNameStyled += "-" + tag
+		}
+		addNameTag("\(style)", style != .standard)
+		addNameTag("m\(pixelMargin)", pixelMargin != 0)
+		addNameTag("all", ignoreSafeAreas)
+		
 		let outputFile = outputDir.appendingPathComponent(outputFileName)
 		let outputFileStyled = outputDir.appendingPathComponent(outputFileNameStyled)
 		let cicontext = CIContext()
 		
-		// PNG (1px scale)
+		
+		// Create PNG (1px scale)
 		if writePNG {
 			try createPNG(cicontext: cicontext, ciimage: ciimage, outputFile: outputFile)
 		}
 		
-		// SVG
+		// Create SVG
 		try createSVG(cicontext: cicontext, ciimage: ciimage, outputFile: outputFileStyled)
 	}
 	
