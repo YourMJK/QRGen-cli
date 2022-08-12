@@ -25,6 +25,9 @@ struct Arguments: ParsableCommand {
 	@Option(name: [.customShort("m"), .long], help: ArgumentHelp("Shrink the QR code's individual pixels by the specified percentage. Values >50 may produce unreadable results", valueName: "percentage"))
 	var pixelMargin: UInt = 0
 	
+	@Flag(name: [.customShort("a"), .long], help: "Apply styling to all pixels, including the QR code's position markers")
+	var styleAll = false
+	
 	@Flag(name: .shortAndLong, help: "Additionally to the SVG output file, also create an unstyled PNG file")
 	var png = false
 	
@@ -51,6 +54,7 @@ let qrGen = QRGen(
 	correctionLevel: arguments.level,
 	style: arguments.style,
 	pixelMargin: arguments.pixelMargin,
+	ignoreSafeAreas: arguments.styleAll,
 	writePNG: arguments.png
 )
 try qrGen.run()
