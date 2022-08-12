@@ -25,8 +25,8 @@ struct Arguments: ParsableCommand {
 	@Argument(help: ArgumentHelp("File containing the QR code's data", valueName: "input data file"), transform: URL.init(fileURLWithPath:))
 	var inputFile: URL
 	
-	@Argument(help: ArgumentHelp("Directory to write output files to", valueName: "output directory"), transform: URL.init(fileURLWithPath:))
-	var outputDir: URL
+	@Argument(help: ArgumentHelp("Directory to write output files to (default: directory of input file)", valueName: "output directory"))
+	var outputDirPath: String?
 }
 
 // Parse arguments
@@ -35,7 +35,7 @@ let arguments = Arguments.parseOrExit()
 // Generate QR
 let qrGen = QRGen(
 	inputFile: arguments.inputFile,
-	outputDir: arguments.outputDir,
+	outputDir: arguments.outputDirPath.map(URL.init(fileURLWithPath:)) ?? arguments.inputFile.deletingLastPathComponent(),
 	correctionLevel: arguments.level,
 	style: arguments.style
 )
