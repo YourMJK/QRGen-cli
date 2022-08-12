@@ -19,6 +19,9 @@ struct Arguments: ParsableCommand {
 	@Option(name: .shortAndLong, help: ArgumentHelp("The QR code's correction level (parity)", valueName: "correction level"))
 	var level: QRGen.CorrectionLevel = .M
 	
+	@Option(name: .shortAndLong, help: "The QR code's style")
+	var style: QRGen.Style = .standard
+	
 	@Argument(help: ArgumentHelp("File containing the QR code's data", valueName: "input data file"), transform: URL.init(fileURLWithPath:))
 	var inputFile: URL
 	
@@ -33,6 +36,7 @@ let arguments = Arguments.parseOrExit()
 let qrGen = QRGen(
 	inputFile: arguments.inputFile,
 	outputDir: arguments.outputDir,
-	correctionLevel: arguments.level
+	correctionLevel: arguments.level,
+	style: arguments.style
 )
 try qrGen.run()
