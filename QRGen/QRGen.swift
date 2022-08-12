@@ -14,6 +14,7 @@ struct QRGen {
 	let outputDir: URL
 	let correctionLevel: CorrectionLevel
 	let style: Style
+	let pixelMargin: UInt
 	let writePNG: Bool
 	
 	enum CorrectionLevel: String, ArgumentEnum {
@@ -49,7 +50,7 @@ struct QRGen {
 		
 		// Write output files
 		let outputFileName = "\(inputFile.deletingPathExtension().lastPathComponent)_QR-\(correctionLevel)"
-		let outputFileNameStyled = outputFileName + (style != .standard ? "-\(style)" : "")
+		let outputFileNameStyled = outputFileName + (style != .standard ? "-\(style)" : "") + (pixelMargin != 0 ? "-m\(pixelMargin)" : "")
 		let outputFile = outputDir.appendingPathComponent(outputFileName)
 		let outputFileStyled = outputDir.appendingPathComponent(outputFileNameStyled)
 		let cicontext = CIContext()
@@ -101,10 +102,11 @@ struct QRGen {
 				case .dots: return .circle
 			}
 		}()
+		let pixelFormat = (pixelStyle, Double(pixelMargin)/100)
 		svg.addPixels { point in
 			let isPixel = dataPointer[cgimage.bytesPerRow*point.y + point.x*4] == 0
 			guard isPixel else { return nil }
-			return isInSafeArea(point) ? .square : pixelStyle
+			return isInSafeArea(point) ? (.square, 0) : pixelFormat
 		}
 		
 		// Write file

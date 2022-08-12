@@ -22,6 +22,9 @@ struct Arguments: ParsableCommand {
 	@Option(name: .shortAndLong, help: "The QR code's style")
 	var style: QRGen.Style = .standard
 	
+	@Option(name: [.customShort("m"), .long], help: ArgumentHelp("Shrink the QR code's individual pixels by the specified percentage. Values >50 may produce unreadable results", valueName: "percentage"))
+	var pixelMargin: UInt = 0
+	
 	@Flag(name: .shortAndLong, help: "Additionally to the SVG output file, also create an unstyled PNG file")
 	var png = false
 	
@@ -30,6 +33,12 @@ struct Arguments: ParsableCommand {
 	
 	@Argument(help: ArgumentHelp("Directory to write output files to (default: directory of input file)", valueName: "output directory"))
 	var outputDirPath: String?
+	
+	mutating func validate() throws {
+		guard 0 <= pixelMargin && pixelMargin <= 100 else {
+			throw ValidationError("Please specify a 'pixel margin' percentage between 0 and 100.")
+		}
+	}
 }
 
 // Parse arguments
@@ -41,6 +50,7 @@ let qrGen = QRGen(
 	outputDir: arguments.outputDirPath.map(URL.init(fileURLWithPath:)) ?? arguments.inputFile.deletingLastPathComponent(),
 	correctionLevel: arguments.level,
 	style: arguments.style,
+	pixelMargin: arguments.pixelMargin,
 	writePNG: arguments.png
 )
 try qrGen.run()
