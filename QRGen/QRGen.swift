@@ -14,6 +14,7 @@ struct QRGen {
 	let outputDir: URL
 	let correctionLevel: CorrectionLevel
 	let style: Style
+	let writePNG: Bool
 	
 	enum CorrectionLevel: String, ArgumentEnum {
 		case L, M, Q, H
@@ -47,17 +48,19 @@ struct QRGen {
 		
 		
 		// Write output files
-		let outputFileName = "\(inputFile.deletingPathExtension().lastPathComponent)_QR-\(correctionLevel)" + (style != .standard ? "-\(style)" : "")
+		let outputFileName = "\(inputFile.deletingPathExtension().lastPathComponent)_QR-\(correctionLevel)"
+		let outputFileNameStyled = outputFileName + (style != .standard ? "-\(style)" : "")
 		let outputFile = outputDir.appendingPathComponent(outputFileName)
+		let outputFileStyled = outputDir.appendingPathComponent(outputFileNameStyled)
 		let cicontext = CIContext()
 		
 		// PNG (1px scale)
-		if style == .standard {
+		if writePNG {
 			try createPNG(cicontext: cicontext, ciimage: ciimage, outputFile: outputFile)
 		}
 		
 		// SVG
-		try createSVG(cicontext: cicontext, ciimage: ciimage, outputFile: outputFile)
+		try createSVG(cicontext: cicontext, ciimage: ciimage, outputFile: outputFileStyled)
 	}
 	
 	

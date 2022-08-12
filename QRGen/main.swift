@@ -22,6 +22,9 @@ struct Arguments: ParsableCommand {
 	@Option(name: .shortAndLong, help: "The QR code's style")
 	var style: QRGen.Style = .standard
 	
+	@Flag(name: .shortAndLong, help: "Additionally to the SVG output file, also create an unstyled PNG file")
+	var png = false
+	
 	@Argument(help: ArgumentHelp("File containing the QR code's data", valueName: "input data file"), transform: URL.init(fileURLWithPath:))
 	var inputFile: URL
 	
@@ -37,6 +40,7 @@ let qrGen = QRGen(
 	inputFile: arguments.inputFile,
 	outputDir: arguments.outputDirPath.map(URL.init(fileURLWithPath:)) ?? arguments.inputFile.deletingLastPathComponent(),
 	correctionLevel: arguments.level,
-	style: arguments.style
+	style: arguments.style,
+	writePNG: arguments.png
 )
 try qrGen.run()
