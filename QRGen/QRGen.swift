@@ -119,6 +119,9 @@ struct QRGen {
 	
 	
 	private static func safeAreas(for size: Int) -> [ClosedRange<BinaryPixelSVG.Point>] {
+		let (version, remainder) = (size - 19).quotientAndRemainder(dividingBy: 4)
+		precondition(remainder == 0 && version >= 1, "\(size) is not a valid QR code version size")
+		
 		var safeAreas = [ClosedRange<BinaryPixelSVG.Point>]()
 		func addSafeArea(x: Int, y: Int, width: Int, height: Int) {
 			safeAreas.append(BinaryPixelSVG.Point(x: x, y: y)...BinaryPixelSVG.Point(x: x+width-1, y: y+height-1))
@@ -132,6 +135,35 @@ struct QRGen {
 		addPositionMarker(x: 1, y: 1)
 		addPositionMarker(x: 1, y: size-positionMarkerSize-1)
 		addPositionMarker(x: size-positionMarkerSize-1, y: 1)
+		
+		// Alignment markers
+		if version > 1 {
+			let alignmentMarkerCount = (version / 7) + 1
+			let alignmentMarkerOffset = positionMarkerSize
+			let alignmentMarkerDistance = (size - alignmentMarkerOffset*2) - 1
+			let alignmentMarkerSpacing: Int = {  // (alignmentMarkerDistance / alignmentMarkerCount) rounded up to next even integer
+				let division = alignmentMarkerDistance.quotientAndRemainder(dividingBy: alignmentMarkerCount*2)
+				return (division.quotient + (division.remainder == 0 ? 0 : 1)) * 2
+			}()
+			let alignmentMarkerPositions: [Int] = (0...alignmentMarkerCount).map {
+				max(alignmentMarkerDistance - alignmentMarkerSpacing * $0, 0) + alignmentMarkerOffset
+			}.reversed()
+			
+			let alignmentMarkerSize = 5
+			func addAlignmentMarker(cx: Int, cy: Int) {
+				addSafeArea(x: cx-alignmentMarkerSize/2, y: cy-alignmentMarkerSize/2, width: alignmentMarkerSize, height: alignmentMarkerSize)
+			}
+			for j in 0...alignmentMarkerCount {
+				for i in 0...alignmentMarkerCount {
+					switch (i, j) {
+						case (0, 0): continue
+						case (0, alignmentMarkerCount): continue
+						case (alignmentMarkerCount, 0): continue
+						default: addAlignmentMarker(cx: alignmentMarkerPositions[i], cy: alignmentMarkerPositions[j])
+					}
+				}
+			}
+		}
 		
 		return safeAreas
 	}
