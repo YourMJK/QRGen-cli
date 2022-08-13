@@ -93,17 +93,10 @@ struct QRGen {
 		let svg = BinaryPixelSVG(width: cgimage.width, height: cgimage.height)
 		
 		// Create safe areas where not to apply styling
-		var safeAreas = [ClosedRange<BinaryPixelSVG.Point>]()
-		func addSafeArea(x: Int, y: Int, width: Int, height: Int) {
-			safeAreas.append(BinaryPixelSVG.Point(x: x, y: y)...BinaryPixelSVG.Point(x: x+width, y: y+height))
-		}
+		let safeAreas = Self.safeAreas(for: svg.width)
 		func isInSafeArea(_ point: BinaryPixelSVG.Point) -> Bool {
 			safeAreas.contains { $0.contains(point) }
 		}
-		let positionMarkerSize = 7
-		addSafeArea(x: 1, y: 1, width: positionMarkerSize, height: positionMarkerSize)
-		addSafeArea(x: 1, y: svg.height-positionMarkerSize-1, width: positionMarkerSize, height: positionMarkerSize)
-		addSafeArea(x: svg.width-positionMarkerSize-1, y: 1, width: positionMarkerSize, height: positionMarkerSize)
 		
 		// Add pixels
 		let pixelShape: BinaryPixelSVG.PixelShape = {
@@ -122,5 +115,24 @@ struct QRGen {
 		// Write file
 		let outputFileSVG = outputFile.appendingPathExtension("svg")
 		try svg.content.write(to: outputFileSVG, atomically: true, encoding: .utf8)
+	}
+	
+	
+	private static func safeAreas(for size: Int) -> [ClosedRange<BinaryPixelSVG.Point>] {
+		var safeAreas = [ClosedRange<BinaryPixelSVG.Point>]()
+		func addSafeArea(x: Int, y: Int, width: Int, height: Int) {
+			safeAreas.append(BinaryPixelSVG.Point(x: x, y: y)...BinaryPixelSVG.Point(x: x+width, y: y+height))
+		}
+		
+		// Position markers
+		let positionMarkerSize = 7
+		func addPositionMarker(x: Int, y: Int) {
+			addSafeArea(x: x, y: y, width: positionMarkerSize, height: positionMarkerSize)
+		}
+		addPositionMarker(x: 1, y: 1)
+		addPositionMarker(x: 1, y: size-positionMarkerSize-1)
+		addPositionMarker(x: size-positionMarkerSize-1, y: 1)
+		
+		return safeAreas
 	}
 }
