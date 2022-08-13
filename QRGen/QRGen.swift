@@ -121,7 +121,7 @@ struct QRGen {
 	private static func safeAreas(for size: Int) -> [ClosedRange<BinaryPixelSVG.Point>] {
 		var safeAreas = [ClosedRange<BinaryPixelSVG.Point>]()
 		func addSafeArea(x: Int, y: Int, width: Int, height: Int) {
-			safeAreas.append(BinaryPixelSVG.Point(x: x, y: y)...BinaryPixelSVG.Point(x: x+width, y: y+height))
+			safeAreas.append(BinaryPixelSVG.Point(x: x, y: y)...BinaryPixelSVG.Point(x: x+width-1, y: y+height-1))
 		}
 		
 		// Position markers
