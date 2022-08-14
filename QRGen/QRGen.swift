@@ -53,26 +53,9 @@ struct QRGen {
 		
 		
 		// Prepare output files
-		let outputFileNameSuffix = "QR-\(correctionLevel)"
-		var outputFileNameStyledSuffix = outputFileNameSuffix
-		func addNameTag(_ tag: String, _ condition: Bool) {
-			guard condition else { return }
-			outputFileNameStyledSuffix += "-" + tag
-		}
-		addNameTag("\(style)", style != .standard)
-		addNameTag("m\(pixelMargin)", pixelMargin != 0)
-		addNameTag("all", ignoreSafeAreas)
-		
-		let outputFileBaseName = outputFileName ?? {
-			let formatter = DateFormatter()
-			formatter.locale = Locale(identifier: "en_US_POSIX")
-			formatter.dateFormat = "yyyy-MM-dd_HH-mm-ss"
-			return formatter.string(from: Date())
-		}()
-		let outputFileName = "\(outputFileBaseName)_\(outputFileNameSuffix)"
-		let outputFileNameStyled = "\(outputFileBaseName)_\(outputFileNameStyledSuffix)"
-		let outputFile = outputDir.appendingPathComponent(outputFileName)
-		let outputFileStyled = outputDir.appendingPathComponent(outputFileNameStyled)
+		let outputFileName = generateOutputFileNames()
+		let outputFile = outputDir.appendingPathComponent(outputFileName.unstyled)
+		let outputFileStyled = outputDir.appendingPathComponent(outputFileName.styled)
 		let cicontext = CIContext()
 		
 		
@@ -83,6 +66,31 @@ struct QRGen {
 		
 		// Create SVG
 		try createSVG(cicontext: cicontext, ciimage: ciimage, outputFile: outputFileStyled)
+	}
+	
+	
+	private func generateOutputFileNames() -> (unstyled: String, styled: String) {
+		let suffix = "QR-\(correctionLevel)"
+		var suffixStyled = suffix
+		
+		func addNameTag(_ tag: String, _ condition: Bool) {
+			guard condition else { return }
+			suffixStyled += "-" + tag
+		}
+		addNameTag("\(style)", style != .standard)
+		addNameTag("m\(pixelMargin)", pixelMargin != 0)
+		addNameTag("all", ignoreSafeAreas)
+		
+		let baseName = outputFileName ?? {
+			let formatter = DateFormatter()
+			formatter.locale = Locale(identifier: "en_US_POSIX")
+			formatter.dateFormat = "yyyy-MM-dd_HH-mm-ss"
+			return formatter.string(from: Date())
+		}()
+		let name = "\(baseName)_\(suffix)"
+		let nameStyled = "\(baseName)_\(suffixStyled)"
+		
+		return (name, nameStyled)
 	}
 	
 	
