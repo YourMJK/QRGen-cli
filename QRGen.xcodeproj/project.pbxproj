@@ -13,6 +13,8 @@
 		182F7F4B28A44C4000E72E4D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 182F7F4A28A44C4000E72E4D /* ArgumentParser */; };
 		182F7F4D28A5531500E72E4D /* QRGen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F4C28A5531500E72E4D /* QRGen.swift */; };
 		182F7F5028A9533A00E72E4D /* QRCodeGenerator in Frameworks */ = {isa = PBXBuildFile; productRef = 182F7F4F28A9533A00E72E4D /* QRCodeGenerator */; };
+		182F7F5228A9A4F600E72E4D /* CIQRCodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F5128A9A4F600E72E4D /* CIQRCodeGenerator.swift */; };
+		182F7F5428A9A5D500E72E4D /* QRCodeGeneratorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F5328A9A5D500E72E4D /* QRCodeGeneratorProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,6 +36,8 @@
 		182F7F4028A17EBE00E72E4D /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		182F7F4128A18AA700E72E4D /* BinaryPixelSVG.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryPixelSVG.swift; sourceTree = "<group>"; };
 		182F7F4C28A5531500E72E4D /* QRGen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRGen.swift; sourceTree = "<group>"; };
+		182F7F5128A9A4F600E72E4D /* CIQRCodeGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CIQRCodeGenerator.swift; sourceTree = "<group>"; };
+		182F7F5328A9A5D500E72E4D /* QRCodeGeneratorProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeGeneratorProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +76,8 @@
 				182F7F3D28A1770F00E72E4D /* CommandLineUtils.swift */,
 				182F7F3628A176C800E72E4D /* main.swift */,
 				182F7F4C28A5531500E72E4D /* QRGen.swift */,
+				182F7F5128A9A4F600E72E4D /* CIQRCodeGenerator.swift */,
+				182F7F5328A9A5D500E72E4D /* QRCodeGeneratorProtocol.swift */,
 				182F7F4128A18AA700E72E4D /* BinaryPixelSVG.swift */,
 			);
 			path = QRGen;
@@ -146,7 +152,9 @@
 				182F7F3728A176C800E72E4D /* main.swift in Sources */,
 				182F7F3E28A1770F00E72E4D /* CommandLineUtils.swift in Sources */,
 				182F7F4228A18AA700E72E4D /* BinaryPixelSVG.swift in Sources */,
+				182F7F5228A9A4F600E72E4D /* CIQRCodeGenerator.swift in Sources */,
 				182F7F4D28A5531500E72E4D /* QRGen.swift in Sources */,
+				182F7F5428A9A5D500E72E4D /* QRCodeGeneratorProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

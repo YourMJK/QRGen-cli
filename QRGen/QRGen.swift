@@ -42,14 +42,9 @@ struct QRGen {
 		}
 		
 		
-		// Create CoreImage filter
-		let filter = CIFilter(name: "CIQRCodeGenerator")!
-		filter.setValue(inputData, forKey: "inputMessage")
-		filter.setValue(correctionLevel.rawValue, forKey: "inputCorrectionLevel")
-		
-		guard let ciimage = filter.outputImage else {
-			exit(error: "Couldn't generate QR code")
-		}
+		// Create basic QR Code
+		let generator = CIQRCodeGenerator(correctionLevel: correctionLevel.rawValue)
+		let ciimage = try generator.generate(for: inputData)
 		
 		
 		// Prepare output files
