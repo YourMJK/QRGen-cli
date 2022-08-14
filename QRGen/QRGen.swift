@@ -141,13 +141,14 @@ struct QRGen {
 			let alignmentMarkerCount = (version / 7) + 1
 			let alignmentMarkerOffset = positionMarkerSize
 			let alignmentMarkerDistance = (size - alignmentMarkerOffset*2) - 1
-			let alignmentMarkerSpacing: Int = {  // (alignmentMarkerDistance / alignmentMarkerCount) rounded up to next even integer
-				let division = alignmentMarkerDistance.quotientAndRemainder(dividingBy: alignmentMarkerCount*2)
-				return (division.quotient + (division.remainder == 0 ? 0 : 1)) * 2
+			let alignmentMarkerSpacing: Int = {
+				// Equal spacing rounded first to nearest integer, then to next even integer
+				let roundedEqualSpacing = lround(Double(alignmentMarkerDistance) / Double(alignmentMarkerCount))
+				return roundedEqualSpacing + (roundedEqualSpacing & 0b1)
 			}()
-			let alignmentMarkerPositions: [Int] = (0...alignmentMarkerCount).map {
-				max(alignmentMarkerDistance - alignmentMarkerSpacing * $0, 0) + alignmentMarkerOffset
-			}.reversed()
+			let alignmentMarkerPositions = ([0] + (1...alignmentMarkerCount).map {
+				alignmentMarkerDistance - alignmentMarkerSpacing * (alignmentMarkerCount - $0)
+			}).map { $0 + alignmentMarkerOffset }
 			
 			let alignmentMarkerSize = 5
 			func addAlignmentMarker(cx: Int, cy: Int) {
