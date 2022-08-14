@@ -34,8 +34,8 @@ struct Arguments: ParsableCommand {
 	@Argument(help: ArgumentHelp("File containing the QR code's data", valueName: "input data file"), transform: URL.init(fileURLWithPath:))
 	var inputFile: URL
 	
-	@Argument(help: ArgumentHelp("Directory to write output files to (default: directory of input file)", valueName: "output directory"))
-	var outputDirPath: String?
+	@Argument(help: ArgumentHelp("Directory to write output files to", valueName: "output directory"), transform: URL.init(fileURLWithPath:))
+	var outputDir: URL
 	
 	mutating func validate() throws {
 		guard 0 <= pixelMargin && pixelMargin <= 100 else {
@@ -49,12 +49,12 @@ let arguments = Arguments.parseOrExit()
 
 // Generate QR
 let qrGen = QRGen(
-	inputFile: arguments.inputFile,
-	outputDir: arguments.outputDirPath.map(URL.init(fileURLWithPath:)) ?? arguments.inputFile.deletingLastPathComponent(),
+	outputDir: arguments.outputDir,
+	outputFileName: arguments.inputFile.deletingPathExtension().lastPathComponent,
 	correctionLevel: arguments.level,
 	style: arguments.style,
 	pixelMargin: arguments.pixelMargin,
 	ignoreSafeAreas: arguments.styleAll,
 	writePNG: arguments.png
 )
-try qrGen.run()
+try qrGen.generate(withDataFrom: arguments.inputFile)

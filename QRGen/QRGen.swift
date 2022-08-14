@@ -10,8 +10,8 @@ import CoreImage
 
 
 struct QRGen {
-	let inputFile: URL
 	let outputDir: URL
+	let outputFileName: String?
 	let correctionLevel: CorrectionLevel
 	let style: Style
 	let pixelMargin: UInt
@@ -27,11 +27,14 @@ struct QRGen {
 	}
 	
 	
-	/// Generate QR code and write output files
-	func run() throws {
-		// Read data from file
+	/// Generate QR code with byte encoding from data in file and write output files
+	func generate(withDataFrom inputFile: URL) throws {
 		let inputData = try Data(contentsOf: inputFile)
-		
+		try generate(withData: inputData)
+	}
+	
+	/// Generate QR code with byte encoding from data and write output files
+	func generate(withData inputData: Data) throws {
 		// Check output directory exists
 		var isDirectory: ObjCBool = false
 		guard FileManager.default.fileExists(atPath: outputDir.path, isDirectory: &isDirectory) && isDirectory.boolValue else {
@@ -50,16 +53,24 @@ struct QRGen {
 		
 		
 		// Prepare output files
-		let outputFileName = "\(inputFile.deletingPathExtension().lastPathComponent)_QR-\(correctionLevel)"
-		var outputFileNameStyled = outputFileName
+		let outputFileNameSuffix = "QR-\(correctionLevel)"
+		var outputFileNameStyledSuffix = outputFileNameSuffix
 		func addNameTag(_ tag: String, _ condition: Bool) {
 			guard condition else { return }
-			outputFileNameStyled += "-" + tag
+			outputFileNameStyledSuffix += "-" + tag
 		}
 		addNameTag("\(style)", style != .standard)
 		addNameTag("m\(pixelMargin)", pixelMargin != 0)
 		addNameTag("all", ignoreSafeAreas)
 		
+		let outputFileBaseName = outputFileName ?? {
+			let formatter = DateFormatter()
+			formatter.locale = Locale(identifier: "en_US_POSIX")
+			formatter.dateFormat = "yyyy-MM-dd_HH-mm-ss"
+			return formatter.string(from: Date())
+		}()
+		let outputFileName = "\(outputFileBaseName)_\(outputFileNameSuffix)"
+		let outputFileNameStyled = "\(outputFileBaseName)_\(outputFileNameStyledSuffix)"
 		let outputFile = outputDir.appendingPathComponent(outputFileName)
 		let outputFileStyled = outputDir.appendingPathComponent(outputFileNameStyled)
 		let cicontext = CIContext()
