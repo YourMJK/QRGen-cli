@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "QRCodeGenerator",
+        "repositoryURL": "https://github.com/BlockchainCommons/QRCodeGenerator.git",
+        "state": {
+          "branch": "master",
+          "revision": "6ae33d4a611e9031413a61e8ba81fd8539f51e49",
+          "version": null
+        }
+      },
+      {
         "package": "swift-argument-parser",
         "repositoryURL": "https://github.com/YourMJK/swift-argument-parser",
         "state": {

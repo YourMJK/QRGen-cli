@@ -12,6 +12,7 @@
 		182F7F4228A18AA700E72E4D /* BinaryPixelSVG.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F4128A18AA700E72E4D /* BinaryPixelSVG.swift */; };
 		182F7F4B28A44C4000E72E4D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 182F7F4A28A44C4000E72E4D /* ArgumentParser */; };
 		182F7F4D28A5531500E72E4D /* QRGen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F4C28A5531500E72E4D /* QRGen.swift */; };
+		182F7F5028A9533A00E72E4D /* QRCodeGenerator in Frameworks */ = {isa = PBXBuildFile; productRef = 182F7F4F28A9533A00E72E4D /* QRCodeGenerator */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -40,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				182F7F5028A9533A00E72E4D /* QRCodeGenerator in Frameworks */,
 				182F7F4B28A44C4000E72E4D /* ArgumentParser in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -93,6 +95,7 @@
 			name = QRGen;
 			packageProductDependencies = (
 				182F7F4A28A44C4000E72E4D /* ArgumentParser */,
+				182F7F4F28A9533A00E72E4D /* QRCodeGenerator */,
 			);
 			productName = QRGen;
 			productReference = 182F7F3328A176C800E72E4D /* QRGen */;
@@ -124,6 +127,7 @@
 			mainGroup = 182F7F2A28A176C700E72E4D;
 			packageReferences = (
 				182F7F4928A44C4000E72E4D /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
+				182F7F4E28A9533900E72E4D /* XCRemoteSwiftPackageReference "QRCodeGenerator" */,
 			);
 			productRefGroup = 182F7F3428A176C800E72E4D /* Products */;
 			projectDirPath = "";
@@ -314,6 +318,14 @@
 				kind = branch;
 			};
 		};
+		182F7F4E28A9533900E72E4D /* XCRemoteSwiftPackageReference "QRCodeGenerator" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/BlockchainCommons/QRCodeGenerator.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -321,6 +333,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 182F7F4928A44C4000E72E4D /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
 			productName = ArgumentParser;
+		};
+		182F7F4F28A9533A00E72E4D /* QRCodeGenerator */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 182F7F4E28A9533900E72E4D /* XCRemoteSwiftPackageReference "QRCodeGenerator" */;
+			productName = QRCodeGenerator;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
