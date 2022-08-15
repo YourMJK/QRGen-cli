@@ -33,6 +33,13 @@ struct CIQRCodeGenerator: QRCodeGeneratorProtocol {
 		
 		return ciQRCode
 	}
+	
+	func generate(for text: String) throws -> CIQRCode {
+		guard let data = text.data(using: .isoLatin1) else {
+			throw Error.textEncoding
+		}
+		return try generate(for: data)
+	}
 }
 
 
@@ -41,12 +48,14 @@ extension CIQRCodeGenerator {
 		case unavailable
 		case unknownError
 		case bitmapData
+		case textEncoding
 		
 		var errorDescription: String? {
 			switch self {
 				case .unavailable: return "CoreImage filter \"CIQRCodeGenerator\" is not available"
 				case .unknownError: return "Couldn't generate QR code"
 				case .bitmapData: return "Couldn't read bitmap data"
+				case .textEncoding: return "Couldn't encode supplied text using Latin-1 encoding"
 			}
 		}
 	}

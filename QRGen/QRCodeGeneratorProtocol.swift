@@ -10,4 +10,7 @@ import Foundation
 
 protocol QRCodeGeneratorProtocol {
 	associatedtype Product
+	
+	func generate(for data: Data) throws -> Product
+	func generate(for text: String) throws -> Product
 }
