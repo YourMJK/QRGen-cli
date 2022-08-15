@@ -22,10 +22,10 @@ extension IntRect {
 	}
 	
 	init(point1: IntPoint, point2: IntPoint) {
-		let minX = min(point1.x, point2.x)
-		let minY = min(point1.y, point2.y)
-		let maxX = max(point1.x, point2.x)
-		let maxY = max(point1.y, point2.y)
+		let minX = Swift.min(point1.x, point2.x)
+		let minY = Swift.min(point1.y, point2.y)
+		let maxX = Swift.max(point1.x, point2.x)
+		let maxY = Swift.max(point1.y, point2.y)
 		self.origin = IntPoint(x: minX, y: minY)
 		self.size = IntSize(width: maxX-minX, height: maxY-minY)
 	}
@@ -71,17 +71,17 @@ extension IntRect {
 	}
 	
 	func union(_ r2: IntRect) -> IntRect {
-		let minX = min(self.minX, r2.minX)
-		let minY = min(self.minY, r2.minY)
-		let maxX = max(self.maxX, r2.maxX)
-		let maxY = max(self.maxY, r2.maxY)
+		let minX = Swift.min(self.minX, r2.minX)
+		let minY = Swift.min(self.minY, r2.minY)
+		let maxX = Swift.max(self.maxX, r2.maxX)
+		let maxY = Swift.max(self.maxY, r2.maxY)
 		return IntRect(origin: IntPoint(x: minX, y: minY), size: IntSize(width: maxX-minX, height: maxY-minY))
 	}
 	func intersection(_ r2: IntRect) -> IntRect {
-		let minX = max(self.minX, r2.minX)
-		let minY = max(self.minY, r2.minY)
-		let maxX = min(self.maxX, r2.maxX)
-		let maxY = min(self.maxY, r2.maxY)
+		let minX = Swift.max(self.minX, r2.minX)
+		let minY = Swift.max(self.minY, r2.minY)
+		let maxX = Swift.min(self.maxX, r2.maxX)
+		let maxY = Swift.min(self.maxY, r2.maxY)
 		let width = maxX-minX
 		let height = maxY-minY
 		if width < 0 || height < 0 { return .zero }
@@ -96,5 +96,58 @@ extension IntRect {
 	}
 	func intersects(_ rect2: IntRect) -> Bool {
 		!intersection(rect2).isEmpty
+	}
+}
+
+extension IntRect: RandomAccessCollection {
+	typealias Element = IntPoint
+	typealias Index = Int
+	
+	var startIndex: Int {
+		0
+	}
+	var endIndex: Int {
+		width * height
+	}
+	
+	subscript(index: Int) -> IntPoint {
+		get {
+			precondition(startIndex <= index && index < endIndex, "Index out of range")
+			let (j, i) = index.quotientAndRemainder(dividingBy: width)
+			return IntPoint(x: origin.x + i, y: origin.y + j)
+		}
+	}	
+}
+
+extension IntRect {
+	struct Iterator: IteratorProtocol {
+		typealias Element = IntRect.Element
+		
+		private let rangeX: Range<Int>
+		private let rangeY: Range<Int>
+		private var x: Int
+		private var y: Int
+		
+		init(_ rect: IntRect) {
+			self.rangeX = (rect.minX..<rect.maxX)
+			self.rangeY = (rect.minY..<rect.maxY)
+			self.x = rangeX.lowerBound
+			self.y = rangeY.lowerBound
+		}
+		
+		mutating func next() -> Element? {
+			if x >= rangeX.upperBound {
+				x = rangeX.lowerBound
+				y += 1
+			}
+			guard x < rangeX.upperBound, y < rangeY.upperBound else { return nil }
+			let point = IntPoint(x: x, y: y)
+			x += 1
+			return point
+		}
+	}
+	
+	func makeIterator() -> Iterator {
+		Iterator(self)
 	}
 }
