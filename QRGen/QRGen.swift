@@ -107,14 +107,11 @@ struct QRGen {
 		let border = 1
 		let size = cgimage.width
 		let sizeWithBorder = size + border*2
-		let contentStartCoordinate = border
-		let contentEndCoordinate = contentStartCoordinate + size - 1
-		let contentArea = BinaryPixelSVG.Point(x: contentStartCoordinate, y: contentStartCoordinate)...BinaryPixelSVG.Point(x: contentEndCoordinate, y: contentEndCoordinate)
-		let svg = BinaryPixelSVG(width: sizeWithBorder, height: sizeWithBorder)
+		let svg = BinaryPixelSVG(size: IntSize(width: sizeWithBorder, height: sizeWithBorder))
 		
 		// Create safe areas where not to apply styling
 		let safeAreas = Self.safeAreas(for: size)
-		func isInSafeArea(_ point: BinaryPixelSVG.Point) -> Bool {
+		func isInSafeArea(_ point: IntPoint) -> Bool {
 			safeAreas.contains { $0.contains(point) }
 		}
 		
@@ -126,12 +123,12 @@ struct QRGen {
 			}
 		}()
 		let pixelStyle = BinaryPixelSVG.PixelStyle(pixelShape, margin: Double(pixelMargin)/100)
-		svg.addPixels { point in
-			let qrPoint = BinaryPixelSVG.Point(x: point.x - border, y: point.y - border)
-			guard contentArea.contains(point) else { return nil }
-			let isPixel = dataPointer[cgimage.bytesPerRow*qrPoint.y + qrPoint.x*4] == 0
-			guard isPixel else { return nil }
-			return !ignoreSafeAreas && isInSafeArea(qrPoint) ? .standard : pixelStyle
+		IntRect(origin: .zero, size: IntSize(width: size, height: size)).forEach { point in
+			let isPixel = dataPointer[cgimage.bytesPerRow*point.y + point.x*4] == 0
+			guard isPixel else { return }
+			let pixelStyle = !ignoreSafeAreas && isInSafeArea(point) ? .standard : pixelStyle
+			let pointInImageCoordinates = point.offsetBy(dx: border, dy: border)
+			svg.addPixel(at: pointInImageCoordinates, style: pixelStyle)
 		}
 		
 		// Write file
@@ -140,13 +137,13 @@ struct QRGen {
 	}
 	
 	
-	private static func safeAreas(for size: Int) -> [ClosedRange<BinaryPixelSVG.Point>] {
+	private static func safeAreas(for size: Int) -> [IntRect] {
 		let (version, remainder) = (size - 17).quotientAndRemainder(dividingBy: 4)
 		precondition(remainder == 0 && version >= 1, "\(size) is not a valid QR code version size")
 		
-		var safeAreas = [ClosedRange<BinaryPixelSVG.Point>]()
+		var safeAreas = [IntRect]()
 		func addSafeArea(x: Int, y: Int, width: Int, height: Int) {
-			safeAreas.append(BinaryPixelSVG.Point(x: x, y: y)...BinaryPixelSVG.Point(x: x+width-1, y: y+height-1))
+			safeAreas.append(IntRect(x: x, y: y, width: width, height: height))
 		}
 		
 		// Position markers
