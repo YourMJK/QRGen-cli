@@ -17,7 +17,7 @@ struct Arguments: ParsableCommand {
 	}
 	
 	@Option(name: .shortAndLong, help: ArgumentHelp("The QR code's correction level (parity)", valueName: "correction level"))
-	var level: QRGen.CorrectionLevel = .M
+	var level: CorrectionLevel = .M
 	
 	@Option(name: .shortAndLong, help: "The QR code's style")
 	var style: QRGen.Style = .standard

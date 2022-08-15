@@ -18,9 +18,6 @@ struct QRGen {
 	let ignoreSafeAreas: Bool
 	let writePNG: Bool
 	
-	enum CorrectionLevel: String, ArgumentEnum {
-		case L, M, Q, H
-	}
 	enum Style: String, ArgumentEnum {
 		case standard
 		case dots
@@ -43,7 +40,7 @@ struct QRGen {
 		
 		
 		// Create basic QR Code
-		let generator = CIQRCodeGenerator(correctionLevel: correctionLevel.rawValue)
+		let generator = CIQRCodeGenerator(correctionLevel: correctionLevel)
 		let qrCode = try generator.generate(for: inputData)
 		
 		

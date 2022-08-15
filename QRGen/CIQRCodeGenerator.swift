@@ -13,14 +13,14 @@ import CoreImage
 struct CIQRCodeGenerator: QRCodeGeneratorProtocol {
 	typealias Product = CIQRCode
 	
-	let correctionLevel: String
+	let correctionLevel: CorrectionLevel
 	
 	func generate(for data: Data) throws -> CIQRCode {
 		guard let filter = CIFilter(name: "CIQRCodeGenerator") else {
 			throw Error.unavailable
 		}
 		filter.setValue(data, forKey: "inputMessage")
-		filter.setValue(correctionLevel, forKey: "inputCorrectionLevel")
+		filter.setValue(correctionLevel.rawValue, forKey: "inputCorrectionLevel")
 		
 		guard let ciimage = filter.outputImage else {
 			throw Error.unknownError
