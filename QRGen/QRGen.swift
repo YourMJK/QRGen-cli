@@ -104,10 +104,16 @@ struct QRGen {
 				exit(error: "Couldn't read bitmap data")
 		}
 		
-		let svg = BinaryPixelSVG(width: cgimage.width, height: cgimage.height)
+		let border = 1
+		let size = cgimage.width
+		let sizeWithBorder = size + border*2
+		let contentStartCoordinate = border
+		let contentEndCoordinate = contentStartCoordinate + size - 1
+		let contentArea = BinaryPixelSVG.Point(x: contentStartCoordinate, y: contentStartCoordinate)...BinaryPixelSVG.Point(x: contentEndCoordinate, y: contentEndCoordinate)
+		let svg = BinaryPixelSVG(width: sizeWithBorder, height: sizeWithBorder)
 		
 		// Create safe areas where not to apply styling
-		let safeAreas = Self.safeAreas(for: svg.width)
+		let safeAreas = Self.safeAreas(for: size)
 		func isInSafeArea(_ point: BinaryPixelSVG.Point) -> Bool {
 			safeAreas.contains { $0.contains(point) }
 		}
@@ -121,9 +127,11 @@ struct QRGen {
 		}()
 		let pixelStyle = BinaryPixelSVG.PixelStyle(pixelShape, margin: Double(pixelMargin)/100)
 		svg.addPixels { point in
-			let isPixel = dataPointer[cgimage.bytesPerRow*point.y + point.x*4] == 0
+			let qrPoint = BinaryPixelSVG.Point(x: point.x - border, y: point.y - border)
+			guard contentArea.contains(point) else { return nil }
+			let isPixel = dataPointer[cgimage.bytesPerRow*qrPoint.y + qrPoint.x*4] == 0
 			guard isPixel else { return nil }
-			return !ignoreSafeAreas && isInSafeArea(point) ? .standard : pixelStyle
+			return !ignoreSafeAreas && isInSafeArea(qrPoint) ? .standard : pixelStyle
 		}
 		
 		// Write file
@@ -133,7 +141,7 @@ struct QRGen {
 	
 	
 	private static func safeAreas(for size: Int) -> [ClosedRange<BinaryPixelSVG.Point>] {
-		let (version, remainder) = (size - 19).quotientAndRemainder(dividingBy: 4)
+		let (version, remainder) = (size - 17).quotientAndRemainder(dividingBy: 4)
 		precondition(remainder == 0 && version >= 1, "\(size) is not a valid QR code version size")
 		
 		var safeAreas = [ClosedRange<BinaryPixelSVG.Point>]()
@@ -146,14 +154,14 @@ struct QRGen {
 		func addPositionMarker(x: Int, y: Int) {
 			addSafeArea(x: x, y: y, width: positionMarkerSize, height: positionMarkerSize)
 		}
-		addPositionMarker(x: 1, y: 1)
-		addPositionMarker(x: 1, y: size-positionMarkerSize-1)
-		addPositionMarker(x: size-positionMarkerSize-1, y: 1)
+		addPositionMarker(x: 0, y: 0)
+		addPositionMarker(x: 0, y: size-positionMarkerSize)
+		addPositionMarker(x: size-positionMarkerSize, y: 0)
 		
 		// Alignment markers
 		if version > 1 {
 			let alignmentMarkerCount = (version / 7) + 1
-			let alignmentMarkerOffset = positionMarkerSize
+			let alignmentMarkerOffset = positionMarkerSize - 1
 			let alignmentMarkerDistance = (size - alignmentMarkerOffset*2) - 1
 			let alignmentMarkerSpacing: Int = {
 				// Equal spacing rounded first to nearest integer, then to next even integer
