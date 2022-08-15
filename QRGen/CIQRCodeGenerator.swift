@@ -46,14 +46,14 @@ struct CIQRCodeGenerator: QRCodeGeneratorProtocol {
 extension CIQRCodeGenerator {
 	enum Error: LocalizedError {
 		case unavailable
-		case unknownError
+		case unknown
 		case bitmapData
 		case textEncoding
 		
 		var errorDescription: String? {
 			switch self {
 				case .unavailable: return "CoreImage filter \"CIQRCodeGenerator\" is not available"
-				case .unknownError: return "Couldn't generate QR code"
+				case .unknown: return "Couldn't generate QR code"
 				case .bitmapData: return "Couldn't read bitmap data"
 				case .textEncoding: return "Couldn't encode supplied text using Latin-1 encoding"
 			}
