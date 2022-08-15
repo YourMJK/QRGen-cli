@@ -16,3 +16,9 @@ struct IntPoint: Equatable {
 extension IntPoint {
 	static let zero = Self(x: 0, y: 0)
 }
+
+extension IntPoint {
+	func offsetBy(dx: Int, dy: Int) -> IntPoint {
+		IntPoint(x: x+dx, y: y+dy)
+	}
+}

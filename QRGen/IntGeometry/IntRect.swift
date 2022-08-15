@@ -58,13 +58,13 @@ extension IntRect {
 		size.height
 	}
 	var isEmpty: Bool {
-		width == 0 || height == 0
+		size.isEmpty
 	}
 }
 
 extension IntRect {
 	func offsetBy(dx: Int, dy: Int) -> IntRect {
-		IntRect(origin: IntPoint(x: origin.x+dx, y: origin.y+dy), size: size)
+		IntRect(origin: origin.offsetBy(dx: dx, dy: dy), size: size)
 	}
 	func insetBy(dx: Int, dy: Int) -> IntRect {
 		IntRect(x: origin.x-dx, y: origin.y-dy, width: size.width-dx*2, height: size.height-dy*2)
