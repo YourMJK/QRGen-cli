@@ -44,23 +44,22 @@ struct QRGen {
 		
 		// Create basic QR Code
 		let generator = CIQRCodeGenerator(correctionLevel: correctionLevel.rawValue)
-		let ciimage = try generator.generate(for: inputData)
+		let qrCode = try generator.generate(for: inputData)
 		
 		
 		// Prepare output files
 		let outputFileName = generateOutputFileNames()
 		let outputFile = outputDir.appendingPathComponent(outputFileName.unstyled)
 		let outputFileStyled = outputDir.appendingPathComponent(outputFileName.styled)
-		let cicontext = CIContext()
 		
 		
 		// Create PNG (1px scale)
 		if writePNG {
-			try createPNG(cicontext: cicontext, ciimage: ciimage, outputFile: outputFile)
+			//try createPNG(cicontext: cicontext, ciimage: ciimage, outputFile: outputFile)
 		}
 		
 		// Create SVG
-		try createSVG(cicontext: cicontext, ciimage: ciimage, outputFile: outputFileStyled)
+		try createSVG(qrCode: qrCode, outputFile: outputFileStyled)
 	}
 	
 	
@@ -89,23 +88,15 @@ struct QRGen {
 	}
 	
 	
-	private func createPNG(cicontext: CIContext, ciimage: CIImage, outputFile: URL) throws {
-		let outputFilePNG = outputFile.appendingPathExtension("png")
-		try cicontext.writePNGRepresentation(of: ciimage, to: outputFilePNG, format: .RGBA8, colorSpace: ciimage.colorSpace!)
-	}
+//	private func createPNG(cicontext: CIContext, ciimage: CIImage, outputFile: URL) throws {
+//		let outputFilePNG = outputFile.appendingPathExtension("png")
+//		try cicontext.writePNGRepresentation(of: ciimage, to: outputFilePNG, format: .RGBA8, colorSpace: ciimage.colorSpace!)
+//	}
 	
 	
-	private func createSVG(cicontext: CIContext, ciimage: CIImage, outputFile: URL) throws {
-		guard
-			let cgimage = cicontext.createCGImage(ciimage, from: ciimage.extent, format: .RGBA8, colorSpace: ciimage.colorSpace!),
-			let cfdata = cgimage.dataProvider?.data,
-			let dataPointer = CFDataGetBytePtr(cfdata),
-			cgimage.bitsPerPixel == 32 else {
-				exit(error: "Couldn't read bitmap data")
-		}
-		
+	private func createSVG<T: QRCodeProtocol>(qrCode: T, outputFile: URL) throws {
 		let border = 1
-		let size = cgimage.width
+		let size = qrCode.size
 		let sizeWithBorder = size + border*2
 		let svg = BinaryPixelSVG(size: IntSize(width: sizeWithBorder, height: sizeWithBorder))
 		
@@ -124,7 +115,7 @@ struct QRGen {
 		}()
 		let pixelStyle = BinaryPixelSVG.PixelStyle(pixelShape, margin: Double(pixelMargin)/100)
 		IntRect(origin: .zero, size: IntSize(width: size, height: size)).forEach { point in
-			let isPixel = dataPointer[cgimage.bytesPerRow*point.y + point.x*4] == 0
+			let isPixel = qrCode[point.x, point.y]
 			guard isPixel else { return }
 			let pixelStyle = !ignoreSafeAreas && isInSafeArea(point) ? .standard : pixelStyle
 			let pointInImageCoordinates = point.offsetBy(dx: border, dy: border)

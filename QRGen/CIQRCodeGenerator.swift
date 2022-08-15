@@ -11,9 +11,11 @@ import CoreImage
 
 /// A wrapper for `CoreImage`'s built-in "CIQRCodeGenerator" `CIFilter`
 struct CIQRCodeGenerator: QRCodeGeneratorProtocol {
+	typealias Product = CIQRCode
+	
 	let correctionLevel: String
 	
-	func generate(for data: Data) throws -> CIImage {
+	func generate(for data: Data) throws -> CIQRCode {
 		guard let filter = CIFilter(name: "CIQRCodeGenerator") else {
 			throw Error.unavailable
 		}
@@ -25,8 +27,11 @@ struct CIQRCodeGenerator: QRCodeGeneratorProtocol {
 		}
 		let cropRect = ciimage.extent.insetBy(dx: 1, dy: 1)  // Remove empty 1px border around QR code
 		let croppedCIImage = ciimage.cropped(to: cropRect)
+		guard let ciQRCode = CIQRCode(ciimage: croppedCIImage) else {
+			throw Error.bitmapData
+		}
 		
-		return croppedCIImage
+		return ciQRCode
 	}
 }
 
@@ -35,11 +40,13 @@ extension CIQRCodeGenerator {
 	enum Error: LocalizedError {
 		case unavailable
 		case unknownError
+		case bitmapData
 		
 		var errorDescription: String? {
 			switch self {
 				case .unavailable: return "CoreImage filter \"CIQRCodeGenerator\" is not available"
 				case .unknownError: return "Couldn't generate QR code"
+				case .bitmapData: return "Couldn't read bitmap data"
 			}
 		}
 	}
