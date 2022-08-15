@@ -15,3 +15,10 @@ protocol QRCodeProtocol {
 	/// The modules of this QR Code (false = white, true = black).
 	subscript(_ x: Int, _ y: Int) -> Bool { get }
 }
+
+extension QRCodeProtocol {
+	/// The modules of this QR Code (false = white, true = black).
+	subscript(_ point: IntPoint) -> Bool { 
+		self[point.x, point.y]
+	}
+}

@@ -115,7 +115,7 @@ struct QRGen {
 		}()
 		let pixelStyle = BinaryPixelSVG.PixelStyle(pixelShape, margin: Double(pixelMargin)/100)
 		IntRect(origin: .zero, size: IntSize(width: size, height: size)).forEach { point in
-			let isPixel = qrCode[point.x, point.y]
+			let isPixel = qrCode[point]
 			guard isPixel else { return }
 			let pixelStyle = !ignoreSafeAreas && isInSafeArea(point) ? .standard : pixelStyle
 			let pointInImageCoordinates = point.offsetBy(dx: border, dy: border)
