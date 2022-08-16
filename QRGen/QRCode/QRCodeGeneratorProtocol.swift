@@ -11,7 +11,7 @@ import Foundation
 protocol QRCodeGeneratorProtocol {
 	associatedtype Product: QRCodeProtocol
 	
-	init(correctionLevel: CorrectionLevel)
+	init(correctionLevel: CorrectionLevel, minVersion: Int, maxVersion: Int)
 	
 	func generate(for data: Data) throws -> Product
 	func generate(for text: String, optimize: Bool) throws -> Product

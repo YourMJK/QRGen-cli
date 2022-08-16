@@ -19,6 +19,12 @@ struct Arguments: ParsableCommand {
 	@Option(name: .shortAndLong, help: ArgumentHelp("The QR code's correction level (parity)", valueName: "correction level"))
 	var level: CorrectionLevel = .M
 	
+	@Option(name: .customLong("min"), help: ArgumentHelp("Minimum QR code version (i.e. size) to use. Not supported with \"--coreimage\" flag", valueName: "version 1-40"))
+	var minVersion = 1
+	
+	@Option(name: .customLong("max"), help: ArgumentHelp("Maximum QR code version (i.e. size) to use. Error is thrown if the supplied input and correction level would produce a larger QR code", valueName: "version 1-40"))
+	var maxVersion = 40
+	
 	@Option(name: .shortAndLong, help: "The QR code's style")
 	var style: QRGen.Style = .standard
 	
@@ -44,6 +50,9 @@ struct Arguments: ParsableCommand {
 		guard 0 <= pixelMargin && pixelMargin <= 100 else {
 			throw ValidationError("Please specify a 'pixel margin' percentage between 0 and 100.")
 		}
+		guard 1 <= minVersion && minVersion <= 40, 1 <= maxVersion && maxVersion <= 40 else {
+			throw ValidationError("Please specify a 'version' value between 1 and 40.")
+		}
 	}
 }
 
@@ -56,6 +65,8 @@ let qrGen = QRGen(
 	outputFileName: arguments.inputFile.deletingPathExtension().lastPathComponent,
 	generatorType: arguments.coreImage ? .coreImage : .nayuki,
 	correctionLevel: arguments.level,
+	minVersion: arguments.minVersion,
+	maxVersion: arguments.maxVersion,
 	style: arguments.style,
 	pixelMargin: arguments.pixelMargin,
 	ignoreSafeAreas: arguments.styleAll,

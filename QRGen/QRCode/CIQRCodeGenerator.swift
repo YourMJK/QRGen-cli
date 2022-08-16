@@ -14,8 +14,15 @@ struct CIQRCodeGenerator: QRCodeGeneratorProtocol {
 	typealias Product = CIQRCode
 	
 	let correctionLevel: CorrectionLevel
+	let minVersion: Int
+	let maxVersion: Int
 	
 	func generate(for data: Data) throws -> CIQRCode {
+		precondition(1 <= maxVersion && maxVersion <= 40, "\(maxVersion) is not a valid QR code version")
+		guard minVersion == 1 else {
+			throw Error.unsupported(property: "minVersion")
+		}
+		
 		guard let filter = CIFilter(name: "CIQRCodeGenerator") else {
 			throw Error.unavailable
 		}
@@ -29,6 +36,9 @@ struct CIQRCodeGenerator: QRCodeGeneratorProtocol {
 		let croppedCIImage = ciimage.cropped(to: cropRect)
 		guard let ciQRCode = CIQRCode(ciimage: croppedCIImage) else {
 			throw Error.bitmapData
+		}
+		guard ciQRCode.version <= maxVersion else {
+			throw Error.maxVersionTooLow
 		}
 		
 		return ciQRCode
@@ -49,6 +59,8 @@ extension CIQRCodeGenerator {
 		case unknown
 		case bitmapData
 		case textEncoding
+		case maxVersionTooLow
+		case unsupported(property: String)
 		
 		var errorDescription: String? {
 			switch self {
@@ -56,6 +68,8 @@ extension CIQRCodeGenerator {
 				case .unknown: return "Couldn't generate QR code"
 				case .bitmapData: return "Couldn't read bitmap data"
 				case .textEncoding: return "Couldn't encode supplied text using Latin-1 encoding"
+				case .maxVersionTooLow: return "Couldn't encode input within a QR code that doesn't exceed the supplied maximum version"
+				case .unsupported(let property): return "Property \"\(property)\" is not supported by CoreImage QR code generator"
 			}
 		}
 	}

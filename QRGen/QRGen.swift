@@ -14,6 +14,8 @@ struct QRGen {
 	let outputFileName: String?
 	let generatorType: GeneratorType
 	let correctionLevel: CorrectionLevel
+	let minVersion: Int
+	let maxVersion: Int
 	let style: Style
 	let pixelMargin: UInt
 	let ignoreSafeAreas: Bool
@@ -51,7 +53,7 @@ struct QRGen {
 		// Generate QR code and write output files
 		func generate<T: QRCodeGeneratorProtocol>(using generatorType: T.Type) throws {
 			// Generate basic QR Code
-			let generator = T(correctionLevel: correctionLevel)
+			let generator = T(correctionLevel: correctionLevel, minVersion: minVersion, maxVersion: maxVersion)
 			let qrCode = try generator.generate(for: inputData)
 			
 			// Create PNG (1px scale)
