@@ -13,7 +13,7 @@ typealias ArgumentEnum = ExpressibleByArgument & CaseIterable
 
 struct Arguments: ParsableCommand {
 	static var configuration: CommandConfiguration {
-		CommandConfiguration(commandName: ProgramName)
+		CommandConfiguration(commandName: ProgramName, alwaysCompactUsageOptions: true)
 	}
 	
 	@Option(name: .shortAndLong, help: ArgumentHelp("The QR code's correction level (parity)", valueName: "correction level"))
