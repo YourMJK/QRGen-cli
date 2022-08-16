@@ -94,15 +94,8 @@
 				182F7F3D28A1770F00E72E4D /* CommandLineUtils.swift */,
 				182F7F3628A176C800E72E4D /* main.swift */,
 				182F7F4C28A5531500E72E4D /* QRGen.swift */,
-				182F7F6428AAF5A100E72E4D /* CorrectionLevel.swift */,
-				182F7F6028AACC0500E72E4D /* CIQRCode.swift */,
-				182F7F5128A9A4F600E72E4D /* CIQRCodeGenerator.swift */,
-				182F7F6628AAF70600E72E4D /* BCQRCode.swift */,
-				182F7F6828AB1F1200E72E4D /* BCQRCodeGenerator.swift */,
-				182F7F6A28AB24F800E72E4D /* BCCorrectionLevel.swift */,
-				182F7F6228AACCC500E72E4D /* QRCodeProtocol.swift */,
-				182F7F5328A9A5D500E72E4D /* QRCodeGeneratorProtocol.swift */,
 				182F7F4128A18AA700E72E4D /* BinaryPixelSVG.swift */,
+				182F7F6C28AB297300E72E4D /* QRCode */,
 				182F7F5B28A9DA5D00E72E4D /* IntGeometry */,
 			);
 			path = QRGen;
@@ -116,6 +109,21 @@
 				182F7F5728A9D67E00E72E4D /* IntRect.swift */,
 			);
 			path = IntGeometry;
+			sourceTree = "<group>";
+		};
+		182F7F6C28AB297300E72E4D /* QRCode */ = {
+			isa = PBXGroup;
+			children = (
+				182F7F6428AAF5A100E72E4D /* CorrectionLevel.swift */,
+				182F7F6028AACC0500E72E4D /* CIQRCode.swift */,
+				182F7F5128A9A4F600E72E4D /* CIQRCodeGenerator.swift */,
+				182F7F6628AAF70600E72E4D /* BCQRCode.swift */,
+				182F7F6828AB1F1200E72E4D /* BCQRCodeGenerator.swift */,
+				182F7F6A28AB24F800E72E4D /* BCCorrectionLevel.swift */,
+				182F7F6228AACCC500E72E4D /* QRCodeProtocol.swift */,
+				182F7F5328A9A5D500E72E4D /* QRCodeGeneratorProtocol.swift */,
+			);
+			path = QRCode;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
