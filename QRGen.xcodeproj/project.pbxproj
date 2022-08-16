@@ -21,6 +21,9 @@
 		182F7F6128AACC0500E72E4D /* CIQRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F6028AACC0500E72E4D /* CIQRCode.swift */; };
 		182F7F6328AACCC500E72E4D /* QRCodeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F6228AACCC500E72E4D /* QRCodeProtocol.swift */; };
 		182F7F6528AAF5A100E72E4D /* CorrectionLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F6428AAF5A100E72E4D /* CorrectionLevel.swift */; };
+		182F7F6728AAF70600E72E4D /* BCQRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F6628AAF70600E72E4D /* BCQRCode.swift */; };
+		182F7F6928AB1F1200E72E4D /* BCQRCodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F6828AB1F1200E72E4D /* BCQRCodeGenerator.swift */; };
+		182F7F6B28AB24F800E72E4D /* BCCorrectionLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F6A28AB24F800E72E4D /* BCCorrectionLevel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -50,6 +53,9 @@
 		182F7F6028AACC0500E72E4D /* CIQRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CIQRCode.swift; sourceTree = "<group>"; };
 		182F7F6228AACCC500E72E4D /* QRCodeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeProtocol.swift; sourceTree = "<group>"; };
 		182F7F6428AAF5A100E72E4D /* CorrectionLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrectionLevel.swift; sourceTree = "<group>"; };
+		182F7F6628AAF70600E72E4D /* BCQRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BCQRCode.swift; sourceTree = "<group>"; };
+		182F7F6828AB1F1200E72E4D /* BCQRCodeGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BCQRCodeGenerator.swift; sourceTree = "<group>"; };
+		182F7F6A28AB24F800E72E4D /* BCCorrectionLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BCCorrectionLevel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +97,9 @@
 				182F7F6428AAF5A100E72E4D /* CorrectionLevel.swift */,
 				182F7F6028AACC0500E72E4D /* CIQRCode.swift */,
 				182F7F5128A9A4F600E72E4D /* CIQRCodeGenerator.swift */,
+				182F7F6628AAF70600E72E4D /* BCQRCode.swift */,
+				182F7F6828AB1F1200E72E4D /* BCQRCodeGenerator.swift */,
+				182F7F6A28AB24F800E72E4D /* BCCorrectionLevel.swift */,
 				182F7F6228AACCC500E72E4D /* QRCodeProtocol.swift */,
 				182F7F5328A9A5D500E72E4D /* QRCodeGeneratorProtocol.swift */,
 				182F7F4128A18AA700E72E4D /* BinaryPixelSVG.swift */,
@@ -178,15 +187,18 @@
 				182F7F3728A176C800E72E4D /* main.swift in Sources */,
 				182F7F6128AACC0500E72E4D /* CIQRCode.swift in Sources */,
 				182F7F5828A9D67E00E72E4D /* IntRect.swift in Sources */,
+				182F7F6B28AB24F800E72E4D /* BCCorrectionLevel.swift in Sources */,
 				182F7F6328AACCC500E72E4D /* QRCodeProtocol.swift in Sources */,
 				182F7F5628A9D64000E72E4D /* IntPoint.swift in Sources */,
 				182F7F5A28A9D6E900E72E4D /* IntSize.swift in Sources */,
 				182F7F3E28A1770F00E72E4D /* CommandLineUtils.swift in Sources */,
 				182F7F4228A18AA700E72E4D /* BinaryPixelSVG.swift in Sources */,
 				182F7F6528AAF5A100E72E4D /* CorrectionLevel.swift in Sources */,
+				182F7F6728AAF70600E72E4D /* BCQRCode.swift in Sources */,
 				182F7F5228A9A4F600E72E4D /* CIQRCodeGenerator.swift in Sources */,
 				182F7F4D28A5531500E72E4D /* QRGen.swift in Sources */,
 				182F7F5428A9A5D500E72E4D /* QRCodeGeneratorProtocol.swift in Sources */,
+				182F7F6928AB1F1200E72E4D /* BCQRCodeGenerator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
