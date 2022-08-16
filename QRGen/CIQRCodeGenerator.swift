@@ -23,7 +23,7 @@ struct CIQRCodeGenerator: QRCodeGeneratorProtocol {
 		filter.setValue(correctionLevel.rawValue, forKey: "inputCorrectionLevel")
 		
 		guard let ciimage = filter.outputImage else {
-			throw Error.unknownError
+			throw Error.unknown
 		}
 		let cropRect = ciimage.extent.insetBy(dx: 1, dy: 1)  // Remove empty 1px border around QR code
 		let croppedCIImage = ciimage.cropped(to: cropRect)
