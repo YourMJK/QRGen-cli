@@ -31,6 +31,9 @@ struct Arguments: ParsableCommand {
 	@Flag(name: .shortAndLong, help: "Additionally to the SVG output file, also create an unstyled PNG file")
 	var png = false
 	
+	@Flag(name: .customLong("coreimage"), help: "Use built-in \"CIQRCodeGenerator\" filter from CoreImage to generate QR code instead of Nayuki implementation")
+	var coreImage = false
+	
 	@Argument(help: ArgumentHelp("File containing the QR code's data", valueName: "input data file"), transform: URL.init(fileURLWithPath:))
 	var inputFile: URL
 	
@@ -51,6 +54,7 @@ let arguments = Arguments.parseOrExit()
 let qrGen = QRGen(
 	outputDir: arguments.outputDir,
 	outputFileName: arguments.inputFile.deletingPathExtension().lastPathComponent,
+	generatorType: arguments.coreImage ? .coreImage : .nayuki,
 	correctionLevel: arguments.level,
 	style: arguments.style,
 	pixelMargin: arguments.pixelMargin,

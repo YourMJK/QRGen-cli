@@ -12,12 +12,17 @@ import CoreImage
 struct QRGen {
 	let outputDir: URL
 	let outputFileName: String?
+	let generatorType: GeneratorType
 	let correctionLevel: CorrectionLevel
 	let style: Style
 	let pixelMargin: UInt
 	let ignoreSafeAreas: Bool
 	let writePNG: Bool
 	
+	enum GeneratorType: String, ArgumentEnum {
+		case coreImage
+		case nayuki
+	}
 	enum Style: String, ArgumentEnum {
 		case standard
 		case dots
@@ -38,25 +43,29 @@ struct QRGen {
 			exit(error: "No such output directory \"\(outputDir.path)\"")
 		}
 		
-		
-		// Create basic QR Code
-		let generator = CIQRCodeGenerator(correctionLevel: correctionLevel)
-		let qrCode = try generator.generate(for: inputData)
-		
-		
 		// Prepare output files
 		let outputFileName = generateOutputFileNames()
 		let outputFile = outputDir.appendingPathComponent(outputFileName.unstyled)
 		let outputFileStyled = outputDir.appendingPathComponent(outputFileName.styled)
 		
-		
-		// Create PNG (1px scale)
-		if writePNG {
-			try createPNG(qrCode: qrCode, outputFile: outputFile)
+		// Generate QR code and write output files
+		func generate<T: QRCodeGeneratorProtocol>(using generatorType: T.Type) throws {
+			// Generate basic QR Code
+			let generator = T(correctionLevel: correctionLevel)
+			let qrCode = try generator.generate(for: inputData)
+			
+			// Create PNG (1px scale)
+			if writePNG {
+				try createPNG(qrCode: qrCode, outputFile: outputFile)
+			}
+			
+			// Create SVG
+			try createSVG(qrCode: qrCode, outputFile: outputFileStyled)
 		}
-		
-		// Create SVG
-		try createSVG(qrCode: qrCode, outputFile: outputFileStyled)
+		switch generatorType {
+			case .coreImage: try generate(using: CIQRCodeGenerator.self)
+			case .nayuki:    try generate(using: BCQRCodeGenerator.self)
+		}
 	}
 	
 	
@@ -71,6 +80,7 @@ struct QRGen {
 		addNameTag("\(style)", style != .standard)
 		addNameTag("m\(pixelMargin)", pixelMargin != 0)
 		addNameTag("all", ignoreSafeAreas)
+		addNameTag("CI", generatorType == .coreImage)
 		
 		let baseName = outputFileName ?? {
 			let formatter = DateFormatter()
