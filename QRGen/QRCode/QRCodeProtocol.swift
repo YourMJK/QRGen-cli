@@ -9,6 +9,9 @@ import Foundation
 
 
 protocol QRCodeProtocol {
+	/// The version number of this QR Code, which is between 1 and 40 (inclusive). This determines the size of this barcode.
+	var version: Int { get }
+	
 	/// The width and height of this QR Code, measured in modules, between 21 and 177 (inclusive). This is equal to version * 4 + 17.
 	var size: Int { get }
 	
@@ -20,6 +23,11 @@ protocol QRCodeProtocol {
 }
 
 extension QRCodeProtocol {
+	/// The version number of this QR Code, which is between 1 and 40 (inclusive). This determines the size of this barcode.
+	var version: Int {
+		Self.version(from: size)
+	}
+	
 	/// The modules of this QR Code (false = white, true = black).
 	subscript(_ point: IntPoint) -> Bool { 
 		self[point.x, point.y]
@@ -32,8 +40,7 @@ extension QRCodeProtocol {
 	}
 	
 	static func safeAreas(for size: Int) -> [IntRect] {
-		let (version, remainder) = (size - 17).quotientAndRemainder(dividingBy: 4)
-		precondition(remainder == 0 && version >= 1, "\(size) is not a valid QR code version size")
+		let version = version(from: size)
 		
 		var safeAreas = [IntRect]()
 		func addSafeArea(x: Int, y: Int, width: Int, height: Int) {
@@ -80,5 +87,11 @@ extension QRCodeProtocol {
 		}
 		
 		return safeAreas
+	}
+	
+	private static func version(from size: Int) -> Int {
+		let (version, remainder) = (size - 17).quotientAndRemainder(dividingBy: 4)
+		precondition(remainder == 0 && version >= 1, "\(size) is not a valid QR code version size")
+		return version
 	}
 }
