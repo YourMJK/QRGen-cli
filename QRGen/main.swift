@@ -50,7 +50,7 @@ struct Arguments: ParsableCommand {
 // Parse arguments
 let arguments = Arguments.parseOrExit()
 
-// Generate QR
+// Run program
 let qrGen = QRGen(
 	outputDir: arguments.outputDir,
 	outputFileName: arguments.inputFile.deletingPathExtension().lastPathComponent,
@@ -61,4 +61,9 @@ let qrGen = QRGen(
 	ignoreSafeAreas: arguments.styleAll,
 	writePNG: arguments.png
 )
-try qrGen.generate(withDataFrom: arguments.inputFile)
+do {
+	try qrGen.generate(withDataFrom: arguments.inputFile)
+}
+catch {
+	exit(error: error.localizedDescription)
+}
