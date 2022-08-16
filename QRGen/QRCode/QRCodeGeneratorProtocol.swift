@@ -9,8 +9,10 @@ import Foundation
 
 
 protocol QRCodeGeneratorProtocol {
-	associatedtype Product
+	associatedtype Product: QRCodeProtocol
+	
+	init(correctionLevel: CorrectionLevel)
 	
 	func generate(for data: Data) throws -> Product
-	func generate(for text: String) throws -> Product
+	func generate(for text: String, optimize: Bool) throws -> Product
 }

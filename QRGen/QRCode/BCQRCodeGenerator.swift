@@ -29,7 +29,7 @@ struct BCQRCodeGenerator: QRCodeGeneratorProtocol {
 		try QRCode.encode(data: Array(data), correctionLevel: correctionLevel)
 	}
 	
-	func generate(for text: String) throws -> QRCode {
-		try QRCode.encode(text: text, correctionLevel: correctionLevel, optimize: false)
+	func generate(for text: String, optimize: Bool = false) throws -> QRCode {
+		try QRCode.encode(text: text, correctionLevel: correctionLevel, optimize: optimize)
 	}
 }
