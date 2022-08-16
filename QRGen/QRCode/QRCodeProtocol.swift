@@ -12,6 +12,9 @@ protocol QRCodeProtocol {
 	/// The width and height of this QR Code, measured in modules, between 21 and 177 (inclusive). This is equal to version * 4 + 17.
 	var size: Int { get }
 	
+	/// The QR code drawn as a bitmap image where each module is exactly one black or white pixel (without a border).
+	var cgimage: CGImage { get }
+	
 	/// The modules of this QR Code (false = white, true = black).
 	subscript(_ x: Int, _ y: Int) -> Bool { get }
 }

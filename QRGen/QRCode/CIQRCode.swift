@@ -12,6 +12,7 @@ import CoreImage
 /// A wrapper for `CoreImage`'s built-in "CIQRCodeGenerator" `CIFilter`
 struct CIQRCode: QRCodeProtocol {
 	let ciimage: CIImage
+	let cgimage: CGImage
 	let size: Int
 	private let bytesPerRow: Int
 	private let imageData: CFData
@@ -27,6 +28,7 @@ struct CIQRCode: QRCodeProtocol {
 				return nil
 		}
 		self.ciimage = ciimage
+		self.cgimage = cgimage
 		self.size = cgimage.width
 		self.bytesPerRow = cgimage.bytesPerRow
 		self.imageData = cfdata
