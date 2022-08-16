@@ -52,7 +52,7 @@ struct QRGen {
 		
 		// Create PNG (1px scale)
 		if writePNG {
-			//try createPNG(cicontext: cicontext, ciimage: ciimage, outputFile: outputFile)
+			try createPNG(qrCode: qrCode, outputFile: outputFile)
 		}
 		
 		// Create SVG
@@ -85,10 +85,12 @@ struct QRGen {
 	}
 	
 	
-//	private func createPNG(cicontext: CIContext, ciimage: CIImage, outputFile: URL) throws {
-//		let outputFilePNG = outputFile.appendingPathExtension("png")
-//		try cicontext.writePNGRepresentation(of: ciimage, to: outputFilePNG, format: .RGBA8, colorSpace: ciimage.colorSpace!)
-//	}
+	private func createPNG<T: QRCodeProtocol>(qrCode: T, outputFile: URL) throws {
+		let outputFilePNG = outputFile.appendingPathExtension("png")
+		let cicontext = CIContext()
+		let ciimage = CIImage(cgImage: qrCode.cgimage)
+		try cicontext.writePNGRepresentation(of: ciimage, to: outputFilePNG, format: .RGBA8, colorSpace: ciimage.colorSpace!)
+	}
 	
 	
 	private func createSVG<T: QRCodeProtocol>(qrCode: T, outputFile: URL) throws {
