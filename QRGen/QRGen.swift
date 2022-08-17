@@ -10,8 +10,7 @@ import CoreImage
 
 
 struct QRGen {
-	let outputDir: URL
-	let outputFileName: String?
+	let outputURL: URL
 	let generatorType: GeneratorType
 	let correctionLevel: CorrectionLevel
 	let minVersion: Int
@@ -39,16 +38,14 @@ struct QRGen {
 	
 	/// Generate QR code with byte encoding from data and write output files
 	func generate(withData inputData: Data) throws {
+		// Prepare output files
+		let outputFile = generateOutputURLs()
+		
 		// Check output directory exists
 		var isDirectory: ObjCBool = false
-		guard FileManager.default.fileExists(atPath: outputDir.path, isDirectory: &isDirectory) && isDirectory.boolValue else {
-			exit(error: "No such output directory \"\(outputDir.path)\"")
+		guard FileManager.default.fileExists(atPath: outputFile.dir.path, isDirectory: &isDirectory) && isDirectory.boolValue else {
+			exit(error: "No such output directory \"\(outputFile.dir.path)\"")
 		}
-		
-		// Prepare output files
-		let outputFileName = generateOutputFileNames()
-		let outputFile = outputDir.appendingPathComponent(outputFileName.unstyled)
-		let outputFileStyled = outputDir.appendingPathComponent(outputFileName.styled)
 		
 		// Generate QR code and write output files
 		func generate<T: QRCodeGeneratorProtocol>(using generatorType: T.Type) throws {
@@ -58,11 +55,11 @@ struct QRGen {
 			
 			// Create PNG (1px scale)
 			if writePNG {
-				try createPNG(qrCode: qrCode, outputFile: outputFile)
+				try createPNG(qrCode: qrCode, outputFile: outputFile.unstyled)
 			}
 			
 			// Create SVG
-			try createSVG(qrCode: qrCode, outputFile: outputFileStyled)
+			try createSVG(qrCode: qrCode, outputFile: outputFile.styled)
 		}
 		switch generatorType {
 			case .coreImage: try generate(using: CIQRCodeGenerator.self)
@@ -71,7 +68,7 @@ struct QRGen {
 	}
 	
 	
-	private func generateOutputFileNames() -> (unstyled: String, styled: String) {
+	private func generateOutputURLs() -> (dir: URL, unstyled: URL, styled: URL) {
 		let suffix = "QR-\(correctionLevel)"
 		var suffixStyled = suffix
 		
@@ -84,7 +81,7 @@ struct QRGen {
 		addNameTag("all", ignoreSafeAreas)
 		addNameTag("CI", generatorType == .coreImage)
 		
-		let baseName = outputFileName ?? {
+		let baseName = !outputURL.hasDirectoryPath ? outputURL.lastPathComponent : {
 			let formatter = DateFormatter()
 			formatter.locale = Locale(identifier: "en_US_POSIX")
 			formatter.dateFormat = "yyyy-MM-dd_HH-mm-ss"
@@ -93,7 +90,11 @@ struct QRGen {
 		let name = "\(baseName)_\(suffix)"
 		let nameStyled = "\(baseName)_\(suffixStyled)"
 		
-		return (name, nameStyled)
+		let baseURL = outputURL.hasDirectoryPath ? outputURL : outputURL.deletingLastPathComponent()
+		let url = baseURL.appendingPathComponent(name)
+		let urlStyled = baseURL.appendingPathComponent(nameStyled)
+		
+		return (baseURL, url, urlStyled)
 	}
 	
 	

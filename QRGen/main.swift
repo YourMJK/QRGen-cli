@@ -40,11 +40,11 @@ struct Arguments: ParsableCommand {
 	@Flag(name: .customLong("coreimage"), help: "Use built-in \"CIQRCodeGenerator\" filter from CoreImage to generate QR code instead of Nayuki implementation")
 	var coreImage = false
 	
-	@Argument(help: ArgumentHelp("File containing the QR code's data", valueName: "input data file"), transform: URL.init(fileURLWithPath:))
+	@Argument(help: ArgumentHelp("Path to file containing the QR code's data", valueName: "input file path"), transform: URL.init(fileURLWithPath:))
 	var inputFile: URL
 	
-	@Argument(help: ArgumentHelp("Directory to write output files to", valueName: "output directory"), transform: URL.init(fileURLWithPath:))
-	var outputDir: URL
+	@Argument(help: ArgumentHelp("Directory or file path where to write output files to (default: directory of input file)", valueName: "output path"))
+	var outputPath: String?
 	
 	mutating func validate() throws {
 		guard 0 <= pixelMargin && pixelMargin <= 100 else {
@@ -59,10 +59,11 @@ struct Arguments: ParsableCommand {
 // Parse arguments
 let arguments = Arguments.parseOrExit()
 
+let outputURL = arguments.outputPath.map(URL.init(fileURLWithPath:))
+
 // Run program
 let qrGen = QRGen(
-	outputDir: arguments.outputDir,
-	outputFileName: arguments.inputFile.deletingPathExtension().lastPathComponent,
+	outputURL: outputURL ?? arguments.inputFile.deletingPathExtension(),
 	generatorType: arguments.coreImage ? .coreImage : .nayuki,
 	correctionLevel: arguments.level,
 	minVersion: arguments.minVersion,
