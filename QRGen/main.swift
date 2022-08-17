@@ -50,7 +50,7 @@ struct Arguments: ParsableCommand {
 	@Argument(help: ArgumentHelp("The type of input used in the <input> argument", valueName: "input type"))
 	var inputType: InputType
 	
-	@Argument(help: ArgumentHelp("The input used to build the QR code's data. For input type \"text\" specify a string, for \"bytes\" and \"textFile\" a file path", valueName: "input"))
+	@Argument(help: ArgumentHelp("The input used to build the QR code's data. For input type \"text\" specify a string, for \"bytes\" and \"textFile\" a file path or \"-\" for stdin", valueName: "input"))
 	var input: String
 	
 	@Argument(help: ArgumentHelp("Directory or file path where to write output files to (default: directory of input file or working directory)", valueName: "output path"))
@@ -72,7 +72,8 @@ let arguments = Arguments.parseOrExit()
 let (inputFile, inputText): (URL?, String?) = {
 	switch arguments.inputType {
 		case .bytes, .textFile:
-			return (URL(fileURLWithPath: arguments.input), nil)
+			let url = (arguments.input == "-") ? nil : URL(fileURLWithPath: arguments.input)
+			return (url, nil)
 		case .text:
 			return (nil, arguments.input)
 	}
@@ -100,9 +101,22 @@ do {
 	let input: QRGen.Input = try {
 		switch arguments.inputType {
 			case .bytes:
-				return .data(try Data(contentsOf: inputFile!))
+				guard let inputFile = inputFile else {
+					let stdinData = FileHandle.standardInput.availableData
+					return .data(stdinData)
+				}
+				return .data(try Data(contentsOf: inputFile))
+				
 			case .textFile:
-				return .text(try String(contentsOf: inputFile!))
+				guard let inputFile = inputFile else {
+					let stdinData = FileHandle.standardInput.availableData
+					guard let stdinText = String(data: stdinData, encoding: .utf8) else {
+						exit(error: "Couldn't decode data from stdin as UTF-8 text")
+					}
+					return .text(stdinText)
+				}
+				return .text(try String(contentsOf: inputFile))
+				
 			case .text:
 				return .text(inputText!)
 		}
