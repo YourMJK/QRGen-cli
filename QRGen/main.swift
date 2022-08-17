@@ -11,6 +11,13 @@ import ArgumentParser
 
 typealias ArgumentEnum = ExpressibleByArgument & CaseIterable
 
+enum InputType: String, ArgumentEnum {
+	case bytes
+	case text
+	case textFile
+}
+
+
 struct Arguments: ParsableCommand {
 	static var configuration: CommandConfiguration {
 		CommandConfiguration(commandName: ProgramName, alwaysCompactUsageOptions: true)
@@ -40,10 +47,13 @@ struct Arguments: ParsableCommand {
 	@Flag(name: .customLong("coreimage"), help: "Use built-in \"CIQRCodeGenerator\" filter from CoreImage to generate QR code instead of Nayuki implementation")
 	var coreImage = false
 	
-	@Argument(help: ArgumentHelp("Path to file containing the QR code's data", valueName: "input file path"), transform: URL.init(fileURLWithPath:))
-	var inputFile: URL
+	@Argument(help: ArgumentHelp("The type of input used in the <input> argument", valueName: "input type"))
+	var inputType: InputType
 	
-	@Argument(help: ArgumentHelp("Directory or file path where to write output files to (default: directory of input file)", valueName: "output path"))
+	@Argument(help: ArgumentHelp("The input used to build the QR code's data. For input type \"text\" specify a string, for \"bytes\" and \"textFile\" a file path", valueName: "input"))
+	var input: String
+	
+	@Argument(help: ArgumentHelp("Directory or file path where to write output files to (default: directory of input file or working directory)", valueName: "output path"))
 	var outputPath: String?
 	
 	mutating func validate() throws {
@@ -59,11 +69,23 @@ struct Arguments: ParsableCommand {
 // Parse arguments
 let arguments = Arguments.parseOrExit()
 
-let outputURL = arguments.outputPath.map(URL.init(fileURLWithPath:))
+let (inputFile, inputText): (URL?, String?) = {
+	switch arguments.inputType {
+		case .bytes, .textFile:
+			return (URL(fileURLWithPath: arguments.input), nil)
+		case .text:
+			return (nil, arguments.input)
+	}
+}()
+let outputURL =
+	arguments.outputPath.map(URL.init(fileURLWithPath:)) ??
+	inputFile?.deletingPathExtension() ??
+	URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+
 
 // Run program
 let qrGen = QRGen(
-	outputURL: outputURL ?? arguments.inputFile.deletingPathExtension(),
+	outputURL: outputURL,
 	generatorType: arguments.coreImage ? .coreImage : .nayuki,
 	correctionLevel: arguments.level,
 	minVersion: arguments.minVersion,
@@ -73,9 +95,19 @@ let qrGen = QRGen(
 	ignoreSafeAreas: arguments.styleAll,
 	writePNG: arguments.png
 )
+
 do {
-	let data = try Data(contentsOf: arguments.inputFile)
-	try qrGen.generate(with: .data(data))
+	let input: QRGen.Input = try {
+		switch arguments.inputType {
+			case .bytes:
+				return .data(try Data(contentsOf: inputFile!))
+			case .textFile:
+				return .text(try String(contentsOf: inputFile!))
+			case .text:
+				return .text(inputText!)
+		}
+	}()
+	try qrGen.generate(with: input)
 }
 catch {
 	exit(error: error.localizedDescription)
