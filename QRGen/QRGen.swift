@@ -20,6 +20,10 @@ struct QRGen {
 	let ignoreSafeAreas: Bool
 	let writePNG: Bool
 	
+	enum Input {
+		case data(Data)
+		case text(String)
+	}
 	enum GeneratorType: String, ArgumentEnum {
 		case coreImage
 		case nayuki
@@ -30,14 +34,8 @@ struct QRGen {
 	}
 	
 	
-	/// Generate QR code with byte encoding from data in file and write output files
-	func generate(withDataFrom inputFile: URL) throws {
-		let inputData = try Data(contentsOf: inputFile)
-		try generate(withData: inputData)
-	}
-	
 	/// Generate QR code with byte encoding from data and write output files
-	func generate(withData inputData: Data) throws {
+	func generate(with input: Input) throws {
 		// Prepare output files
 		let outputFile = generateOutputURLs()
 		
@@ -51,7 +49,14 @@ struct QRGen {
 		func generate<T: QRCodeGeneratorProtocol>(using generatorType: T.Type) throws {
 			// Generate basic QR Code
 			let generator = T(correctionLevel: correctionLevel, minVersion: minVersion, maxVersion: maxVersion)
-			let qrCode = try generator.generate(for: inputData)
+			let qrCode: T.Product = try {
+				switch input {
+					case .data(let data):
+						return try generator.generate(for: data)
+					case .text(let string):
+						return try generator.generate(for: string, optimize: false)
+				}
+			}()
 			
 			// Create PNG (1px scale)
 			if writePNG {

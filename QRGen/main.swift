@@ -74,7 +74,8 @@ let qrGen = QRGen(
 	writePNG: arguments.png
 )
 do {
-	try qrGen.generate(withDataFrom: arguments.inputFile)
+	let data = try Data(contentsOf: arguments.inputFile)
+	try qrGen.generate(with: .data(data))
 }
 catch {
 	exit(error: error.localizedDescription)
