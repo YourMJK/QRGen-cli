@@ -18,11 +18,7 @@ enum InputType: String, ArgumentEnum {
 }
 
 
-struct Arguments: ParsableCommand {
-	static var configuration: CommandConfiguration {
-		CommandConfiguration(commandName: ProgramName, alwaysCompactUsageOptions: true)
-	}
-	
+struct Options: ParsableCommand {
 	@Option(name: .shortAndLong, help: ArgumentHelp("The QR code's correction level (parity)", valueName: "correction level"))
 	var level: CorrectionLevel = .M
 	
@@ -47,15 +43,6 @@ struct Arguments: ParsableCommand {
 	@Flag(name: .customLong("coreimage"), help: "Use built-in \"CIQRCodeGenerator\" filter from CoreImage to generate QR code instead of Nayuki implementation")
 	var coreImage = false
 	
-	@Argument(help: ArgumentHelp("The type of input used in the <input> argument", valueName: "input type"))
-	var inputType: InputType
-	
-	@Argument(help: ArgumentHelp("The input used to build the QR code's data. For input type \"text\" specify a string, for \"bytes\" and \"textFile\" a file path or \"-\" for stdin", valueName: "input"))
-	var input: String
-	
-	@Argument(help: ArgumentHelp("Directory or file path where to write output files to (default: directory of input file or working directory)", valueName: "output path"))
-	var outputPath: String?
-	
 	mutating func validate() throws {
 		guard 0 <= pixelMargin && pixelMargin <= 100 else {
 			throw ValidationError("Please specify a 'pixel margin' percentage between 0 and 100.")
@@ -64,6 +51,24 @@ struct Arguments: ParsableCommand {
 			throw ValidationError("Please specify a 'version' value between 1 and 40.")
 		}
 	}
+}
+
+struct Arguments: ParsableCommand {
+	static var configuration: CommandConfiguration {
+		CommandConfiguration(commandName: ProgramName, alwaysCompactUsageOptions: true)
+	}
+	
+	@OptionGroup
+	var options: Options
+	
+	@Argument(help: ArgumentHelp("The type of input used in the <input> argument", valueName: "input type"))
+	var inputType: InputType
+	
+	@Argument(help: ArgumentHelp("The input used to build the QR code's data. For input type \"text\" specify a string, for \"bytes\" and \"textFile\" a file path or \"-\" for stdin", valueName: "input"))
+	var input: String
+	
+	@Argument(help: ArgumentHelp("Directory or file path where to write output files to (default: directory of input file or working directory)", valueName: "output path"))
+	var outputPath: String?
 }
 
 // Parse arguments
@@ -87,14 +92,14 @@ let outputURL =
 // Run program
 let qrGen = QRGen(
 	outputURL: outputURL,
-	generatorType: arguments.coreImage ? .coreImage : .nayuki,
-	correctionLevel: arguments.level,
-	minVersion: arguments.minVersion,
-	maxVersion: arguments.maxVersion,
-	style: arguments.style,
-	pixelMargin: arguments.pixelMargin,
-	ignoreSafeAreas: arguments.styleAll,
-	writePNG: arguments.png
+	generatorType: arguments.options.coreImage ? .coreImage : .nayuki,
+	correctionLevel: arguments.options.level,
+	minVersion: arguments.options.minVersion,
+	maxVersion: arguments.options.maxVersion,
+	style: arguments.options.style,
+	pixelMargin: arguments.options.pixelMargin,
+	ignoreSafeAreas: arguments.options.styleAll,
+	writePNG: arguments.options.png
 )
 
 do {
