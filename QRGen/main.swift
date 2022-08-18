@@ -28,6 +28,9 @@ struct Options: ParsableCommand {
 	@Option(name: .customLong("max"), help: ArgumentHelp("Maximum QR code version (i.e. size) to use. Error is thrown if the supplied input and correction level would produce a larger QR code", valueName: "version 1-40"))
 	var maxVersion = 40
 	
+	@Flag(name: .shortAndLong, help: ArgumentHelp("Try to reduce length of QR code data by splitting text input into segments of different encodings. Not supported with \"--coreimage\" flag."))
+	var optimize = false
+	
 	@Option(name: .shortAndLong, help: "The QR code's style")
 	var style: QRGen.Style = .standard
 	
@@ -96,6 +99,7 @@ let qrGen = QRGen(
 	correctionLevel: arguments.options.level,
 	minVersion: arguments.options.minVersion,
 	maxVersion: arguments.options.maxVersion,
+	optimize: arguments.options.optimize,
 	style: arguments.options.style,
 	pixelMargin: arguments.options.pixelMargin,
 	ignoreSafeAreas: arguments.options.styleAll,

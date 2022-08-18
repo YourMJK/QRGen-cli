@@ -45,6 +45,9 @@ struct CIQRCodeGenerator: QRCodeGeneratorProtocol {
 	}
 	
 	func generate(for text: String, optimize: Bool) throws -> CIQRCode {
+		guard !optimize else {
+			throw Error.unsupported(property: "optimize")
+		}
 		guard let data = text.data(using: .isoLatin1) else {
 			throw Error.textEncoding
 		}

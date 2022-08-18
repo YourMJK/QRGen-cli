@@ -15,6 +15,7 @@ struct QRGen {
 	let correctionLevel: CorrectionLevel
 	let minVersion: Int
 	let maxVersion: Int
+	let optimize: Bool
 	let style: Style
 	let pixelMargin: UInt
 	let ignoreSafeAreas: Bool
@@ -54,7 +55,7 @@ struct QRGen {
 					case .data(let data):
 						return try generator.generate(for: data)
 					case .text(let string):
-						return try generator.generate(for: string, optimize: false)
+						return try generator.generate(for: string, optimize: optimize)
 				}
 			}()
 			
