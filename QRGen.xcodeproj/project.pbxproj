@@ -12,7 +12,6 @@
 		182F7F4228A18AA700E72E4D /* BinaryPixelSVG.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F4128A18AA700E72E4D /* BinaryPixelSVG.swift */; };
 		182F7F4B28A44C4000E72E4D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 182F7F4A28A44C4000E72E4D /* ArgumentParser */; };
 		182F7F4D28A5531500E72E4D /* QRGen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F4C28A5531500E72E4D /* QRGen.swift */; };
-		182F7F5028A9533A00E72E4D /* QRCodeGenerator in Frameworks */ = {isa = PBXBuildFile; productRef = 182F7F4F28A9533A00E72E4D /* QRCodeGenerator */; };
 		182F7F5228A9A4F600E72E4D /* CIQRCodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F5128A9A4F600E72E4D /* CIQRCodeGenerator.swift */; };
 		182F7F5428A9A5D500E72E4D /* QRCodeGeneratorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F5328A9A5D500E72E4D /* QRCodeGeneratorProtocol.swift */; };
 		182F7F5628A9D64000E72E4D /* IntPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F5528A9D64000E72E4D /* IntPoint.swift */; };
@@ -24,6 +23,7 @@
 		182F7F6728AAF70600E72E4D /* BCQRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F6628AAF70600E72E4D /* BCQRCode.swift */; };
 		182F7F6928AB1F1200E72E4D /* BCQRCodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F6828AB1F1200E72E4D /* BCQRCodeGenerator.swift */; };
 		182F7F6B28AB24F800E72E4D /* BCCorrectionLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F6A28AB24F800E72E4D /* BCCorrectionLevel.swift */; };
+		18B2CD6F28AF139D00F135AB /* QRCodeGenerator in Frameworks */ = {isa = PBXBuildFile; productRef = 18B2CD6E28AF139D00F135AB /* QRCodeGenerator */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -63,7 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				182F7F5028A9533A00E72E4D /* QRCodeGenerator in Frameworks */,
+				18B2CD6F28AF139D00F135AB /* QRCodeGenerator in Frameworks */,
 				182F7F4B28A44C4000E72E4D /* ArgumentParser in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -144,7 +144,7 @@
 			name = QRGen;
 			packageProductDependencies = (
 				182F7F4A28A44C4000E72E4D /* ArgumentParser */,
-				182F7F4F28A9533A00E72E4D /* QRCodeGenerator */,
+				18B2CD6E28AF139D00F135AB /* QRCodeGenerator */,
 			);
 			productName = QRGen;
 			productReference = 182F7F3328A176C800E72E4D /* QRGen */;
@@ -176,7 +176,7 @@
 			mainGroup = 182F7F2A28A176C700E72E4D;
 			packageReferences = (
 				182F7F4928A44C4000E72E4D /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
-				182F7F4E28A9533900E72E4D /* XCRemoteSwiftPackageReference "QRCodeGenerator" */,
+				18B2CD6D28AF139D00F135AB /* XCRemoteSwiftPackageReference "QRCodeGenerator" */,
 			);
 			productRefGroup = 182F7F3428A176C800E72E4D /* Products */;
 			projectDirPath = "";
@@ -378,9 +378,9 @@
 				kind = branch;
 			};
 		};
-		182F7F4E28A9533900E72E4D /* XCRemoteSwiftPackageReference "QRCodeGenerator" */ = {
+		18B2CD6D28AF139D00F135AB /* XCRemoteSwiftPackageReference "QRCodeGenerator" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/BlockchainCommons/QRCodeGenerator.git";
+			repositoryURL = "https://github.com/YourMJK/QRCodeGenerator";
 			requirement = {
 				branch = master;
 				kind = branch;
@@ -394,9 +394,9 @@
 			package = 182F7F4928A44C4000E72E4D /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
 			productName = ArgumentParser;
 		};
-		182F7F4F28A9533A00E72E4D /* QRCodeGenerator */ = {
+		18B2CD6E28AF139D00F135AB /* QRCodeGenerator */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 182F7F4E28A9533900E72E4D /* XCRemoteSwiftPackageReference "QRCodeGenerator" */;
+			package = 18B2CD6D28AF139D00F135AB /* XCRemoteSwiftPackageReference "QRCodeGenerator" */;
 			productName = QRCodeGenerator;
 		};
 /* End XCSwiftPackageProductDependency section */

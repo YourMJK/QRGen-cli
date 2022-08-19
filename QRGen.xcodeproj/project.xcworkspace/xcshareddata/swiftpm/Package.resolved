@@ -3,10 +3,10 @@
     "pins": [
       {
         "package": "QRCodeGenerator",
-        "repositoryURL": "https://github.com/BlockchainCommons/QRCodeGenerator.git",
+        "repositoryURL": "https://github.com/YourMJK/QRCodeGenerator",
         "state": {
           "branch": "master",
-          "revision": "6ae33d4a611e9031413a61e8ba81fd8539f51e49",
+          "revision": "d6edea2f34b76f2ab75dbeddaf62de63c5a14560",
           "version": null
         }
       },
