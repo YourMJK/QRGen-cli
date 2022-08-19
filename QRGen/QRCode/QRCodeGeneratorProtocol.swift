@@ -14,5 +14,5 @@ protocol QRCodeGeneratorProtocol {
 	init(correctionLevel: CorrectionLevel, minVersion: Int, maxVersion: Int)
 	
 	func generate(for data: Data) throws -> Product
-	func generate(for text: String, optimize: Bool) throws -> Product
+	func generate(for text: String, optimize: Bool, strictEncoding: Bool) throws -> Product
 }

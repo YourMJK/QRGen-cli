@@ -31,6 +31,9 @@ struct Options: ParsableCommand {
 	@Flag(name: .shortAndLong, help: ArgumentHelp("Try to reduce length of QR code data by splitting text input into segments of different encodings. Not supported with \"--coreimage\" flag."))
 	var optimize = false
 	
+	@Flag(name: .long, help: ArgumentHelp("Strictly conform to the QR code specification when encoding text. Might increase length of QR code data. No effect with \"--coreimage\" flag."))
+	var strict = false
+	
 	@Option(name: .shortAndLong, help: "The QR code's style")
 	var style: QRGen.Style = .standard
 	
@@ -100,6 +103,7 @@ let qrGen = QRGen(
 	minVersion: arguments.options.minVersion,
 	maxVersion: arguments.options.maxVersion,
 	optimize: arguments.options.optimize,
+	strict: arguments.options.strict,
 	style: arguments.options.style,
 	pixelMargin: arguments.options.pixelMargin,
 	ignoreSafeAreas: arguments.options.styleAll,

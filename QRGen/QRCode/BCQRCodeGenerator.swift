@@ -33,7 +33,7 @@ struct BCQRCodeGenerator: QRCodeGeneratorProtocol {
 		try QRCode.encode(data: Array(data), correctionLevel: correctionLevel, minVersion: minVersion, maxVersion: maxVersion)
 	}
 	
-	func generate(for text: String, optimize: Bool = false) throws -> QRCode {
-		try QRCode.encode(text: text, correctionLevel: correctionLevel, minVersion: minVersion, maxVersion: maxVersion, optimize: optimize)
+	func generate(for text: String, optimize: Bool = false, strictEncoding: Bool = false) throws -> QRCode {
+		try QRCode.encode(text: text, correctionLevel: correctionLevel, minVersion: minVersion, maxVersion: maxVersion, optimize: optimize, strictEncoding: strictEncoding)
 	}
 }
