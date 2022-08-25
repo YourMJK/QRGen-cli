@@ -60,12 +60,13 @@ class BinaryPixelSVG {
 	
 	func addPixel(at point: IntPoint, style: PixelStyle = .standard) {
 		let margin = style.margin
+		let marginOffset = margin / 2
 		let scale = 1 - margin
 		switch style.shape {
 			case .square:
 				let size = scale
-				let xPos = Decimal(point.x) + margin/2
-				let yPos = Decimal(point.y) + margin/2
+				let xPos = Decimal(point.x) + marginOffset
+				let yPos = Decimal(point.y) + marginOffset
 				contentBuilerString += "\t<rect x=\"\(xPos)\" y=\"\(yPos)\" width=\"\(size)\" height=\"\(size)\"/>\n"
 			
 			case .circle:
@@ -75,16 +76,16 @@ class BinaryPixelSVG {
 			case .roundedCorners(let corners, let inverted):
 				if corners.isEmpty {
 					if inverted { break }
-					else { addPixel(at: point) }
+					else { addPixel(at: point, style: PixelStyle(.square, margin: style.margin, cornerRadius: style.cornerRadius)) }
 				}
 				let radiusScale = style.cornerRadius
-				let radius = radiusScale / 2
+				let radius = radiusScale * scale / 2
 				contentBuilerString += "\t<path d=\""
 				
 				func cornerPath(for corner: PixelCorners, at point: IntPoint, from start: (x: Decimal, y: Decimal), to end: (x: Decimal, y: Decimal), first: Bool = false) {
 					if inverted && !corners.contains(corner) { return }
-					let xPos = Decimal(point.x)
-					let yPos = Decimal(point.y)
+					let xPos = Decimal(point.x) + marginOffset*(start.x+end.x)
+					let yPos = Decimal(point.y) + marginOffset*(start.y+end.y)
 					let xStart = xPos + radius*start.x
 					let yStart = yPos + radius*start.y
 					let xEnd = xPos + radius*end.x
