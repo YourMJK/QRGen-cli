@@ -128,7 +128,7 @@ struct QRGen {
 		
 		// Add pixels
 		let rect = IntRect(origin: .zero, size: IntSize(width: size, height: size))
-		let pixelMargin = Double(pixelMargin)/100
+		let pixelMargin = Decimal(pixelMargin)/100
 		func addPixel(at point: IntPoint, shape pixelShape: BinaryPixelSVG.PixelShape, isPixel: Bool = true) {
 			let shouldStyle = ignoreSafeAreas || !isInSafeArea(point)
 			guard let pixelStyle = shouldStyle ? BinaryPixelSVG.PixelStyle(pixelShape, margin: pixelMargin) : (isPixel ? .standard : nil) else { return }

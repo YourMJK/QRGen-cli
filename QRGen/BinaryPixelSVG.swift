@@ -26,9 +26,9 @@ class BinaryPixelSVG {
 	
 	struct PixelStyle {
 		let shape: PixelShape
-		let margin: Double
+		let margin: Decimal
 		
-		init(_ shape: PixelShape, margin: Double = 0) {
+		init(_ shape: PixelShape, margin: Decimal = 0) {
 			self.shape = shape
 			self.margin = min(max(margin, 0), 1)
 		}
@@ -39,7 +39,6 @@ class BinaryPixelSVG {
 	
 	let size: IntSize
 	private var contentBuilerString: String
-	private let floatFormatter: NumberFormatter
 	
 	init(size: IntSize) {
 		self.size = size
@@ -49,18 +48,6 @@ class BinaryPixelSVG {
 		<svg width="100%" height="100%" viewBox="0 0 \(size.width) \(size.height)" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 		
 		"""
-		self.floatFormatter = {
-			let formatter = NumberFormatter()
-			formatter.locale = Locale(identifier: "en_US_POSIX")
-			formatter.maximumFractionDigits = 2
-			formatter.minimumIntegerDigits = 1
-			return formatter
-		}()
-	}
-	
-	
-	private func format(_ number: Double) -> String {
-		floatFormatter.string(from: number as NSNumber)!
 	}
 	
 	
@@ -73,13 +60,13 @@ class BinaryPixelSVG {
 		let scale = 1 - margin
 		switch style.shape {
 			case .square:
-				let size = format(scale)
-				let xPos = format(Double(point.x) + margin/2)
-				let yPos = format(Double(point.y) + margin/2)
+				let size = scale
+				let xPos = Decimal(point.x) + margin/2
+				let yPos = Decimal(point.y) + margin/2
 				contentBuilerString += "\t<rect x=\"\(xPos)\" y=\"\(yPos)\" width=\"\(size)\" height=\"\(size)\"/>\n"
 			
 			case .circle:
-				let radius = format(scale * 0.5)
+				let radius = scale / 2
 				contentBuilerString += "\t<circle cx=\"\(point.x).5\" cy=\"\(point.y).5\" r=\"\(radius)\"/>\n"
 			
 			case .roundedCorners(let corners, let inverted):
@@ -87,20 +74,17 @@ class BinaryPixelSVG {
 					if inverted { break }
 					else { addPixel(at: point) }
 				}
-				let radiusValue = scale * 0.5
-				let radius = format(radiusValue)
+				let radius = scale / 2
 				contentBuilerString += "\t<path d=\""
 				
-				func cornerPath(for corner: PixelCorners, at point: IntPoint, from start: (x: Double, y: Double), to end: (x: Double, y: Double), first: Bool = false) {
+				func cornerPath(for corner: PixelCorners, at point: IntPoint, from start: (x: Decimal, y: Decimal), to end: (x: Decimal, y: Decimal), first: Bool = false) {
 					if inverted && !corners.contains(corner) { return }
-					let xPosValue = Double(point.x)
-					let yPosValue = Double(point.y)
-					let xPos = String(point.x)
-					let yPos = String(point.y)
-					let xStart = format(xPosValue + radiusValue*start.x)
-					let yStart = format(yPosValue + radiusValue*start.y)
-					let xEnd = format(xPosValue + radiusValue*end.x)
-					let yEnd = format(yPosValue + radiusValue*end.y)
+					let xPos = Decimal(point.x)
+					let yPos = Decimal(point.y)
+					let xStart = xPos + radius*start.x
+					let yStart = yPos + radius*start.y
+					let xEnd = xPos + radius*end.x
+					let yEnd = yPos + radius*end.y
 					if inverted || first {
 						contentBuilerString += "M\(xStart) \(yStart)"
 					} else if scale != 1 {
