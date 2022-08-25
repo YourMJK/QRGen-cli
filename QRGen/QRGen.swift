@@ -33,6 +33,7 @@ struct QRGen {
 	enum Style: String, ArgumentEnum {
 		case standard
 		case dots
+		case rounded
 	}
 	
 	
@@ -126,19 +127,52 @@ struct QRGen {
 		}
 		
 		// Add pixels
-		let pixelShape: BinaryPixelSVG.PixelShape = {
-			switch style {
-				case .standard: return .square
-				case .dots: return .circle
-			}
-		}()
-		let pixelStyle = BinaryPixelSVG.PixelStyle(pixelShape, margin: Double(pixelMargin)/100)
-		IntRect(origin: .zero, size: IntSize(width: size, height: size)).forEach { point in
-			let isPixel = qrCode[point]
-			guard isPixel else { return }
-			let pixelStyle = !ignoreSafeAreas && isInSafeArea(point) ? .standard : pixelStyle
+		let rect = IntRect(origin: .zero, size: IntSize(width: size, height: size))
+		let pixelMargin = Double(pixelMargin)/100
+		func addPixel(at point: IntPoint, shape pixelShape: BinaryPixelSVG.PixelShape, isPixel: Bool = true) {
+			let shouldStyle = ignoreSafeAreas || !isInSafeArea(point)
+			guard let pixelStyle = shouldStyle ? BinaryPixelSVG.PixelStyle(pixelShape, margin: pixelMargin) : (isPixel ? .standard : nil) else { return }
 			let pointInImageCoordinates = point.offsetBy(dx: border, dy: border)
 			svg.addPixel(at: pointInImageCoordinates, style: pixelStyle)
+		}
+		
+		switch style {
+			// Static pixel shape
+			case .standard, .dots:
+				let pixelShape: BinaryPixelSVG.PixelShape
+				switch style {
+					case .standard: pixelShape = .square
+					case .dots: pixelShape = .circle
+					default: preconditionFailure("Invalid pixel shape for static style")
+				}
+				rect.forEach { point in
+					let isPixel = qrCode[point]
+					guard isPixel else { return }
+					addPixel(at: point, shape: pixelShape)
+				}
+			
+			// Dynamic pixel shape
+			case .rounded:
+				rect.forEach { point in
+					let isPixel = qrCode[point]
+					var corners: BinaryPixelSVG.PixelCorners = []
+					func isNeighborPixel(dx: Int, dy: Int) -> Bool {
+						let neighborPoint = point.offsetBy(dx: dx, dy: dy)
+						return rect.contains(neighborPoint) && qrCode[neighborPoint]
+					}
+					func checkCorner(dx: Int, dy: Int) -> Bool {
+						isNeighborPixel(dx: dx, dy: 0) != isPixel &&
+						isNeighborPixel(dx: 0, dy: dy) != isPixel &&
+						(isPixel || isNeighborPixel(dx: dx, dy: dy) != isPixel)
+						//(!isPixel || isNeighborPixel(dx: dx, dy: dy) != isPixel)
+					}
+					if checkCorner(dx: -1, dy: -1) { corners.insert(.topLeft) }
+					if checkCorner(dx: +1, dy: -1) { corners.insert(.topRight) }
+					if checkCorner(dx: -1, dy: +1) { corners.insert(.bottomLeft) }
+					if checkCorner(dx: +1, dy: +1) { corners.insert(.bottomRight) }
+					let pixelShape: BinaryPixelSVG.PixelShape = .roundedCorners(corners, inverted: !isPixel)
+					addPixel(at: point, shape: pixelShape, isPixel: isPixel)
+				}
 		}
 		
 		// Write file
