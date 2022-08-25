@@ -61,7 +61,7 @@ struct Options: ParsableCommand {
 
 struct Arguments: ParsableCommand {
 	static var configuration: CommandConfiguration {
-		CommandConfiguration(commandName: ProgramName, alwaysCompactUsageOptions: true)
+		CommandConfiguration(commandName: ProgramName, helpMessageLabelColumnWidth: 48, alwaysCompactUsageOptions: true)
 	}
 	
 	@OptionGroup
