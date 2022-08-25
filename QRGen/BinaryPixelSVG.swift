@@ -16,6 +16,7 @@ class BinaryPixelSVG {
 		static let topRight    = Self(rawValue: 1 << 1)
 		static let bottomLeft  = Self(rawValue: 1 << 2)
 		static let bottomRight = Self(rawValue: 1 << 3)
+		static let all = Self(rawValue: 0b1111)
 	}
 	
 	enum PixelShape {
@@ -27,10 +28,12 @@ class BinaryPixelSVG {
 	struct PixelStyle {
 		let shape: PixelShape
 		let margin: Decimal
+		let cornerRadius: Decimal
 		
-		init(_ shape: PixelShape, margin: Decimal = 0) {
+		init(_ shape: PixelShape, margin: Decimal = 0, cornerRadius: Decimal = 1) {
 			self.shape = shape
 			self.margin = min(max(margin, 0), 1)
+			self.cornerRadius = min(max(cornerRadius, 0), 1)
 		}
 		
 		static let standard = Self(.square)
@@ -74,7 +77,8 @@ class BinaryPixelSVG {
 					if inverted { break }
 					else { addPixel(at: point) }
 				}
-				let radius = scale / 2
+				let radiusScale = style.cornerRadius
+				let radius = radiusScale / 2
 				contentBuilerString += "\t<path d=\""
 				
 				func cornerPath(for corner: PixelCorners, at point: IntPoint, from start: (x: Decimal, y: Decimal), to end: (x: Decimal, y: Decimal), first: Bool = false) {
@@ -87,7 +91,7 @@ class BinaryPixelSVG {
 					let yEnd = yPos + radius*end.y
 					if inverted || first {
 						contentBuilerString += "M\(xStart) \(yStart)"
-					} else if scale != 1 {
+					} else if radiusScale != 1 {
 						contentBuilerString += "L\(xStart) \(yStart)"
 					}
 					if corners.contains(corner) {

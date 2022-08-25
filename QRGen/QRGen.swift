@@ -19,6 +19,7 @@ struct QRGen {
 	let strict: Bool
 	let style: Style
 	let pixelMargin: UInt
+	let cornerRadius: UInt
 	let ignoreSafeAreas: Bool
 	let writePNG: Bool
 	
@@ -86,6 +87,7 @@ struct QRGen {
 		}
 		addNameTag("\(style)", style != .standard)
 		addNameTag("m\(pixelMargin)", pixelMargin != 0)
+		addNameTag("r\(cornerRadius)", cornerRadius != 100 && style != .standard)
 		addNameTag("all", ignoreSafeAreas)
 		addNameTag("CI", generatorType == .coreImage)
 		
@@ -129,9 +131,10 @@ struct QRGen {
 		// Add pixels
 		let rect = IntRect(origin: .zero, size: IntSize(width: size, height: size))
 		let pixelMargin = Decimal(pixelMargin)/100
+		let cornerRadius = Decimal(cornerRadius)/100
 		func addPixel(at point: IntPoint, shape pixelShape: BinaryPixelSVG.PixelShape, isPixel: Bool = true) {
 			let shouldStyle = ignoreSafeAreas || !isInSafeArea(point)
-			guard let pixelStyle = shouldStyle ? BinaryPixelSVG.PixelStyle(pixelShape, margin: pixelMargin) : (isPixel ? .standard : nil) else { return }
+			guard let pixelStyle = shouldStyle ? BinaryPixelSVG.PixelStyle(pixelShape, margin: pixelMargin, cornerRadius: cornerRadius) : (isPixel ? .standard : nil) else { return }
 			let pointInImageCoordinates = point.offsetBy(dx: border, dy: border)
 			svg.addPixel(at: pointInImageCoordinates, style: pixelStyle)
 		}
@@ -140,9 +143,11 @@ struct QRGen {
 			// Static pixel shape
 			case .standard, .dots:
 				let pixelShape: BinaryPixelSVG.PixelShape
-				switch style {
-					case .standard: pixelShape = .square
-					case .dots: pixelShape = .circle
+				switch (style, cornerRadius) {
+					case (.standard, _): pixelShape = .square
+					case (.dots,   0): pixelShape = .square
+					case (.dots, 100): pixelShape = .circle
+					case (.dots,   _): pixelShape = .roundedCorners(.all, inverted: false)
 					default: preconditionFailure("Invalid pixel shape for static style")
 				}
 				rect.forEach { point in

@@ -40,6 +40,9 @@ struct Options: ParsableCommand {
 	@Option(name: [.customShort("m"), .long], help: ArgumentHelp("Shrink the QR code's individual pixels by the specified percentage. Values >50 may produce unreadable results", valueName: "percentage"))
 	var pixelMargin: UInt = 0
 	
+	@Option(name: [.customShort("r"), .long], help: ArgumentHelp("Specify corner radius for \"dots\" and \"rounded\" style as a percentage of 0.5px", valueName: "percentage"))
+	var cornerRadius: UInt = 100
+	
 	@Flag(name: [.customShort("a"), .long], help: "Apply styling to all pixels, including the QR code's position markers")
 	var styleAll = false
 	
@@ -52,6 +55,9 @@ struct Options: ParsableCommand {
 	mutating func validate() throws {
 		guard 0 <= pixelMargin && pixelMargin <= 100 else {
 			throw ValidationError("Please specify a 'pixel margin' percentage between 0 and 100.")
+		}
+		guard 0 <= cornerRadius && cornerRadius <= 100 else {
+			throw ValidationError("Please specify a 'corner radius' percentage between 0 and 100.")
 		}
 		guard 1 <= minVersion && minVersion <= 40, 1 <= maxVersion && maxVersion <= 40 else {
 			throw ValidationError("Please specify a 'version' value between 1 and 40.")
@@ -106,6 +112,7 @@ let qrGen = QRGen(
 	strict: arguments.options.strict,
 	style: arguments.options.style,
 	pixelMargin: arguments.options.pixelMargin,
+	cornerRadius: arguments.options.cornerRadius,
 	ignoreSafeAreas: arguments.options.styleAll,
 	writePNG: arguments.options.png
 )
