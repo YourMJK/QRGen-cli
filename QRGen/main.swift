@@ -40,7 +40,7 @@ struct Options: ParsableCommand {
 	@Option(name: [.customShort("m"), .long], help: ArgumentHelp("Shrink the QR code's individual pixels by the specified percentage. Values >50 may produce unreadable results", valueName: "percentage"))
 	var pixelMargin: UInt = 0
 	
-	@Option(name: [.customShort("r"), .long], help: ArgumentHelp("Specify corner radius for \"dots\" and \"liquidDots\" style as a percentage of half pixel size", valueName: "percentage"))
+	@Option(name: [.customShort("r"), .long], help: ArgumentHelp("Specify corner radius as a percentage of half pixel size. Ignored for \"standard\" style", valueName: "percentage"))
 	var cornerRadius: UInt = 100
 	
 	@Flag(name: [.customShort("a"), .long], help: "Apply styling to all pixels, including the QR code's position markers")
