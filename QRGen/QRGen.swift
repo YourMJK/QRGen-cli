@@ -36,6 +36,7 @@ struct QRGen {
 		case dots
 		case holes
 		case liquidDots
+		case liquidHoles
 	}
 	
 	
@@ -145,6 +146,7 @@ struct QRGen {
 			let pointInImageCoordinates = point.offsetBy(dx: border, dy: border)
 			svg.addPixel(at: pointInImageCoordinates, style: pixelStyle)
 		}
+		var bridgeLiquidDiagonally = false
 		
 		switch style {
 			// Static pixel shape
@@ -178,6 +180,9 @@ struct QRGen {
 					addPixel(at: point, shape: pixelShape, isPixel: isPixel)
 				}
 			
+			case .liquidHoles:
+				bridgeLiquidDiagonally = true
+				fallthrough
 			case .liquidDots:
 				rect.forEach { point in
 					let isPixel = qrCode[point]
@@ -189,8 +194,7 @@ struct QRGen {
 					func checkCorner(dx: Int, dy: Int) -> Bool {
 						isNeighborPixel(dx: dx, dy: 0) != isPixel &&
 						isNeighborPixel(dx: 0, dy: dy) != isPixel &&
-						(isPixel || isNeighborPixel(dx: dx, dy: dy) != isPixel)
-						//(!isPixel || isNeighborPixel(dx: dx, dy: dy) != isPixel)
+						(isNeighborPixel(dx: dx, dy: dy) != isPixel || isPixel != bridgeLiquidDiagonally)
 					}
 					if checkCorner(dx: -1, dy: -1) { corners.insert(.topLeft) }
 					if checkCorner(dx: +1, dy: -1) { corners.insert(.topRight) }
