@@ -35,7 +35,7 @@ struct QRGen {
 		case standard
 		case dots
 		case holes
-		case rounded
+		case liquidDots
 	}
 	
 	
@@ -178,7 +178,7 @@ struct QRGen {
 					addPixel(at: point, shape: pixelShape, isPixel: isPixel)
 				}
 			
-			case .rounded:
+			case .liquidDots:
 				rect.forEach { point in
 					let isPixel = qrCode[point]
 					var corners: BinaryPixelSVG.PixelCorners = []
