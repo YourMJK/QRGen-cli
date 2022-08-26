@@ -34,6 +34,7 @@ struct QRGen {
 	enum Style: String, ArgumentEnum {
 		case standard
 		case dots
+		case holes
 		case rounded
 	}
 	
@@ -163,6 +164,20 @@ struct QRGen {
 				}
 			
 			// Dynamic pixel shape
+			case .holes:
+				rect.forEach { point in
+					let isPixel = qrCode[point]
+					let pixelShape: BinaryPixelSVG.PixelShape
+					if isPixel {
+						pixelShape = .square
+					} else if cornerRadius != 0 {
+						pixelShape = .roundedCorners(.all, inverted: true)
+					} else {
+						return
+					}
+					addPixel(at: point, shape: pixelShape, isPixel: isPixel)
+				}
+			
 			case .rounded:
 				rect.forEach { point in
 					let isPixel = qrCode[point]
