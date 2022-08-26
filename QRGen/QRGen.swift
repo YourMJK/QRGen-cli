@@ -38,7 +38,7 @@ struct QRGen {
 	}
 	
 	
-	/// Generate QR code with byte encoding from data and write output files
+	/// Generate QR code from input and write output files
 	func generate(with input: Input) throws {
 		// Prepare output files
 		let outputFile = generateOutputURLs()
@@ -133,8 +133,14 @@ struct QRGen {
 		let pixelMargin = Decimal(pixelMargin)/100
 		let cornerRadius = Decimal(cornerRadius)/100
 		func addPixel(at point: IntPoint, shape pixelShape: BinaryPixelSVG.PixelShape, isPixel: Bool = true) {
-			let shouldStyle = ignoreSafeAreas || !isInSafeArea(point)
-			guard let pixelStyle = shouldStyle ? BinaryPixelSVG.PixelStyle(pixelShape, margin: pixelMargin, cornerRadius: cornerRadius) : (isPixel ? .standard : nil) else { return }
+			let pixelStyle: BinaryPixelSVG.PixelStyle
+			if ignoreSafeAreas || !isInSafeArea(point) {
+				pixelStyle = BinaryPixelSVG.PixelStyle(pixelShape, margin: pixelMargin, cornerRadius: cornerRadius)
+			} else if isPixel {
+				pixelStyle = .standard
+			} else {
+				return
+			}
 			let pointInImageCoordinates = point.offsetBy(dx: border, dy: border)
 			svg.addPixel(at: pointInImageCoordinates, style: pixelStyle)
 		}
