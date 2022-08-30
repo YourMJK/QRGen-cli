@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct IntPoint: Equatable {
+struct IntPoint: Equatable, Hashable {
 	var x: Int
 	var y: Int
 }
