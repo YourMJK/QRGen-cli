@@ -74,7 +74,7 @@ struct GeneralOptions: ParsableCommand {
 
 struct Arguments: ParsableCommand {
 	static var configuration: CommandConfiguration {
-		CommandConfiguration(commandName: ProgramName, helpMessageLabelColumnWidth: 48, alwaysCompactUsageOptions: true)
+		CommandConfiguration(commandName: ProgramName, helpMessageLabelColumnWidth: 40, alwaysCompactUsageOptions: true)
 	}
 	
 	@OptionGroup(helpSectionNamePrefix: "Generator")
