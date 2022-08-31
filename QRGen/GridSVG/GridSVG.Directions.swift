@@ -66,7 +66,7 @@ protocol GridSVGDirectionsOptionSet: Sequence, OptionSet where RawValue == UInt8
 	var isSingular: Bool { get }
 	
 	/// All directions rotated clockwise by the specified number of 45° steps
-	func rotate(eights: Int) -> Self
+	func rotate(eighths: Int) -> Self
 	
 	/// All directions mirrored by flipping in the specified direction
 	func mirror(in: GridSVG.Directions) -> Self
@@ -92,8 +92,8 @@ extension GridSVGDirectionsOptionSet {
 		rawValue.nonzeroBitCount == 1
 	}
 	
-	func rotate(eights: Int) -> Self {
-		let shift = eights & 0b111
+	func rotate(eighths: Int) -> Self {
+		let shift = eighths & 0b111
 		return Self(rawValue: rawValue << shift | rawValue >> (8-shift))
 	}
 	
@@ -101,7 +101,7 @@ extension GridSVGDirectionsOptionSet {
 		precondition(isSingular, "Multiple directions to mirror in specified")
 		let n = direction.rawValue.trailingZeroBitCount
 		// Rotate direction to top
-		let rotated = rotate(eights: -n).rawValue
+		let rotated = rotate(eighths: -n).rawValue
 		// Mirror towards top
 		var flipped = rotated & 0b0100_0100
 		flipped |= (rotated & 0b0010_0010) << 2
@@ -109,15 +109,15 @@ extension GridSVGDirectionsOptionSet {
 		flipped |= (rotated & 0b0000_0001) << 4
 		flipped |= (rotated & 0b0001_0000) >> 4
 		// Rotate back to direction
-		return Self(rawValue: flipped).rotate(eights: +n)
+		return Self(rawValue: flipped).rotate(eighths: +n)
 	}
 	
 	var opposite: Self {
-		rotate(eights: 4)
+		rotate(eighths: 4)
 	}
 	
 	var neighbors: Neighbors {
-		Neighbors(rawValue: rotate(eights: 1).rawValue | rotate(eights: -1).rawValue)
+		Neighbors(rawValue: rotate(eighths: 1).rawValue | rotate(eighths: -1).rawValue)
 	}
 	
 	var offset: (x: Int, y: Int) {
