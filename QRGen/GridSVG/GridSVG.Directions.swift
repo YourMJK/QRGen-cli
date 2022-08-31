@@ -111,8 +111,8 @@ extension GridSVGDirectionsOptionSet {
 }
 
 struct GridSVGDirectionsOptionSetIterator<Element: GridSVGDirectionsOptionSet>: IteratorProtocol {
-	private var remainingBits: UInt8
-	private var mask: UInt8 = 1
+	private var remainingBits: Element.RawValue
+	private var mask: Element.RawValue = 1
 	
 	init(_ element: Element) {
 		self.remainingBits = element.rawValue
