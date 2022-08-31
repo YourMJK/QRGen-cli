@@ -26,7 +26,7 @@ extension GridSVG {
 						for key in keys {
 							guard let neighborElement = elements.dict[key] else { continue }
 							// Check if neighborhood is mutual
-							let mirroredQuadrant = quandrant.mirror(in: direction.directions)
+							let mirroredQuadrant = quandrant.mirror(in: direction)
 							if neighborElement.connectingQuadrants.contains(mirroredQuadrant) {
 								elements.dict.removeValue(forKey: key)
 								neighborElements.append(neighborElement)

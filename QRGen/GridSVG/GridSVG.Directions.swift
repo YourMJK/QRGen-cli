@@ -69,7 +69,7 @@ protocol GridSVGDirectionsOptionSet: Sequence, OptionSet where RawValue == UInt8
 	func rotate(eighths: Int) -> Self
 	
 	/// All directions mirrored by flipping in the specified direction
-	func mirror(in: GridSVG.Directions) -> Self
+	func mirror<T: GridSVGDirectionsOptionSet>(in direction: T) -> Self
 	
 	/// All directions rotated by 180°
 	var opposite: Self { get }
@@ -97,7 +97,7 @@ extension GridSVGDirectionsOptionSet {
 		return Self(rawValue: rawValue << shift | rawValue >> (8-shift))
 	}
 	
-	func mirror(in direction: GridSVG.Directions) -> Self {
+	func mirror<T: GridSVGDirectionsOptionSet>(in direction: T) -> Self {
 		precondition(isSingular, "Multiple directions to mirror in specified")
 		let n = direction.rawValue.trailingZeroBitCount
 		// Rotate direction to top
