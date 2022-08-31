@@ -62,8 +62,14 @@ protocol GridSVGDirectionsOptionSet: Sequence, OptionSet where RawValue == UInt8
 	init(_ directions: GridSVG.Directions)
 	var directions: GridSVG.Directions { get }
 	
+	/// Check if set only contains a single direction
+	var isSingular: Bool { get }
+	
 	/// All directions rotated clockwise by the specified number of 45° steps
 	func rotate(eights: Int) -> Self
+	
+	/// All directions mirrored by flipping in the specified direction
+	func mirror(in: GridSVG.Directions) -> Self
 	
 	/// All directions rotated by 180°
 	var opposite: Self { get }
@@ -82,9 +88,28 @@ extension GridSVGDirectionsOptionSet {
 		GridSVG.Directions(rawValue: rawValue)
 	}
 	
+	var isSingular: Bool {
+		rawValue.nonzeroBitCount == 1
+	}
+	
 	func rotate(eights: Int) -> Self {
 		let shift = eights & 0b111
 		return Self(rawValue: rawValue << shift | rawValue >> (8-shift))
+	}
+	
+	func mirror(in direction: GridSVG.Directions) -> Self {
+		precondition(isSingular, "Multiple directions to mirror in specified")
+		let n = direction.rawValue.trailingZeroBitCount
+		// Rotate direction to top
+		let rotated = rotate(eights: -n).rawValue
+		// Mirror towards top
+		var flipped = rotated & 0b0100_0100
+		flipped |= (rotated & 0b0010_0010) << 2
+		flipped |= (rotated & 0b1000_1000) >> 2
+		flipped |= (rotated & 0b0000_0001) << 4
+		flipped |= (rotated & 0b0001_0000) >> 4
+		// Rotate back to direction
+		return Self(rawValue: flipped).rotate(eights: +n)
 	}
 	
 	var opposite: Self {
