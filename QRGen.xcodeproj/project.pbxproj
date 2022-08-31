@@ -28,6 +28,7 @@
 		185F9EB328BBEEE700A90726 /* GridSVG.Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185F9EB228BBEEE700A90726 /* GridSVG.Path.swift */; };
 		185F9EB528BBEFB300A90726 /* GridSVG.Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185F9EB428BBEFB300A90726 /* GridSVG.Element.swift */; };
 		185F9EB928BBFD8300A90726 /* GridSVG.Directions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185F9EB828BBFD8300A90726 /* GridSVG.Directions.swift */; };
+		1869C60328BEDE3900C7B638 /* GridSVG.ElementCluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1869C60228BEDE3900C7B638 /* GridSVG.ElementCluster.swift */; };
 		18B2CD6F28AF139D00F135AB /* QRCodeGenerator in Frameworks */ = {isa = PBXBuildFile; productRef = 18B2CD6E28AF139D00F135AB /* QRCodeGenerator */; };
 /* End PBXBuildFile section */
 
@@ -66,6 +67,7 @@
 		185F9EB228BBEEE700A90726 /* GridSVG.Path.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSVG.Path.swift; sourceTree = "<group>"; };
 		185F9EB428BBEFB300A90726 /* GridSVG.Element.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSVG.Element.swift; sourceTree = "<group>"; };
 		185F9EB828BBFD8300A90726 /* GridSVG.Directions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSVG.Directions.swift; sourceTree = "<group>"; };
+		1869C60228BEDE3900C7B638 /* GridSVG.ElementCluster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSVG.ElementCluster.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +146,7 @@
 				185F9EB028BBED0000A90726 /* GridSVG.Curve.swift */,
 				185F9EB228BBEEE700A90726 /* GridSVG.Path.swift */,
 				185F9EB428BBEFB300A90726 /* GridSVG.Element.swift */,
+				1869C60228BEDE3900C7B638 /* GridSVG.ElementCluster.swift */,
 				185F9EAE28BBEC6200A90726 /* DecimalPoint.swift */,
 			);
 			path = GridSVG;
@@ -221,6 +224,7 @@
 				185F9EB528BBEFB300A90726 /* GridSVG.Element.swift in Sources */,
 				185F9EB128BBED0000A90726 /* GridSVG.Curve.swift in Sources */,
 				182F7F5828A9D67E00E72E4D /* IntRect.swift in Sources */,
+				1869C60328BEDE3900C7B638 /* GridSVG.ElementCluster.swift in Sources */,
 				185F9EAD28BBEC3C00A90726 /* GridSVG.swift in Sources */,
 				182F7F6B28AB24F800E72E4D /* BCCorrectionLevel.swift in Sources */,
 				182F7F6328AACCC500E72E4D /* QRCodeProtocol.swift in Sources */,

@@ -48,8 +48,8 @@ class GridSVG {
 		<svg width="100%" height="100%" viewBox="0 0 \(size.width) \(size.height)" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 		
 		"""
-		for element in elements {
-			contentBuilerString += "\t\(element.formatted)\n"
+		for cluster in ElementCluster.findClusters(in: elements) {
+			contentBuilerString += "\t\(cluster.formatted)\n"
 		}
 		contentBuilerString += "</svg>\n"
 		return contentBuilerString
