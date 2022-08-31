@@ -122,7 +122,7 @@ struct QRGen {
 		let border = 1
 		let size = qrCode.size
 		let sizeWithBorder = size + border*2
-		let svg = BinaryPixelSVG(size: IntSize(width: sizeWithBorder, height: sizeWithBorder))
+		let svg = GridSVG(size: IntSize(width: sizeWithBorder, height: sizeWithBorder))
 		
 		// Create safe areas where not to apply styling
 		let safeAreas = qrCode.safeAreas()
@@ -134,10 +134,10 @@ struct QRGen {
 		let rect = IntRect(origin: .zero, size: IntSize(width: size, height: size))
 		let pixelMargin = Decimal(pixelMargin)/100
 		let cornerRadius = Decimal(cornerRadius)/100
-		func addPixel(at point: IntPoint, shape pixelShape: BinaryPixelSVG.PixelShape, isPixel: Bool = true) {
-			let pixelStyle: BinaryPixelSVG.PixelStyle
+		func addPixel(at point: IntPoint, shape pixelShape: GridSVG.PixelShape, isPixel: Bool = true) {
+			let pixelStyle: GridSVG.PixelStyle
 			if ignoreSafeAreas || !isInSafeArea(point) {
-				pixelStyle = BinaryPixelSVG.PixelStyle(pixelShape, margin: pixelMargin, cornerRadius: cornerRadius)
+				pixelStyle = GridSVG.PixelStyle(pixelShape, margin: pixelMargin, cornerRadius: cornerRadius)
 			} else if isPixel {
 				pixelStyle = .standard
 			} else {
@@ -151,7 +151,7 @@ struct QRGen {
 		switch style {
 			// Static pixel shape
 			case .standard, .dots:
-				let pixelShape: BinaryPixelSVG.PixelShape
+				let pixelShape: GridSVG.PixelShape
 				switch (style, cornerRadius) {
 					case (.standard, _): pixelShape = .square
 					case (.dots,   0): pixelShape = .square
@@ -169,7 +169,7 @@ struct QRGen {
 			case .holes:
 				rect.forEach { point in
 					let isPixel = qrCode[point]
-					let pixelShape: BinaryPixelSVG.PixelShape
+					let pixelShape: GridSVG.PixelShape
 					if isPixel {
 						pixelShape = .square
 					} else if cornerRadius != 0 {
@@ -186,27 +186,28 @@ struct QRGen {
 			case .liquidDots:
 				rect.forEach { point in
 					let isPixel = qrCode[point]
-					var corners: BinaryPixelSVG.PixelCorners = []
+					var corners: GridSVG.Corners = []
 					func isNeighborPixel(dx: Int, dy: Int) -> Bool {
 						let neighborPoint = point.offsetBy(dx: dx, dy: dy)
 						return rect.contains(neighborPoint) && qrCode[neighborPoint]
 					}
-					func checkCorner(dx: Int, dy: Int) -> Bool {
-						isNeighborPixel(dx: dx, dy: 0) != isPixel &&
-						isNeighborPixel(dx: 0, dy: dy) != isPixel &&
-						(isNeighborPixel(dx: dx, dy: dy) != isPixel || isPixel != bridgeLiquidDiagonally)
+					for corner in GridSVG.Corners.all {
+						let (dx, dy) = corner.offset
+						let shouldRound = 
+							isNeighborPixel(dx: dx, dy: 0) != isPixel &&
+							isNeighborPixel(dx: 0, dy: dy) != isPixel &&
+							(isNeighborPixel(dx: dx, dy: dy) != isPixel || isPixel != bridgeLiquidDiagonally)
+						if shouldRound {
+							corners.insert(corner)
+						}
 					}
-					if checkCorner(dx: -1, dy: -1) { corners.insert(.topLeft) }
-					if checkCorner(dx: +1, dy: -1) { corners.insert(.topRight) }
-					if checkCorner(dx: -1, dy: +1) { corners.insert(.bottomLeft) }
-					if checkCorner(dx: +1, dy: +1) { corners.insert(.bottomRight) }
-					let pixelShape: BinaryPixelSVG.PixelShape = .roundedCorners(corners, inverted: !isPixel)
+					let pixelShape: GridSVG.PixelShape = .roundedCorners(corners, inverted: !isPixel)
 					addPixel(at: point, shape: pixelShape, isPixel: isPixel)
 				}
 		}
 		
 		// Write file
 		let outputFileSVG = outputFile.appendingPathExtension("svg")
-		try svg.content.write(to: outputFileSVG, atomically: true, encoding: .utf8)
+		try svg.content().write(to: outputFileSVG, atomically: true, encoding: .utf8)
 	}
 }
