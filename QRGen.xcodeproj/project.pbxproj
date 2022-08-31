@@ -23,6 +23,12 @@
 		182F7F6728AAF70600E72E4D /* BCQRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F6628AAF70600E72E4D /* BCQRCode.swift */; };
 		182F7F6928AB1F1200E72E4D /* BCQRCodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F6828AB1F1200E72E4D /* BCQRCodeGenerator.swift */; };
 		182F7F6B28AB24F800E72E4D /* BCCorrectionLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F6A28AB24F800E72E4D /* BCCorrectionLevel.swift */; };
+		185F9EAD28BBEC3C00A90726 /* GridSVG.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185F9EAC28BBEC3C00A90726 /* GridSVG.swift */; };
+		185F9EAF28BBEC6200A90726 /* DecimalPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185F9EAE28BBEC6200A90726 /* DecimalPoint.swift */; };
+		185F9EB128BBED0000A90726 /* GridSVG.Curve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185F9EB028BBED0000A90726 /* GridSVG.Curve.swift */; };
+		185F9EB328BBEEE700A90726 /* GridSVG.Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185F9EB228BBEEE700A90726 /* GridSVG.Path.swift */; };
+		185F9EB528BBEFB300A90726 /* GridSVG.Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185F9EB428BBEFB300A90726 /* GridSVG.Element.swift */; };
+		185F9EB928BBFD8300A90726 /* GridSVG.Directions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185F9EB828BBFD8300A90726 /* GridSVG.Directions.swift */; };
 		18B2CD6F28AF139D00F135AB /* QRCodeGenerator in Frameworks */ = {isa = PBXBuildFile; productRef = 18B2CD6E28AF139D00F135AB /* QRCodeGenerator */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +62,12 @@
 		182F7F6628AAF70600E72E4D /* BCQRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BCQRCode.swift; sourceTree = "<group>"; };
 		182F7F6828AB1F1200E72E4D /* BCQRCodeGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BCQRCodeGenerator.swift; sourceTree = "<group>"; };
 		182F7F6A28AB24F800E72E4D /* BCCorrectionLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BCCorrectionLevel.swift; sourceTree = "<group>"; };
+		185F9EAC28BBEC3C00A90726 /* GridSVG.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSVG.swift; sourceTree = "<group>"; };
+		185F9EAE28BBEC6200A90726 /* DecimalPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalPoint.swift; sourceTree = "<group>"; };
+		185F9EB028BBED0000A90726 /* GridSVG.Curve.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSVG.Curve.swift; sourceTree = "<group>"; };
+		185F9EB228BBEEE700A90726 /* GridSVG.Path.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSVG.Path.swift; sourceTree = "<group>"; };
+		185F9EB428BBEFB300A90726 /* GridSVG.Element.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSVG.Element.swift; sourceTree = "<group>"; };
+		185F9EB828BBFD8300A90726 /* GridSVG.Directions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridSVG.Directions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +107,7 @@
 				182F7F3628A176C800E72E4D /* main.swift */,
 				182F7F4C28A5531500E72E4D /* QRGen.swift */,
 				182F7F4128A18AA700E72E4D /* BinaryPixelSVG.swift */,
+				185F9EAB28BBEC2C00A90726 /* GridSVG */,
 				182F7F6C28AB297300E72E4D /* QRCode */,
 				182F7F5B28A9DA5D00E72E4D /* IntGeometry */,
 			);
@@ -124,6 +137,19 @@
 				182F7F5328A9A5D500E72E4D /* QRCodeGeneratorProtocol.swift */,
 			);
 			path = QRCode;
+			sourceTree = "<group>";
+		};
+		185F9EAB28BBEC2C00A90726 /* GridSVG */ = {
+			isa = PBXGroup;
+			children = (
+				185F9EAC28BBEC3C00A90726 /* GridSVG.swift */,
+				185F9EB828BBFD8300A90726 /* GridSVG.Directions.swift */,
+				185F9EB028BBED0000A90726 /* GridSVG.Curve.swift */,
+				185F9EB228BBEEE700A90726 /* GridSVG.Path.swift */,
+				185F9EB428BBEFB300A90726 /* GridSVG.Element.swift */,
+				185F9EAE28BBEC6200A90726 /* DecimalPoint.swift */,
+			);
+			path = GridSVG;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -192,14 +218,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				185F9EAF28BBEC6200A90726 /* DecimalPoint.swift in Sources */,
 				182F7F3728A176C800E72E4D /* main.swift in Sources */,
 				182F7F6128AACC0500E72E4D /* CIQRCode.swift in Sources */,
+				185F9EB528BBEFB300A90726 /* GridSVG.Element.swift in Sources */,
+				185F9EB128BBED0000A90726 /* GridSVG.Curve.swift in Sources */,
 				182F7F5828A9D67E00E72E4D /* IntRect.swift in Sources */,
+				185F9EAD28BBEC3C00A90726 /* GridSVG.swift in Sources */,
 				182F7F6B28AB24F800E72E4D /* BCCorrectionLevel.swift in Sources */,
 				182F7F6328AACCC500E72E4D /* QRCodeProtocol.swift in Sources */,
 				182F7F5628A9D64000E72E4D /* IntPoint.swift in Sources */,
 				182F7F5A28A9D6E900E72E4D /* IntSize.swift in Sources */,
+				185F9EB328BBEEE700A90726 /* GridSVG.Path.swift in Sources */,
 				182F7F3E28A1770F00E72E4D /* CommandLineUtils.swift in Sources */,
+				185F9EB928BBFD8300A90726 /* GridSVG.Directions.swift in Sources */,
 				182F7F4228A18AA700E72E4D /* BinaryPixelSVG.swift in Sources */,
 				182F7F6528AAF5A100E72E4D /* CorrectionLevel.swift in Sources */,
 				182F7F6728AAF70600E72E4D /* BCQRCode.swift in Sources */,
