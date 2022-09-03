@@ -371,6 +371,7 @@
 		};
 		182F7F3C28A176C800E72E4D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 182F7F4028A17EBE00E72E4D /* Config.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
