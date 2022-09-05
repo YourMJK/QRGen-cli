@@ -11,28 +11,54 @@ import Foundation
 extension GridSVG {
 	/// A cluster of connected `Element`s
 	struct ElementCluster {
-		let elements: [Element]
-		
-		init (from elements: inout (dict: [Int: Element], keys: [IntPoint: [Int]]), containing element: Element) {
-			func neighbors(of element: Element) -> [Element] {
-				var neighborElements = [Element]()
+		class GridDictionary {
+			let keys: [IntPoint: [Int]]
+			var dict: [Int: Element]
+			
+			init (from elements: [Element]) {
+				var keys = [IntPoint: [Int]]()
+				var dict = [Int: Element]()
+				for (index, element) in elements.enumerated() {
+					dict[index] = element
+					keys[element.position, default: []].append(index)
+				}
+				self.keys = keys
+				self.dict = dict
+			}
+			
+			func forEachElement(at position: IntPoint, _ closure: (Int, Element) throws -> Void) rethrows {
+				try keys[position]?.forEach { key in
+					guard let element = dict[key] else { return }
+					try closure(key, element)
+				}
+			}
+			func forEachNeighbor(of element: Element, _ closure: (Corners, Edges, Int, Element) throws -> Void) rethrows {
 				for quandrant in element.connectingQuadrants {
 					// Check neighboring positions of quadrant
 					for direction in quandrant.neighbors {
 						let offset = direction.offset
 						let position = element.position.offsetBy(dx: offset.x, dy: offset.y)
 						// Check all elements at neighboring position
-						guard let keys = elements.keys[position] else { continue }
-						for key in keys {
-							guard let neighborElement = elements.dict[key] else { continue }
-							// Check if neighborhood is mutual
-							let mirroredQuadrant = quandrant.mirror(in: direction)
-							if neighborElement.connectingQuadrants.contains(mirroredQuadrant) {
-								elements.dict.removeValue(forKey: key)
-								neighborElements.append(neighborElement)
-							}
+						try forEachElement(at: position) { key, neighborElement in
+							try closure(quandrant, direction, key, neighborElement)
 						}
 					}
+				}
+			}
+		}
+		
+		
+		let elements: [Element]
+		
+		init (from elements: inout GridDictionary, containing element: Element) {
+			func neighbors(of element: Element) -> [Element] {
+				var neighborElements = [Element]()
+				elements.forEachNeighbor(of: element) { quandrant, direction, key, neighborElement in
+					// Check if neighborhood is mutual
+					let mirroredQuadrant = quandrant.mirror(in: direction)
+					guard neighborElement.connectingQuadrants.contains(mirroredQuadrant) else { return }
+					elements.dict.removeValue(forKey: key)
+					neighborElements.append(neighborElement)
 				}
 				return neighborElements
 			}
@@ -50,11 +76,7 @@ extension GridSVG {
 		
 		static func findClusters(in elements: [Element]) -> [ElementCluster] {
 			var clusters = [ElementCluster]()
-			var elementsDict = (dict: [Int: Element](), keys: [IntPoint: [Int]]())
-			for (index, element) in elements.enumerated() {
-				elementsDict.dict[index] = element
-				elementsDict.keys[element.position, default: []].append(index)
-			}
+			var elementsDict = GridDictionary(from: elements)
 			
 			while let element = elementsDict.dict.popFirst()?.value {
 				clusters.append(ElementCluster(from: &elementsDict, containing: element))
