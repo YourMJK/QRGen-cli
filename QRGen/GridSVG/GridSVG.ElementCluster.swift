@@ -52,15 +52,14 @@ extension GridSVG {
 		
 		init (from elements: inout GridDictionary, containing element: Element) {
 			func neighbors(of element: Element) -> [Element] {
-				var neighborElements = [Element]()
+				var neighborElementsKeys = Set<Int>()
 				elements.forEachNeighbor(of: element) { quandrant, direction, key, neighborElement in
 					// Check if neighborhood is mutual
 					let mirroredQuadrant = quandrant.mirror(in: direction)
 					guard neighborElement.connectingQuadrants.contains(mirroredQuadrant) else { return }
-					elements.dict.removeValue(forKey: key)
-					neighborElements.append(neighborElement)
+					neighborElementsKeys.insert(key)
 				}
-				return neighborElements
+				return neighborElementsKeys.sorted().map { elements.dict.removeValue(forKey: $0)! }
 			}
 			func addNeighbors(of element: Element, to clusterElements: inout [Element]) {
 				clusterElements.append(element)
@@ -78,7 +77,8 @@ extension GridSVG {
 			var clusters = [ElementCluster]()
 			var elementsDict = GridDictionary(from: elements)
 			
-			while let element = elementsDict.dict.popFirst()?.value {
+			while let key = elementsDict.dict.keys.sorted().first {
+				let element = elementsDict.dict.removeValue(forKey: key)!
 				clusters.append(ElementCluster(from: &elementsDict, containing: element))
 			}
 			
