@@ -11,6 +11,7 @@ import Foundation
 extension GridSVG {
 	/// A cluster of connected `Element`s
 	struct ElementCluster {
+		/// A mutable collection of elements with O(1) access to elements by their grid position
 		class GridDictionary {
 			let keys: [IntPoint: [Int]]
 			var dict: [Int: Element]
@@ -39,10 +40,18 @@ extension GridSVG {
 						let offset = direction.offset
 						let position = element.position.offsetBy(dx: offset.x, dy: offset.y)
 						// Check all elements at neighboring position
-						try forEachElement(at: position) { key, neighborElement in
-							try closure(quandrant, direction, key, neighborElement)
+						try forEachElement(at: position) { neighborKey, neighborElement in
+							try closure(quandrant, direction, neighborKey, neighborElement)
 						}
 					}
+				}
+			}
+			func forEachMutualNeighbor(of element: Element, _ closure: (Corners, Edges, Int, Element) throws -> Void) rethrows {
+				try forEachNeighbor(of: element) { quandrant, direction, neighborKey, neighborElement in
+					// Check if neighborhood is mutual
+					let mirroredQuadrant = quandrant.mirror(in: direction)
+					guard neighborElement.connectingQuadrants.contains(mirroredQuadrant) else { return }
+					try closure(quandrant, direction, neighborKey, neighborElement)
 				}
 			}
 		}
@@ -51,33 +60,34 @@ extension GridSVG {
 		let elements: [Element]
 		
 		init (from elements: inout GridDictionary, containing element: Element) {
-			func neighbors(of element: Element) -> [Element] {
-				var neighborElementsKeys = Set<Int>()
-				elements.forEachNeighbor(of: element) { quandrant, direction, key, neighborElement in
-					// Check if neighborhood is mutual
-					let mirroredQuadrant = quandrant.mirror(in: direction)
-					guard neighborElement.connectingQuadrants.contains(mirroredQuadrant) else { return }
-					neighborElementsKeys.insert(key)
-				}
-				return neighborElementsKeys.sorted().map { elements.dict.removeValue(forKey: $0)! }
-			}
-			func addNeighbors(of element: Element, to clusterElements: inout [Element]) {
-				clusterElements.append(element)
-				for neighborElement in neighbors(of: element) {
-					addNeighbors(of: neighborElement, to: &clusterElements)
-				}
-			}
+			var clusterElements = [Element]()
 			
-			var elements = [Element]()
-			addNeighbors(of: element, to: &elements)
-			self.elements = elements
+			func addNeighbors(of element: Element) {
+				// Add element to cluster
+				clusterElements.append(element)
+				// Find mutual neighbors
+				var neighborKeys = Set<Int>()
+				elements.forEachMutualNeighbor(of: element) { _, _, neighborKey, _ in
+					neighborKeys.insert(neighborKey)
+				}
+				// Remove neighbors from search pool
+				let neighborElements = neighborKeys.sorted().map { elements.dict.removeValue(forKey: $0)! }
+				// Call recursively for each neighbor
+				for neighborElement in neighborElements {
+					addNeighbors(of: neighborElement)
+				}
+			}
+			addNeighbors(of: element)
+			
+			self.elements = clusterElements
 		}
 		
 		static func findClusters(in elements: [Element]) -> [ElementCluster] {
 			var clusters = [ElementCluster]()
 			var elementsDict = GridDictionary(from: elements)
 			
-			while let key = elementsDict.dict.keys.sorted().first {
+			// Create clusters until search pool is empty, each time starting at first most element
+			while let key = elementsDict.dict.keys.min() {
 				let element = elementsDict.dict.removeValue(forKey: key)!
 				clusters.append(ElementCluster(from: &elementsDict, containing: element))
 			}
