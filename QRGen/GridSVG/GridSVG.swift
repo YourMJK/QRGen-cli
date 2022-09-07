@@ -45,7 +45,7 @@ class GridSVG {
 		var contentBuilerString =
 		"""
 		<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-		<svg width="100%" height="100%" viewBox="0 0 \(size.width) \(size.height)" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+		<svg width="100%" height="100%" viewBox="0 0 \(size.width) \(size.height)" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="fill-rule:evenodd;">
 		
 		"""
 		for cluster in ElementCluster.findClusters(in: elements) {
