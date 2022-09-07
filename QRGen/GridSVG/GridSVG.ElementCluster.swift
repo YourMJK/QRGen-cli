@@ -116,7 +116,7 @@ extension GridSVG.ElementCluster {
 		}
 		
 		// Map each endpoint to an even number of possible keys of boundaryCurvesIndices
-		for curveEndpoints in boundaryCurvesIndices.keys {
+		for (curveEndpoints, _) in boundaryCurvesIndices.sorted(by: { $0.value < $1.value }) {
 			for endpoint in curveEndpoints.endpoints {
 				boundaryCurvesEndpoints[endpoint, default: []].append(curveEndpoints) 
 			}
