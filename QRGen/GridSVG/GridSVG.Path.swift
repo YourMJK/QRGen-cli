@@ -73,9 +73,6 @@ extension GridSVG.Path {
 extension GridSVG.Path {
 	/// A new square shape with rounded corners
 	static func roundedSquare(origin: DecimalPoint, size: Decimal, roundedCorners: GridSVG.Corners, cornerRadius: Decimal) -> Self {
-		guard !roundedCorners.isEmpty else {
-			return square(origin: origin, size: size)
-		}
 		let roundedSquareCoordinates = Self.roundedSquareCoordinates(origin: origin, size: size, roundedCorners: roundedCorners, cornerRadius: cornerRadius)
 		let needsEdgeLine = cornerRadius != 1
 		var pathBuilder: GridSVG.PathBuilder?

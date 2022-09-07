@@ -139,7 +139,10 @@ struct QRGen {
 			if ignoreSafeAreas || !isInSafeArea(point) {
 				pixelStyle = GridSVG.PixelStyle(pixelShape, margin: pixelMargin, cornerRadius: cornerRadius)
 			} else if isPixel {
-				pixelStyle = .standard
+				switch pixelShape {
+					case .square: pixelStyle = .standard
+					default: pixelStyle = GridSVG.PixelStyle(.roundedCorners([], inverted: false), margin: 0, cornerRadius: cornerRadius)
+				}
 			} else {
 				return
 			}
@@ -171,7 +174,7 @@ struct QRGen {
 					let isPixel = qrCode[point]
 					let pixelShape: GridSVG.PixelShape
 					if isPixel {
-						pixelShape = .square
+						pixelShape = .roundedCorners([], inverted: false)
 					} else if cornerRadius != 0 {
 						pixelShape = .roundedCorners(.all, inverted: true)
 					} else {
