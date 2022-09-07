@@ -33,27 +33,6 @@ extension GridSVG {
 					try closure(key, element)
 				}
 			}
-			func forEachNeighbor(of element: Element, _ closure: (Corners, Edges, Int, Element) throws -> Void) rethrows {
-				for quandrant in element.connectingQuadrants {
-					// Check neighboring positions of quadrant
-					for direction in quandrant.neighbors {
-						let offset = direction.offset
-						let position = element.position.offsetBy(dx: offset.x, dy: offset.y)
-						// Check all elements at neighboring position
-						try forEachElement(at: position) { neighborKey, neighborElement in
-							try closure(quandrant, direction, neighborKey, neighborElement)
-						}
-					}
-				}
-			}
-			func forEachMutualNeighbor(of element: Element, _ closure: (Corners, Edges, Int, Element) throws -> Void) rethrows {
-				try forEachNeighbor(of: element) { quandrant, direction, neighborKey, neighborElement in
-					// Check if neighborhood is mutual
-					let mirroredQuadrant = quandrant.mirror(in: direction)
-					guard neighborElement.connectingQuadrants.contains(mirroredQuadrant) else { return }
-					try closure(quandrant, direction, neighborKey, neighborElement)
-				}
-			}
 		}
 		
 		
@@ -67,8 +46,19 @@ extension GridSVG {
 				clusterElements.append(element)
 				// Find mutual neighbors
 				var neighborKeys = Set<Int>()
-				elements.forEachMutualNeighbor(of: element) { _, _, neighborKey, _ in
-					neighborKeys.insert(neighborKey)
+				for quandrant in element.connectingQuadrants {
+					// Check neighboring positions of quadrant
+					for direction in quandrant.neighbors {
+						let offset = direction.offset
+						let position = element.position.offsetBy(dx: offset.x, dy: offset.y)
+						// Check all elements at neighboring position
+						elements.forEachElement(at: position) { neighborKey, neighborElement in
+							// Check if neighborhood is mutual
+							let mirroredQuadrant = quandrant.mirror(in: direction)
+							guard neighborElement.connectingQuadrants.contains(mirroredQuadrant) else { return }
+							neighborKeys.insert(neighborKey)
+						}
+					}
 				}
 				// Remove neighbors from search pool
 				let neighborElements = neighborKeys.sorted().map { elements.dict.removeValue(forKey: $0)! }
@@ -97,6 +87,7 @@ extension GridSVG {
 	}
 }
 
+
 extension GridSVG.ElementCluster {
 	private struct CurveEndpoints: Equatable, Hashable {
 		let endpoints: Set<DecimalPoint>
@@ -124,7 +115,7 @@ extension GridSVG.ElementCluster {
 			}
 		}
 		
-		// Map each endpoint to two possible keys of boundaryCurvesIndices
+		// Map each endpoint to an even number of possible keys of boundaryCurvesIndices
 		for curveEndpoints in boundaryCurvesIndices.keys {
 			for endpoint in curveEndpoints.endpoints {
 				boundaryCurvesEndpoints[endpoint, default: []].append(curveEndpoints) 
