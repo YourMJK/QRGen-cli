@@ -98,11 +98,72 @@ extension GridSVG {
 }
 
 extension GridSVG.ElementCluster {
+	private struct CurveEndpoints: Equatable, Hashable {
+		let endpoints: Set<DecimalPoint>
+		init (curve: GridSVG.Curve) {
+			self.endpoints = [curve.start, curve.end]
+		}
+	}
+	
 	/// The SVG paths making up the combined shape of the cluster's elements
 	func combinedPaths() -> [GridSVG.Path] {
-		// TODO: Implement with algorithm finding enclosing path and subtracting holes
-		// FIXME: Placeholder (seems to work great for squares but not for inner corners):
-		return elements.map(\.path)
+		guard elements.count > 1 else {
+			return elements.map(\.path)
+		}
+		
+		var boundaryCurvesIndices = [CurveEndpoints: IndexPath]()
+		var boundaryCurvesEndpoints = [DecimalPoint: [CurveEndpoints]]()
+		var boundaryPaths = [GridSVG.Path]()
+		
+		// Find curves on the boundary of the cluser by removing curves with the same start and end point 
+		for (elementIndex, element) in elements.enumerated() {
+			for (curveIndex, curve) in element.path.curves.enumerated() {
+				let endpoints = CurveEndpoints(curve: curve)
+				guard boundaryCurvesIndices.removeValue(forKey: endpoints) == nil else { continue }
+				boundaryCurvesIndices[endpoints] = IndexPath(item: curveIndex, section: elementIndex)
+			}
+		}
+		
+		// Map each endpoint to two possible keys of boundaryCurvesIndices
+		for curveEndpoints in boundaryCurvesIndices.keys {
+			for endpoint in curveEndpoints.endpoints {
+				boundaryCurvesEndpoints[endpoint, default: []].append(curveEndpoints) 
+			}
+		}
+		//precondition(boundaryCurvesEndpoints.values.map(\.count).allSatisfy { $0 == 2 }, "Degree of boundary path nodes is not 2")
+		
+		// Construct a path for each connected loop of boundary curves, each time starting at the first most curve
+		while let startCurveEndpoints = boundaryCurvesIndices.min(by: { $0.value < $1.value })?.key {
+			let startIndex = boundaryCurvesIndices.removeValue(forKey: startCurveEndpoints)!
+			
+			var curves = [GridSVG.Curve]()
+			var nextIndex: IndexPath? = startIndex
+			var nextStartPoint = elements[startIndex.section].path.curves[startIndex.item].end
+			while let index = nextIndex { 
+				var curve = elements[index.section].path.curves[index.item]
+				// Reverse curve if necessary
+				if curve.start != nextStartPoint {
+					curve = curve.reverse()
+					precondition(curve.start == nextStartPoint, "Gap in boundary path")
+				}
+				curves.append(curve)
+				
+				// Find the next curve's index
+				nextStartPoint = curve.end
+				nextIndex = {
+					for curveEndpoints in boundaryCurvesEndpoints[nextStartPoint]! {
+						if let index = boundaryCurvesIndices.removeValue(forKey: curveEndpoints) {
+							return index
+						}
+					}
+					return nil
+				}()
+			}
+			
+			boundaryPaths.append(GridSVG.Path(curves: curves))
+		}
+		
+		return boundaryPaths
 	}
 	
 	var formatted: String {
