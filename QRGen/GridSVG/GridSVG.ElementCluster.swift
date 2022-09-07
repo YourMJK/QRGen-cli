@@ -160,7 +160,51 @@ extension GridSVG.ElementCluster {
 				}()
 			}
 			
-			boundaryPaths.append(GridSVG.Path(curves: curves))
+			// Optimize strings of colinear straight lines into single straight lines
+			var optimizedCurves = [GridSVG.Curve]()
+			var lineStart: DecimalPoint?
+			var lineAxis: (x: Bool, y: Bool)?
+			func curveProperties(_ curve: GridSVG.Curve) -> (axis: (x: Bool, y: Bool), isLineOnAxis: Bool, isSameAxis: Bool) {
+				let vector = (x: curve.end.x - curve.start.x, y: curve.end.y - curve.start.y)
+				let axis = (x: vector.y == 0, y: vector.x == 0)
+				let isLineOnAxis = curve is GridSVG.Line && (axis.x || axis.y)
+				let isSameAxis = lineAxis.map { $0 == axis } ?? true
+				return (axis, isLineOnAxis, isSameAxis)
+			}
+			for curve in curves {
+				let properties = curveProperties(curve)
+				if !properties.isLineOnAxis || !properties.isSameAxis, let start = lineStart {
+					// String of colinear lines is over: add new combining line
+					optimizedCurves.append(GridSVG.Line(start: start, end: curve.start))
+					lineStart = nil
+					lineAxis = nil
+				}
+				guard properties.isLineOnAxis else {
+					// Curve is not a straight line: add unchanged
+					optimizedCurves.append(curve)
+					continue
+				}
+				if lineStart == nil {
+					// Curve is first straight line of string
+					lineStart = curve.start
+					lineAxis = properties.axis
+				}
+			}
+			if let lineStart = lineStart {
+				// Last curve was straight line
+				let firstCurve = optimizedCurves.first!
+				let properties = curveProperties(firstCurve)
+				if properties.isLineOnAxis && properties.isSameAxis {
+					// String is colinear with first string: replace both with new combining line 
+					optimizedCurves[0] = GridSVG.Line(start: lineStart, end: firstCurve.end)
+				} else {
+					// String of colinear lines is over: add new combining line
+					optimizedCurves.append(GridSVG.Line(start: lineStart, end: firstCurve.start))
+				}
+			}
+			
+			// Create new boundary path from optimized curves
+			boundaryPaths.append(GridSVG.Path(curves: optimizedCurves))
 		}
 		
 		return boundaryPaths
