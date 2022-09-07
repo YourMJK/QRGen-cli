@@ -130,7 +130,7 @@ extension GridSVG.ElementCluster {
 				boundaryCurvesEndpoints[endpoint, default: []].append(curveEndpoints) 
 			}
 		}
-		//precondition(boundaryCurvesEndpoints.values.map(\.count).allSatisfy { $0 == 2 }, "Degree of boundary path nodes is not 2")
+		precondition(boundaryCurvesEndpoints.values.map(\.count).allSatisfy { $0 % 2 == 0 }, "Degree of boundary path nodes is not even")
 		
 		// Construct a path for each connected loop of boundary curves, each time starting at the first most curve
 		while let startCurveEndpoints = boundaryCurvesIndices.min(by: { $0.value < $1.value })?.key {
@@ -159,6 +159,7 @@ extension GridSVG.ElementCluster {
 					return nil
 				}()
 			}
+			precondition(curves.last?.end == curves.first?.start, "Boundary path is not closed")
 			
 			// Optimize strings of colinear straight lines into single straight lines
 			var optimizedCurves = [GridSVG.Curve]()
