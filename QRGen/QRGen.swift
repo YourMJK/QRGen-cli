@@ -22,6 +22,7 @@ struct QRGen {
 	let cornerRadius: UInt
 	let ignoreSafeAreas: Bool
 	let writePNG: Bool
+	let noShapeOptimization: Bool
 	
 	enum Input {
 		case data(Data)
@@ -211,6 +212,6 @@ struct QRGen {
 		
 		// Write file
 		let outputFileSVG = outputFile.appendingPathExtension("svg")
-		try svg.content().write(to: outputFileSVG, atomically: true, encoding: .utf8)
+		try svg.content(combineClusters: !noShapeOptimization).write(to: outputFileSVG, atomically: true, encoding: .utf8)
 	}
 }

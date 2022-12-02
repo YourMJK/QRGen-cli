@@ -70,6 +70,9 @@ struct GeneralOptions: ParsableCommand {
 	
 	@Flag(name: .customLong("coreimage"), help: "Use built-in \"CIQRCodeGenerator\" filter from CoreImage to generate QR code instead of Nayuki implementation")
 	var coreImage = false
+	
+	@Flag(name: .long, help: "Add one shape per pixel to the SVG instead of combining touching shapes. This may result in anti-aliasing artifacts (thin lines) between neighboring pixels when viewing the SVG!")
+	var noShapeOptimization = false
 }
 
 struct Arguments: ParsableCommand {
@@ -127,7 +130,8 @@ let qrGen = QRGen(
 	pixelMargin: arguments.styleOptions.pixelMargin,
 	cornerRadius: arguments.styleOptions.cornerRadius,
 	ignoreSafeAreas: arguments.styleOptions.styleAll,
-	writePNG: arguments.generalOptions.png
+	writePNG: arguments.generalOptions.png,
+	noShapeOptimization: arguments.generalOptions.noShapeOptimization
 )
 
 do {
