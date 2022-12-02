@@ -89,7 +89,7 @@ struct Arguments: ParsableCommand {
 	@OptionGroup
 	var generalOptions: GeneralOptions
 	
-	@Argument(help: ArgumentHelp("The type of input used in the <input> argument", valueName: "input type"))
+	@Argument(help: ArgumentHelp("The type of input used in the <input> argument (\(InputType.allCases.map(\.rawValue).joined(separator: " | ")))", valueName: "input type"))
 	var inputType: InputType
 	
 	@Argument(help: ArgumentHelp("The input used to build the QR code's data. For input type \"text\" specify a string, for \"bytes\" and \"textFile\" a file path or \"-\" for stdin", valueName: "input"))
