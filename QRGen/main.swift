@@ -12,9 +12,9 @@ import ArgumentParser
 typealias ArgumentEnum = ExpressibleByArgument & CaseIterable
 
 enum InputType: String, ArgumentEnum {
-	case bytes
 	case text
 	case textFile
+	case bytes
 }
 
 
@@ -98,10 +98,10 @@ struct Arguments: ParsableCommand {
 	@OptionGroup
 	var generalOptions: GeneralOptions
 	
-	@Argument(help: ArgumentHelp("The type of input used in the <input> argument (\(InputType.allCases.map(\.rawValue).joined(separator: " | ")))", valueName: "input type"))
+	@Argument(help: ArgumentHelp("The type of input used in the <input> argument (values: \(InputType.allCases.map(\.rawValue).joined(separator: " | ")))", valueName: "input type"))
 	var inputType: InputType
 	
-	@Argument(help: ArgumentHelp("The input used to build the QR code's data. For input type \"text\" specify a string, for \"bytes\" and \"textFile\" a file path or \"-\" for stdin", valueName: "input"))
+	@Argument(help: ArgumentHelp("The input used to build the QR code's data. For input type \"\(InputType.text)\" specify a string, for \"\(InputType.textFile)\" and \"\(InputType.bytes)\" a file path or \"-\" for stdin", valueName: "input"))
 	var input: String
 	
 	@Argument(help: ArgumentHelp("Directory or file path where to write output files to (default: directory of input file or working directory)", valueName: "output path"))
