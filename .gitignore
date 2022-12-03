@@ -2,3 +2,7 @@
 xcuserdata/
 
 /build/*
+/.build
+
+.swiftpm
+Package.resolved
