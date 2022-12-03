@@ -62,7 +62,7 @@ EXAMPLES:
 * **Variant 1**:  
 Run `make` to build the Swift Package.
 * **Variant 2**:  
-Open the Xcode project and go to *Product > Build (⌘B)*.
+Open the Xcode project and go to *Product > Build* (⌘B).
 
 After using one of these two variants to build the binary, you can either run it directly from `build/QRGen` or install it to your PATH location, e.g.:  
 `$ cp build/QRGen /usr/local/bin/`
