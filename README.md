@@ -1,5 +1,5 @@
 # QRGen
-Swift CLI tool to generate QR codes (PNG and SVG) from data or text
+Swift CLI tool to generate stylized QR codes (SVG and PNG) from data or text
 
 ## Usage
 
@@ -56,3 +56,13 @@ EXAMPLES:
   QRGen -l Q textFile data.txt
   QRGen --level L -s liquidDots -r 80 -a bytes event.ics
 ```
+
+## How to build
+
+* **Variant 1**:  
+Run `make` to build the Swift Package.
+* **Variant 2**:  
+Open the Xcode project and go to *Product > Build (⌘B)*.
+
+After using one of these two variants to build the binary, you can either run it directly from `build/QRGen` or install it to your PATH location, e.g.:  
+`$ cp build/QRGen /usr/local/bin/`
