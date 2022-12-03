@@ -7,10 +7,11 @@ Swift CLI tool to generate QR codes (PNG and SVG) from data or text
 USAGE: QRGen [OPTIONS ...] <input type> <input> [<output path>]
 
 ARGUMENTS:
-  <input type>                          The type of input used in the <input> argument
+  <input type>                          The type of input used in the <input> argument (values:
+                                        text | textFile | bytes)
   <input>                               The input used to build the QR code's data. For input
-                                        type "text" specify a string, for "bytes" and
-                                        "textFile" a file path or "-" for stdin
+                                        type "text" specify a string, for "textFile" and
+                                        "bytes" a file path or "-" for stdin
   <output path>                         Directory or file path where to write output files to
                                         (default: directory of input file or working directory)
 
@@ -44,5 +45,14 @@ GENERAL OPTIONS:
                                         unstyled PNG file
   --coreimage                           Use built-in "CIQRCodeGenerator" filter from CoreImage
                                         to generate QR code instead of Nayuki implementation
+  --no-shape-optimization               Add one shape per pixel to the SVG instead of combining
+                                        touching shapes. This may result in anti-aliasing
+                                        artifacts (thin lines) between neighboring pixels when
+                                        viewing the SVG!
   -h, --help                            Show help information.
+
+EXAMPLES:
+  QRGen text "http://example.org" example
+  QRGen -l Q textFile data.txt
+  QRGen --level L -s liquidDots -r 80 -a bytes event.ics
 ```
