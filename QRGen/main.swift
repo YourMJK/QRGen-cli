@@ -77,7 +77,16 @@ struct GeneralOptions: ParsableCommand {
 
 struct Arguments: ParsableCommand {
 	static var configuration: CommandConfiguration {
-		CommandConfiguration(commandName: ProgramName, helpMessageLabelColumnWidth: 40, alwaysCompactUsageOptions: true)
+		CommandConfiguration(
+					commandName: ProgramName,
+					helpMessageLabelColumnWidth: 40,
+					alwaysCompactUsageOptions: true,
+					examples: [
+						.example(arguments: "text \"http://example.org\" example"),
+						.example(arguments: "-l Q textFile data.txt"),
+						.example(arguments: "--level L -s liquidDots -r 80 -a bytes event.ics"),
+					]
+				)
 	}
 	
 	@OptionGroup(title: "Generator Options")
