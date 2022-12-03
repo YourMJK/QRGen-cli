@@ -1,25 +1,23 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "QRCodeGenerator",
-        "repositoryURL": "https://github.com/YourMJK/QRCodeGenerator",
-        "state": {
-          "branch": "master",
-          "revision": "38f5fd4dc6203baf2bf293b17880e2157654aee7",
-          "version": null
-        }
-      },
-      {
-        "package": "swift-argument-parser",
-        "repositoryURL": "https://github.com/YourMJK/swift-argument-parser",
-        "state": {
-          "branch": "main",
-          "revision": "3b9d6c471ae5f30c5dc3a6742297fa4582ee3073",
-          "version": null
-        }
+  "pins" : [
+    {
+      "identity" : "qrcodegenerator",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/YourMJK/QRCodeGenerator",
+      "state" : {
+        "branch" : "master",
+        "revision" : "38f5fd4dc6203baf2bf293b17880e2157654aee7"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "identity" : "swift-argument-parser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/YourMJK/swift-argument-parser",
+      "state" : {
+        "branch" : "main",
+        "revision" : "4af05930a5a4b5ba92bdaf77ab385dbe8af5e660"
+      }
+    }
+  ],
+  "version" : 2
 }

@@ -80,10 +80,10 @@ struct Arguments: ParsableCommand {
 		CommandConfiguration(commandName: ProgramName, helpMessageLabelColumnWidth: 40, alwaysCompactUsageOptions: true)
 	}
 	
-	@OptionGroup(helpSectionNamePrefix: "Generator")
+	@OptionGroup(title: "Generator Options")
 	var generatorOptions: GeneratorOptions
 	
-	@OptionGroup(helpSectionNamePrefix: "Style")
+	@OptionGroup(title: "Style Options")
 	var styleOptions: StyleOptions
 	
 	@OptionGroup
