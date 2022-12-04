@@ -6,8 +6,9 @@
 //
 
 import Foundation
+#if canImport(AppKit)
 import CoreImage
-
+#endif
 
 struct QRGen {
 	let outputURL: URL
@@ -29,7 +30,9 @@ struct QRGen {
 		case text(String)
 	}
 	enum GeneratorType: String, ArgumentEnum {
+		#if canImport(CoreImage)
 		case coreImage
+		#endif
 		case nayuki
 	}
 	enum Style: String, ArgumentEnum {
@@ -67,14 +70,18 @@ struct QRGen {
 			
 			// Create PNG (1px scale)
 			if writePNG {
+				#if canImport(AppKit)
 				try createPNG(qrCode: qrCode, outputFile: outputFile.unstyled)
+				#endif
 			}
 			
 			// Create SVG
 			try createSVG(qrCode: qrCode, outputFile: outputFile.styled)
 		}
 		switch generatorType {
+			#if canImport(CoreImage)
 			case .coreImage: try generate(using: CIQRCodeGenerator.self)
+			#endif
 			case .nayuki:    try generate(using: BCQRCodeGenerator.self)
 		}
 	}
@@ -92,7 +99,9 @@ struct QRGen {
 		addNameTag("m\(pixelMargin)", pixelMargin != 0)
 		addNameTag("r\(cornerRadius)", cornerRadius != 100 && style != .standard)
 		addNameTag("all", ignoreSafeAreas)
+		#if canImport(CoreImage)
 		addNameTag("CI", generatorType == .coreImage)
+		#endif
 		
 		let baseName = !outputURL.hasDirectoryPath ? outputURL.lastPathComponent : {
 			let formatter = DateFormatter()
@@ -111,12 +120,14 @@ struct QRGen {
 	}
 	
 	
+	#if canImport(AppKit)
 	private func createPNG<T: QRCodeProtocol>(qrCode: T, outputFile: URL) throws {
 		let outputFilePNG = outputFile.appendingPathExtension("png")
 		let cicontext = CIContext()
 		let ciimage = CIImage(cgImage: qrCode.cgimage)
 		try cicontext.writePNGRepresentation(of: ciimage, to: outputFilePNG, format: .RGBA8, colorSpace: ciimage.colorSpace!)
 	}
+	#endif
 	
 	
 	private func createSVG<T: QRCodeProtocol>(qrCode: T, outputFile: URL) throws {

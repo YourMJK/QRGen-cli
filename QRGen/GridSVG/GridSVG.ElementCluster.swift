@@ -95,6 +95,13 @@ extension GridSVG.ElementCluster {
 			self.endpoints = [curve.start, curve.end]
 		}
 	}
+	private struct Index: Comparable, Equatable, Hashable {
+		let curve: Int
+		let element: Int
+		static func < (lhs: Self, rhs: Self) -> Bool {
+			lhs.element == rhs.element ? lhs.curve < rhs.curve : lhs.element < rhs.element
+		}
+	}
 	
 	/// The SVG paths making up the combined shape of the cluster's elements
 	func combinedPaths() -> [GridSVG.Path] {
@@ -102,7 +109,7 @@ extension GridSVG.ElementCluster {
 			return elements.map(\.path)
 		}
 		
-		var boundaryCurvesIndices = [CurveEndpoints: IndexPath]()
+		var boundaryCurvesIndices = [CurveEndpoints: Index]()
 		var boundaryCurvesEndpoints = [DecimalPoint: [CurveEndpoints]]()
 		var boundaryPaths = [GridSVG.Path]()
 		
@@ -111,7 +118,7 @@ extension GridSVG.ElementCluster {
 			for (curveIndex, curve) in element.path.curves.enumerated() {
 				let endpoints = CurveEndpoints(curve: curve)
 				guard boundaryCurvesIndices.removeValue(forKey: endpoints) == nil else { continue }
-				boundaryCurvesIndices[endpoints] = IndexPath(item: curveIndex, section: elementIndex)
+				boundaryCurvesIndices[endpoints] = Index(curve: curveIndex, element: elementIndex)
 			}
 		}
 		
@@ -128,10 +135,10 @@ extension GridSVG.ElementCluster {
 			let startIndex = boundaryCurvesIndices.removeValue(forKey: startCurveEndpoints)!
 			
 			var curves = [GridSVG.Curve]()
-			var nextIndex: IndexPath? = startIndex
-			var nextStartPoint = elements[startIndex.section].path.curves[startIndex.item].end
+			var nextIndex: Index? = startIndex
+			var nextStartPoint = elements[startIndex.element].path.curves[startIndex.curve].end
 			while let index = nextIndex { 
-				var curve = elements[index.section].path.curves[index.item]
+				var curve = elements[index.element].path.curves[index.curve]
 				// Reverse curve if necessary
 				if curve.start != nextStartPoint {
 					curve = curve.reverse()
