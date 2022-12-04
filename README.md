@@ -57,11 +57,17 @@ EXAMPLES:
   QRGen --level L -s liquidDots -r 80 -a bytes event.ics
 ```
 
+## Prerequisites
+
+The Swift toolchain version 5.5 or higher needs to be installed.  
+- For macOS either [download Xcode from the AppStore](https://apps.apple.com/us/app/xcode/id497799835) or run `xcode-select --install` to just get the Command Line Tools. Swift 5.5 requires at least Xcode 13 and macOS 11.3 Big Sur.
+- For Linux [download Swift from swift.org](https://www.swift.org/download/) for your distro and follow the installation guide further down the page.
+
 ## How to build
 
-* **Variant 1**:  
+- **Variant 1**:  
 Run `make` to build the Swift Package.
-* **Variant 2**:  
+- **Variant 2** (macOS only):  
 Open the Xcode project and go to *Product > Build* (⌘B).
 
 After using one of these two variants to build the binary, you can either run it directly from `build/QRGen` or install it to your PATH location, e.g.:  
