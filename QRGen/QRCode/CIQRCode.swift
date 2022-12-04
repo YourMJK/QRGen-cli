@@ -5,6 +5,7 @@
 //  Created by Max-Joseph on 15.08.22.
 //
 
+#if canImport(CoreImage)
 import Foundation
 import CoreImage
 
@@ -42,3 +43,4 @@ struct CIQRCode: QRCodeProtocol {
 		}
 	}
 }
+#endif

@@ -65,11 +65,15 @@ struct StyleOptions: ParsableCommand {
 }
 
 struct GeneralOptions: ParsableCommand {
+	#if canImport(AppKit)
 	@Flag(name: .shortAndLong, help: "Additionally to the SVG output file, also create an unstyled PNG file")
 	var png = false
+	#endif
 	
+	#if canImport(CoreImage)
 	@Flag(name: .customLong("coreimage"), help: "Use built-in \"CIQRCodeGenerator\" filter from CoreImage to generate QR code instead of Nayuki implementation")
 	var coreImage = false
+	#endif
 	
 	@Flag(name: .long, help: "Add one shape per pixel to the SVG instead of combining touching shapes. This may result in anti-aliasing artifacts (thin lines) between neighboring pixels when viewing the SVG!")
 	var noShapeOptimization = false
@@ -125,11 +129,22 @@ let outputURL =
 	inputFile?.deletingPathExtension() ??
 	URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
 
+#if canImport(CoreImage)
+let generatorType: QRGen.GeneratorType = arguments.generalOptions.coreImage ? .coreImage : .nayuki
+#else
+let generatorType: QRGen.GeneratorType = .nayuki
+#endif
+#if canImport(AppKit)
+let writePNG = arguments.generalOptions.png
+#else
+let writePNG = false
+#endif
+
 
 // Run program
 let qrGen = QRGen(
 	outputURL: outputURL,
-	generatorType: arguments.generalOptions.coreImage ? .coreImage : .nayuki,
+	generatorType: generatorType,
 	correctionLevel: arguments.generatorOptions.level,
 	minVersion: arguments.generatorOptions.minVersion,
 	maxVersion: arguments.generatorOptions.maxVersion,
@@ -139,7 +154,7 @@ let qrGen = QRGen(
 	pixelMargin: arguments.styleOptions.pixelMargin,
 	cornerRadius: arguments.styleOptions.cornerRadius,
 	ignoreSafeAreas: arguments.styleOptions.styleAll,
-	writePNG: arguments.generalOptions.png,
+	writePNG: writePNG,
 	noShapeOptimization: arguments.generalOptions.noShapeOptimization
 )
 

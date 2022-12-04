@@ -5,6 +5,7 @@
 //  Created by Max-Joseph on 14.08.22.
 //
 
+#if canImport(CoreImage)
 import Foundation
 import CoreImage
 
@@ -77,3 +78,4 @@ extension CIQRCodeGenerator {
 		}
 	}
 }
+#endif
