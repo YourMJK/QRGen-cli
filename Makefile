@@ -1,12 +1,15 @@
 .PHONY: build distclean
 
+destination = build
+
 build:
 	swift build --configuration release && \
-	cp -v .build/release/QRGen build/
+	mkdir -p $(destination) && \
+	cp -v .build/release/QRGen $(destination)/
 
 clean:
 	swift package clean
-	rm -rf build/*
+	rm -rf $(destination)/*
 
 distclean: clean
 	rm -rf Package.resolved
