@@ -19,13 +19,13 @@ enum InputType: String, ArgumentEnum {
 
 
 struct GeneratorOptions: ParsableCommand {
-	@Option(name: .shortAndLong, help: ArgumentHelp("The QR code's correction level (parity)", valueName: "correction level"))
+	@Option(name: .shortAndLong, help: ArgumentHelp("The QR code's correction level (parity).", valueName: "correction level"))
 	var level: CorrectionLevel = .M
 	
-	@Option(name: .customLong("min"), help: ArgumentHelp("Minimum QR code version (i.e. size) to use. Not supported with \"--coreimage\" flag", valueName: "version 1-40"))
+	@Option(name: .customLong("min"), help: ArgumentHelp("Minimum QR code version (i.e. size) to use. Not supported with \"--coreimage\" flag.", valueName: "version 1-40"))
 	var minVersion = 1
 	
-	@Option(name: .customLong("max"), help: ArgumentHelp("Maximum QR code version (i.e. size) to use. Error is thrown if the supplied input and correction level would produce a larger QR code", valueName: "version 1-40"))
+	@Option(name: .customLong("max"), help: ArgumentHelp("Maximum QR code version (i.e. size) to use. Error is thrown if the supplied input and correction level would produce a larger QR code.", valueName: "version 1-40"))
 	var maxVersion = 40
 	
 	@Flag(name: .shortAndLong, help: ArgumentHelp("Try to reduce length of QR code data by splitting text input into segments of different encodings. Not supported with \"--coreimage\" flag."))
@@ -42,16 +42,16 @@ struct GeneratorOptions: ParsableCommand {
 }
 
 struct StyleOptions: ParsableCommand {
-	@Option(name: .shortAndLong, help: "The QR code's style")
+	@Option(name: .shortAndLong, help: "The QR code's style.")
 	var style: QRGen.Style = .standard
 	
-	@Option(name: [.customShort("m"), .long], help: ArgumentHelp("Shrink the QR code's individual pixels by the specified percentage. Values >50 may produce unreadable results", valueName: "percentage"))
+	@Option(name: [.customShort("m"), .long], help: ArgumentHelp("Shrink the QR code's individual pixels by the specified percentage. Values >50 may produce unreadable results.", valueName: "percentage"))
 	var pixelMargin: UInt = 0
 	
-	@Option(name: [.customShort("r"), .long], help: ArgumentHelp("Specify corner radius as a percentage of half pixel size. Ignored for \"standard\" style", valueName: "percentage"))
+	@Option(name: [.customShort("r"), .long], help: ArgumentHelp("Specify corner radius as a percentage of half pixel size. Ignored for \"standard\" style.", valueName: "percentage"))
 	var cornerRadius: UInt = 100
 	
-	@Flag(name: [.customShort("a"), .long], help: "Apply styling to all pixels, including the QR code's position markers")
+	@Flag(name: [.customShort("a"), .long], help: "Apply styling to all pixels, including the QR code's position markers.")
 	var styleAll = false
 	
 	mutating func validate() throws {
@@ -66,12 +66,12 @@ struct StyleOptions: ParsableCommand {
 
 struct GeneralOptions: ParsableCommand {
 	#if canImport(AppKit)
-	@Flag(name: .shortAndLong, help: "Additionally to the SVG output file, also create an unstyled PNG file")
+	@Flag(name: .shortAndLong, help: "Additionally to the SVG output file, also create an unstyled PNG file.")
 	var png = false
 	#endif
 	
 	#if canImport(CoreImage)
-	@Flag(name: .customLong("coreimage"), help: "Use built-in \"CIQRCodeGenerator\" filter from CoreImage to generate QR code instead of Nayuki implementation")
+	@Flag(name: .customLong("coreimage"), help: "Use built-in \"CIQRCodeGenerator\" filter from CoreImage to generate QR code instead of Nayuki implementation.")
 	var coreImage = false
 	#endif
 	
@@ -102,13 +102,13 @@ struct Arguments: ParsableCommand {
 	@OptionGroup
 	var generalOptions: GeneralOptions
 	
-	@Argument(help: ArgumentHelp("The type of input used in the <input> argument (values: \(InputType.allCases.map(\.rawValue).joined(separator: " | ")))", valueName: "input type"))
+	@Argument(help: ArgumentHelp("The type of input used in the <input> argument. (values: \(InputType.allCases.map(\.rawValue).joined(separator: " | ")))", valueName: "input type"))
 	var inputType: InputType
 	
-	@Argument(help: ArgumentHelp("The input used to build the QR code's data. For input type \"\(InputType.text)\" specify a string, for \"\(InputType.textFile)\" and \"\(InputType.bytes)\" a file path or \"-\" for stdin", valueName: "input"))
+	@Argument(help: ArgumentHelp("The input used to build the QR code's data. For input type \"\(InputType.text)\" specify a string, for \"\(InputType.textFile)\" and \"\(InputType.bytes)\" a file path or \"-\" for stdin.", valueName: "input"))
 	var input: String
 	
-	@Argument(help: ArgumentHelp("Directory or file path where to write output files to (default: directory of input file or working directory)", valueName: "output path"))
+	@Argument(help: ArgumentHelp("Directory or file path where to write output files to. (default: directory of input file or working directory)", valueName: "output path"))
 	var outputPath: String?
 }
 
