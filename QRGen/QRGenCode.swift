@@ -1,5 +1,5 @@
 //
-//  QRGen.swift
+//  QRGenCode.swift
 //  QRGen
 //
 //  Created by Max-Joseph on 11.08.22.
@@ -10,7 +10,7 @@ import Foundation
 import CoreImage
 #endif
 
-struct QRGen {
+struct QRGenCode {
 	let outputURL: URL
 	let generatorType: GeneratorType
 	let correctionLevel: CorrectionLevel
