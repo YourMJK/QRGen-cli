@@ -202,6 +202,16 @@ extension Command {
 		}
 		
 		struct Wifi: ParsableCommand {
+			@Argument(help: ArgumentHelp("The SSID (name) of the WiFi network."))
+			var ssid: String
+			@Argument(help: ArgumentHelp("The password of the WiFi network."))
+			var password: String?
+			@Argument(help: ArgumentHelp("The encryption method used by the WiFi network. (values: \(QRGenContent.WifiEncryption.allCases.map(\.rawValue).joined(separator: " | ")))"))
+			var encryption: QRGenContent.WifiEncryption = .wpa
+			
+			func run() throws {
+				QRGenContent.wifi(ssid: ssid, password: password, encryption: encryption)
+			}
 		}
 		
 		struct Event: ParsableCommand {
