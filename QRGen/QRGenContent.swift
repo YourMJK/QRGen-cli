@@ -50,4 +50,41 @@ struct QRGenContent {
 		
 		stdout(content, terminator: "")
 	}
+	
+	struct GeoCoordinates {
+		let latitude: Double
+		let longitude: Double 
+	}
+	static func event(name: String?, start: Date, end: Date?, location: String?, coordinates: GeoCoordinates?) {
+		var lines = [String]()
+		func addParameter(_ parameter: String, _ value: String) {
+			lines.append("\(parameter):\(value)")
+		}
+		func addParameter(_ parameter: String, date: Date) {
+			let formatter = ISO8601DateFormatter()
+			formatter.formatOptions = [.withYear, .withMonth, .withDay, .withTime, .withTimeZone]
+			addParameter(parameter, formatter.string(from: date))
+		}
+		
+		addParameter("BEGIN", "VEVENT")
+		if let name {
+			addParameter("SUMMARY", name)
+		}
+		addParameter("DTSTART", date: start)
+		if let end {
+			addParameter("DTEND", date: end)
+		}
+		if let location {
+			addParameter("LOCATION", location)
+		}
+		if let coordinates {
+			addParameter("LOCATION", String(format: "%.5f;%.5f", coordinates.latitude, coordinates.longitude))
+		}
+		addParameter("END", "VEVENT")
+		
+		lines.append("")
+		let content = lines.joined(separator: "\r\n")
+		
+		stdout(content, terminator: "")
+	}
 }
