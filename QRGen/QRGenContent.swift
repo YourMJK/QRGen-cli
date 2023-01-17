@@ -87,4 +87,12 @@ struct QRGenContent {
 		
 		stdout(content, terminator: "")
 	}
+	
+	static func geo(coordinates: GeoCoordinates, altitude: Int?) {
+		var content = String(format: "geo:%.5f,%.5f", coordinates.latitude, coordinates.longitude)
+		if let altitude {
+			content += ",\(altitude)"
+		}
+		stdout(content, terminator: "")
+	}
 }

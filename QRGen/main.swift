@@ -197,7 +197,7 @@ extension Command {
 	struct Content: ParsableCommand {
 		static var configuration: CommandConfiguration {
 			CommandConfiguration(
-				subcommands: [Wifi.self, Event.self]
+				subcommands: [Wifi.self, Event.self, Geo.self]
 			)
 		}
 		
@@ -262,6 +262,20 @@ extension Command {
 					location: location,
 					coordinates: try coordinates.map { try parseCoordinates($0) }
 				)
+			}
+		}
+		
+		struct Geo: ParsableCommand {
+			@Argument(help: ArgumentHelp("Latitude coordinate of the location in decimal format. If negative, add \"--\" as first argument."))
+			var latitude: Double
+			@Argument(help: ArgumentHelp("Longitude coordinate of the location in decimal format. If negative, add \"--\" as first argument."))
+			var longitude: Double
+			@Argument(help: ArgumentHelp("Altitude coordinate of the location in meters. If negative, add \"--\" as first argument."))
+			var altitude: Int?
+			
+			func run() throws {
+				//print(latitude, longitude)
+				QRGenContent.geo(coordinates: .init(latitude: latitude, longitude: longitude), altitude: altitude)
 			}
 		}
 	}
