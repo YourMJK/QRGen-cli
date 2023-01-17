@@ -24,52 +24,25 @@ extension Command.Content {
 			)
 		}
 		
-		enum ParsingError: LocalizedError {
-			case dateTime(value: String)
-			case coordinates(value: String)
-			var errorDescription: String? {
-				switch self {
-					case .dateTime(let value): return "Couldn't parse time & date from \"\(value)\". Make sure it is a valid ISO-8601 date with timezone, e.g. \"2023-01-01T01:23:45Z\""
-					case .coordinates(let value): return "Couldn't parse coordinates from \"\(value)\". Make sure it is in the right format (latitude,longitude), e.g. \"45.67890,12.34567\""
-				}
-			}
-		}
-		
 		@Argument(help: ArgumentHelp("The name of the event."))
 		var name: String
-		@Argument(help: ArgumentHelp("The start time & date of the event in ISO-8601 format."))
-		var start: String
+		@Argument(help: ArgumentHelp("The start time & date of the event in ISO-8601 format, e.g. \"2023-01-01T01:23:45Z\"."))
+		var start: Date
 		
-		@Option(name: .long, help: ArgumentHelp("The end time & date of the event in ISO-8601 format."))
-		var end: String?
+		@Option(name: .long, help: ArgumentHelp("The end time & date of the event in ISO-8601 format, e.g. \"2023-01-01T01:23:45Z\"."))
+		var end: Date?
 		@Option(name: .long, help: ArgumentHelp("The location of the event, e.g. a street address."))
 		var location: String?
 		@Option(name: .long, help: ArgumentHelp("Geographical coordinates (latitude and longitude) of the event's location. If latitude is negative, provide the value using \"=\", e.g. \"--coordinates=-45.67890,12.34567\"", valueName: "latitude,longitude"))
-		var coordinates: String?
+		var coordinates: QRGenContent.GeoCoordinates?
 		
 		func run() throws {
-			func parseDateTime(_ value: String) throws -> Date {
-				let formatter = ISO8601DateFormatter()
-				formatter.formatOptions = .withInternetDateTime
-				guard let date = formatter.date(from: value) else {
-					throw ParsingError.dateTime(value: value)
-				}
-				return date
-			}
-			func parseCoordinates(_ value: String) throws -> QRGenContent.GeoCoordinates {
-				let components = value.components(separatedBy: ",")
-				guard components.count == 2, let latitude = Double(components[0]), let longitude = Double(components[1]) else {
-					throw ParsingError.coordinates(value: value)
-				}
-				return .init(latitude: latitude, longitude: longitude)
-			}
-			
 			QRGenContent.event(
 				name: name,
-				start: try parseDateTime(start),
-				end: try end.map { try parseDateTime($0) },
+				start: start,
+				end: end,
 				location: location,
-				coordinates: try coordinates.map { try parseCoordinates($0) }
+				coordinates: coordinates
 			)
 		}
 	}
