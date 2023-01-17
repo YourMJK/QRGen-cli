@@ -78,7 +78,7 @@ struct QRGenContent {
 			addParameter("LOCATION", location)
 		}
 		if let coordinates {
-			addParameter("LOCATION", String(format: "%.5f;%.5f", coordinates.latitude, coordinates.longitude))
+			addParameter("GEO", String(format: "%.5f;%.5f", coordinates.latitude, coordinates.longitude))
 		}
 		addParameter("END", "VEVENT")
 		
