@@ -27,6 +27,15 @@ extension Command {
 			)
 		}
 		
+		enum ParsingError: LocalizedError {
+			case stdinEncoding
+			var errorDescription: String? {
+				switch self {
+					case .stdinEncoding: return "Couldn't decode data from stdin as UTF-8 text"
+				}
+			}
+		}
+		
 		enum InputType: String, ArgumentEnum {
 			case text
 			case textFile
@@ -118,10 +127,10 @@ extension Command {
 			let (inputFile, inputText): (URL?, String?) = {
 				switch inputType {
 					case .bytes, .textFile:
-						let url = (input == "-") ? nil : URL(fileURLWithPath: input)
+						let url = (self.input == "-") ? nil : URL(fileURLWithPath: self.input)
 						return (url, nil)
 					case .text:
-						return (nil, input)
+						return (nil, self.input)
 				}
 			}()
 			let outputURL =
@@ -158,37 +167,30 @@ extension Command {
 				noShapeOptimization: generalOptions.noShapeOptimization
 			)
 			
-			do {
-				let input: QRGenCode.Input = try {
-					switch inputType {
-						case .bytes:
-							guard let inputFile = inputFile else {
-								let stdinData = FileHandle.standardInput.availableData
-								return .data(stdinData)
+			let input: QRGenCode.Input = try {
+				switch inputType {
+					case .bytes:
+						guard let inputFile = inputFile else {
+							let stdinData = FileHandle.standardInput.availableData
+							return .data(stdinData)
+						}
+						return .data(try Data(contentsOf: inputFile))
+						
+					case .textFile:
+						guard let inputFile = inputFile else {
+							let stdinData = FileHandle.standardInput.availableData
+							guard let stdinText = String(data: stdinData, encoding: .utf8) else {
+								throw ParsingError.stdinEncoding
 							}
-							return .data(try Data(contentsOf: inputFile))
-							
-						case .textFile:
-							guard let inputFile = inputFile else {
-								let stdinData = FileHandle.standardInput.availableData
-								guard let stdinText = String(data: stdinData, encoding: .utf8) else {
-									//exit(error: "Couldn't decode data from stdin as UTF-8 text")
-									fatalError("Couldn't decode data from stdin as UTF-8 text")
-								}
-								return .text(stdinText)
-							}
-							return .text(try String(contentsOf: inputFile))
-							
-						case .text:
-							return .text(inputText!)
-					}
-				}()
-				try qrGenCode.generate(with: input)
-			}
-			catch {
-				//exit(error: error.localizedDescription)
-				fatalError(error.localizedDescription)
-			}
+							return .text(stdinText)
+						}
+						return .text(try String(contentsOf: inputFile))
+						
+					case .text:
+						return .text(inputText!)
+				}
+			}()
+			try qrGenCode.generate(with: input)
 		}
 	}
 }
@@ -238,6 +240,17 @@ extension Command {
 				)
 			}
 			
+			enum ParsingError: LocalizedError {
+				case dateTime(value: String)
+				case coordinates(value: String)
+				var errorDescription: String? {
+					switch self {
+						case .dateTime(let value): return "Couldn't parse time & date from \"\(value)\". Make sure it is a valid ISO-8601 date with timezone, e.g. \"2023-01-01T01:23:45Z\""
+						case .coordinates(let value): return "Couldn't parse coordinates from \"\(value)\". Make sure it is in the right format (latitude,longitude), e.g. \"45.67890,12.34567\""
+					}
+				}
+			}
+			
 			@Argument(help: ArgumentHelp("The name of the event."))
 			var name: String
 			@Argument(help: ArgumentHelp("The start time & date of the event in ISO-8601 format."))
@@ -249,17 +262,6 @@ extension Command {
 			var location: String?
 			@Option(name: .long, help: ArgumentHelp("Geographical coordinates (latitude and longitude) of the event's location. If latitude is negative, provide the value using \"=\", e.g. \"--coordinates=-45.67890,12.34567\"", valueName: "latitude,longitude"))
 			var coordinates: String?
-			
-			enum ParsingError: LocalizedError {
-				case dateTime(value: String)
-				case coordinates(value: String)
-				var errorDescription: String? {
-					switch self {
-						case .dateTime(let value): return "Couldn't parse time & date from \"\(value)\". Make sure it is a valid ISO-8601 date with timezone, e.g. \"2023-01-01T01:23:45Z\""
-						case .coordinates(let value): return "Couldn't parse coordinates from \"\(value)\". Make sure it is in the right format (latitude,longitude), e.g. \"45.67890,12.34567\""
-					}
-				}
-			}
 			
 			func run() throws {
 				func parseDateTime(_ value: String) throws -> Date {
