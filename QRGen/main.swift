@@ -231,6 +231,7 @@ extension Command {
 			static var configuration: CommandConfiguration {
 				CommandConfiguration(
 					abstract: "QR code content for a calendar event in the vEvent format.",
+					helpMessageLabelColumnWidth: 40,
 					examples: [
 						.example(arguments: "\"Birthday party\" 2023-01-01T19:00:00Z"),
 						.example(arguments: "\"Birthday party\" 2023-01-01T19:00:00Z --end 2023-01-02T02:00:00Z --coordinates 45.67890,12.34567"),
