@@ -11,6 +11,7 @@ import ArgumentParser
 
 typealias ArgumentEnum = ExpressibleByArgument & CaseIterable
 
+
 extension Date: ExpressibleByArgument {
 	public init?(argument: String) {
 		guard let date = ISO8601DateFormatter().date(from: argument) else { return nil }
@@ -18,6 +19,10 @@ extension Date: ExpressibleByArgument {
 	}
 }
 
+extension QRGenCode.GeneratorType: ExpressibleByArgument { }
+extension QRGenCode.Style: ExpressibleByArgument { }
+
+extension QRGenContent.WifiEncryption: ExpressibleByArgument { }
 extension QRGenContent.GeoCoordinates: ExpressibleByArgument {
 	public init?(argument: String) {
 		let components = argument.components(separatedBy: ",")
@@ -27,3 +32,5 @@ extension QRGenContent.GeoCoordinates: ExpressibleByArgument {
 		self.init(latitude: latitude, longitude: longitude)
 	}
 }
+
+extension CorrectionLevel: ExpressibleByArgument { }

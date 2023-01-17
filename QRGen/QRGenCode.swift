@@ -29,13 +29,13 @@ struct QRGenCode {
 		case data(Data)
 		case text(String)
 	}
-	enum GeneratorType: String, ArgumentEnum {
+	enum GeneratorType: String, CaseIterable {
 		#if canImport(CoreImage)
 		case coreImage
 		#endif
 		case nayuki
 	}
-	enum Style: String, ArgumentEnum {
+	enum Style: String, CaseIterable {
 		case standard
 		case dots
 		case holes

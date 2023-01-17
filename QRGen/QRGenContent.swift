@@ -8,11 +8,17 @@
 import Foundation
 
 struct QRGenContent {
-	enum WifiEncryption: String, ArgumentEnum {
+	enum WifiEncryption: String, CaseIterable {
 		case wep
 		case wpa
 		//case wpa2eap(eapMethod: String?, anonymousIdentity: String?, identity: String?, phase2Method: String?)
 	}
+	struct GeoCoordinates {
+		let latitude: Double
+		let longitude: Double 
+	}
+	
+	
 	static func wifi(ssid: String, password: String?, encryption: WifiEncryption?, hidden: Bool = false) {
 		var content = "WIFI:"
 		func addParameter(_ parameter: String, value: String) {
@@ -51,10 +57,7 @@ struct QRGenContent {
 		stdout(content, terminator: "")
 	}
 	
-	struct GeoCoordinates {
-		let latitude: Double
-		let longitude: Double 
-	}
+	
 	static func event(name: String?, start: Date, end: Date?, location: String?, coordinates: GeoCoordinates?) {
 		var lines = [String]()
 		func addParameter(_ parameter: String, _ value: String) {
