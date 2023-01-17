@@ -16,6 +16,7 @@ extension Command {
 	struct Code: ParsableCommand {
 		static var configuration: CommandConfiguration {
 			CommandConfiguration(
+				abstract: "Generate an (optionally stylized) QR code image from a given input.",
 				helpMessageLabelColumnWidth: 40,
 				alwaysCompactUsageOptions: true,
 				examples: [
@@ -197,11 +198,21 @@ extension Command {
 	struct Content: ParsableCommand {
 		static var configuration: CommandConfiguration {
 			CommandConfiguration(
+				abstract: "Generate different kinds of content for a QR code.",
 				subcommands: [Wifi.self, Event.self, Geo.self]
 			)
 		}
 		
 		struct Wifi: ParsableCommand {
+			static var configuration: CommandConfiguration {
+				CommandConfiguration(
+					abstract: "QR code content for WiFi network information.",
+					examples: [
+						.example(arguments: "\"Free Hotspot\""),
+						.example(arguments: "\"Personal WiFi\" SecretPassword123 wpa"),
+					]
+				)
+			}
 			@Argument(help: ArgumentHelp("The SSID (name) of the WiFi network."))
 			var ssid: String
 			@Argument(help: ArgumentHelp("The password of the WiFi network."))
@@ -215,16 +226,28 @@ extension Command {
 		}
 		
 		struct Event: ParsableCommand {
+			static var configuration: CommandConfiguration {
+				CommandConfiguration(
+					abstract: "QR code content for a calendar event in the vEvent format.",
+					examples: [
+						.example(arguments: "\"Birthday party\" 2023-01-01T19:00:00Z"),
+						.example(arguments: "\"Birthday party\" 2023-01-01T19:00:00Z --end 2023-01-02T02:00:00Z --coordinates 45.67890,12.34567"),
+						.example(arguments: "\"Birthday party\" 2023-01-01T19:00:00Z --end 2023-01-02T02:00:00Z --coordinates=-45.67890,12.34567"),
+						.example(arguments: "\"Birthday party\" 2023-01-01T19:00:00Z --end 2023-01-02T02:00:00Z --location \"Via Bagnon 12\\nSan Biagio di Callalta TV\\, Italia\""),
+					]
+				)
+			}
+			
 			@Argument(help: ArgumentHelp("The name of the event."))
 			var name: String
-			@Argument(help: ArgumentHelp("The start time & date of the event."))
+			@Argument(help: ArgumentHelp("The start time & date of the event in ISO-8601 format."))
 			var start: String
 			
-			@Option(name: .long, help: ArgumentHelp("The end time & date of the event."))
+			@Option(name: .long, help: ArgumentHelp("The end time & date of the event in ISO-8601 format."))
 			var end: String?
 			@Option(name: .long, help: ArgumentHelp("The location of the event, e.g. a street address."))
 			var location: String?
-			@Option(name: .long, help: ArgumentHelp("Geographical coordinates (latitude and longitude) of the event's location.", valueName: "latitude,longitude"))
+			@Option(name: .long, help: ArgumentHelp("Geographical coordinates (latitude and longitude) of the event's location. If latitude is negative, provide the value using \"=\", e.g. \"--coordinates=-45.67890,12.34567\"", valueName: "latitude,longitude"))
 			var coordinates: String?
 			
 			enum ParsingError: LocalizedError {
@@ -266,6 +289,16 @@ extension Command {
 		}
 		
 		struct Geo: ParsableCommand {
+			static var configuration: CommandConfiguration {
+				CommandConfiguration(
+					abstract: "QR code content for geographical coordinates.",
+					discussion: "To provide negative numbers, add \"--\" as the first argument.",
+					examples: [
+						.example(arguments: "45.67890 12.3456"),
+						.example(arguments: "-- 40.71872 -73.98905 100"),
+					]
+				)
+			}
 			@Argument(help: ArgumentHelp("Latitude coordinate of the location in decimal format. If negative, add \"--\" as first argument."))
 			var latitude: Double
 			@Argument(help: ArgumentHelp("Longitude coordinate of the location in decimal format. If negative, add \"--\" as first argument."))
