@@ -5,7 +5,7 @@ destination = build
 build:
 	swift build --configuration release && \
 	mkdir -p $(destination) && \
-	cp -v .build/release/QRGen $(destination)/
+	cp -v .build/release/QRGen-cli $(destination)/QRGen
 
 clean:
 	swift package clean

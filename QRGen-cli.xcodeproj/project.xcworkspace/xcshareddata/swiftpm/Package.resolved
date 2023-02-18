@@ -11,15 +11,6 @@
         }
       },
       {
-        "package": "QRGen",
-        "repositoryURL": "/Users/max-joseph/Projects/Code/QRGen",
-        "state": {
-          "branch": "module-cli-separation",
-          "revision": "2a552dcffb44fbe12a77e963f00d1f2dbb1df3b4",
-          "version": null
-        }
-      },
-      {
         "package": "swift-argument-parser",
         "repositoryURL": "https://github.com/YourMJK/swift-argument-parser",
         "state": {
