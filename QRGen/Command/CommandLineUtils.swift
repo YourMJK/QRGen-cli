@@ -1,5 +1,5 @@
 //
-//  CommandLine.swift
+//  CommandLineUtils.swift
 //  QRGen
 //
 //  Created by Max-Joseph on 24.10.18.

@@ -6,7 +6,7 @@
       "location" : "https://github.com/YourMJK/QRCodeGenerator",
       "state" : {
         "branch" : "master",
-        "revision" : "8164bccc310fd497545644a2c94f1f849136877c"
+        "revision" : "65c3ca6d310251a0989c5221318b8c377f2027a7"
       }
     },
     {
@@ -15,7 +15,7 @@
       "location" : "https://github.com/YourMJK/swift-argument-parser",
       "state" : {
         "branch" : "main",
-        "revision" : "4af05930a5a4b5ba92bdaf77ab385dbe8af5e660"
+        "revision" : "e323f3feb07c64e05db8db0ac0ad73bd5ceae6ae"
       }
     }
   ],

@@ -4,7 +4,9 @@ Swift CLI tool to generate stylized QR codes (SVG and PNG) from data or text
 ## Usage
 
 ```
-USAGE: QRGen [OPTIONS ...] <input type> <input> [<output path>]
+OVERVIEW:  Generate an (optionally stylized) QR code image from a given input.
+
+USAGE:  QRGen code [OPTIONS ...] <input type> <input> [<output path>]
 
 ARGUMENTS:
   <input type>                          The type of input used in the <input> argument.
@@ -52,9 +54,25 @@ GENERAL OPTIONS:
   -h, --help                            Show help information.
 
 EXAMPLES:
-  QRGen text "http://example.org" example
-  QRGen -l Q textFile data.txt
-  QRGen --level L -s liquidDots -r 80 -a bytes event.ics
+  QRGen code text "http://example.org" example
+  QRGen code -l Q textFile data.txt
+  QRGen code --level L -s liquidDots -r 80 -a bytes event.ics
+```
+
+```
+OVERVIEW:  Generate different kinds of content for a QR code.
+
+USAGE:  QRGen content <subcommand>
+
+GENERAL OPTIONS:
+  -h, --help              Show help information.
+
+SUBCOMMANDS:
+  wifi                    QR code content for WiFi network information.
+  event                   QR code content for a calendar event in the vEvent format.
+  geo                     QR code content for geographical coordinates.
+
+  See 'content help <subcommand>' for detailed help.
 ```
 
 ## Prerequisites
