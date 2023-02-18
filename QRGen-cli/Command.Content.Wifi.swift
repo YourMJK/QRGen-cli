@@ -7,6 +7,7 @@
 
 import Foundation
 import ArgumentParser
+import QRGen
 
 
 extension Command.Content {
@@ -29,7 +30,8 @@ extension Command.Content {
 		var encryption: QRGenContent.WifiEncryption = .wpa
 		
 		func run() throws {
-			QRGenContent.wifi(ssid: ssid, password: password, encryption: encryption)
+			let content = QRGenContent.wifi(ssid: ssid, password: password, encryption: encryption)
+			stdout(content, terminator: "")
 		}
 	}
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 import ArgumentParser
+import QRGen
 
 
 extension Command.Content {
@@ -30,7 +31,8 @@ extension Command.Content {
 		var altitude: Int?
 		
 		func run() throws {
-			QRGenContent.geo(coordinates: .init(latitude: latitude, longitude: longitude), altitude: altitude)
+			let content = QRGenContent.geo(coordinates: .init(latitude: latitude, longitude: longitude), altitude: altitude)
+			stdout(content, terminator: "")
 		}
 	}
 }

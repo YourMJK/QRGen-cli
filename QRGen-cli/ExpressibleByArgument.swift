@@ -7,6 +7,7 @@
 
 import Foundation
 import ArgumentParser
+import QRGen
 
 
 typealias ArgumentEnum = ExpressibleByArgument & CaseIterable

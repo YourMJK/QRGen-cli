@@ -7,6 +7,7 @@
 
 import Foundation
 import ArgumentParser
+import QRGen
 
 
 extension Command.Content {
@@ -37,13 +38,14 @@ extension Command.Content {
 		var coordinates: QRGenContent.GeoCoordinates?
 		
 		func run() throws {
-			QRGenContent.event(
+			let content = QRGenContent.event(
 				name: name,
 				start: start,
 				end: end,
 				location: location,
 				coordinates: coordinates
 			)
+			stdout(content, terminator: "")
 		}
 	}
 }
