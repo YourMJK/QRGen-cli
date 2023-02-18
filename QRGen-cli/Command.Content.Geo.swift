@@ -1,6 +1,6 @@
 //
 //  Command.Content.Geo.swift
-//  QRGen
+//  QRGen-cli
 //
 //  Created by Max-Joseph on 17.01.23.
 //
