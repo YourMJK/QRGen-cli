@@ -1,5 +1,7 @@
 # QRGen
-Swift CLI tool to generate stylized QR codes (SVG and PNG) from data or text
+Swift CLI tool to generate stylized QR codes (SVG and PNG) from data or text.
+
+Swift Package library: [**QRGen**](https://github.com/YourMJK/QRGen)
 
 ## Usage
 
