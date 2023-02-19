@@ -1,12 +1,13 @@
 //
 //  Command.Content.Wifi.swift
-//  QRGen
+//  QRGen-cli
 //
 //  Created by Max-Joseph on 17.01.23.
 //
 
 import Foundation
 import ArgumentParser
+import QRGen
 
 
 extension Command.Content {
@@ -25,11 +26,12 @@ extension Command.Content {
 		var ssid: String
 		@Argument(help: ArgumentHelp("The password of the WiFi network."))
 		var password: String?
-		@Argument(help: ArgumentHelp("The encryption method used by the WiFi network. (values: \(QRGenContent.WifiEncryption.allCases.map(\.rawValue).joined(separator: " | ")))"))
-		var encryption: QRGenContent.WifiEncryption = .wpa
+		@Argument(help: ArgumentHelp("The encryption method used by the WiFi network. (values: \(QRContent.WifiEncryption.allCases.map(\.rawValue).joined(separator: " | ")))"))
+		var encryption: QRContent.WifiEncryption = .wpa
 		
 		func run() throws {
-			QRGenContent.wifi(ssid: ssid, password: password, encryption: encryption)
+			let content = QRContent.wifi(ssid: ssid, password: password, encryption: encryption)
+			stdout(content, terminator: "")
 		}
 	}
 }

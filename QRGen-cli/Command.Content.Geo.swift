@@ -1,12 +1,13 @@
 //
 //  Command.Content.Geo.swift
-//  QRGen
+//  QRGen-cli
 //
 //  Created by Max-Joseph on 17.01.23.
 //
 
 import Foundation
 import ArgumentParser
+import QRGen
 
 
 extension Command.Content {
@@ -30,7 +31,8 @@ extension Command.Content {
 		var altitude: Int?
 		
 		func run() throws {
-			QRGenContent.geo(coordinates: .init(latitude: latitude, longitude: longitude), altitude: altitude)
+			let content = QRContent.geo(coordinates: .init(latitude: latitude, longitude: longitude), altitude: altitude)
+			stdout(content, terminator: "")
 		}
 	}
 }

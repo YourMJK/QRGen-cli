@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "182F7F3228A176C800E72E4D"
                BuildableName = "QRGen"
-               BlueprintName = "QRGen"
-               ReferencedContainer = "container:QRGen.xcodeproj">
+               BlueprintName = "QRGen-cli"
+               ReferencedContainer = "container:QRGen-cli.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -46,8 +46,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "182F7F3228A176C800E72E4D"
             BuildableName = "QRGen"
-            BlueprintName = "QRGen"
-            ReferencedContainer = "container:QRGen.xcodeproj">
+            BlueprintName = "QRGen-cli"
+            ReferencedContainer = "container:QRGen-cli.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -63,8 +63,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "182F7F3228A176C800E72E4D"
             BuildableName = "QRGen"
-            BlueprintName = "QRGen"
-            ReferencedContainer = "container:QRGen.xcodeproj">
+            BlueprintName = "QRGen-cli"
+            ReferencedContainer = "container:QRGen-cli.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

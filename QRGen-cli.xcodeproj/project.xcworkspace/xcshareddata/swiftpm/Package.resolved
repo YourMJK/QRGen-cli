@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "qrgen",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/YourMJK/QRGen",
+      "state" : {
+        "branch" : "master",
+        "revision" : "65314cc0fafa08b3439011f0cbbcca090e2d50a4"
+      }
+    },
+    {
       "identity" : "swift-argument-parser",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/YourMJK/swift-argument-parser",

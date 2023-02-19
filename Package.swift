@@ -4,22 +4,22 @@
 import PackageDescription
 
 let package = Package(
-	name: "QRGen",
+	name: "QRGen-cli",
 	products: [
-		.executable(name: "QRGen", targets: ["QRGen"]),
+		.executable(name: "QRGen-cli", targets: ["QRGen-cli"]),
 	],
 	dependencies: [
 		.package(url: "https://github.com/YourMJK/swift-argument-parser", branch: "main"),
-		.package(url: "https://github.com/YourMJK/QRCodeGenerator", branch: "master"),
+		.package(url: "https://github.com/YourMJK/QRGen", branch: "master"),
 	],
 	targets: [
 		.executableTarget(
-			name: "QRGen",
+			name: "QRGen-cli",
 			dependencies: [
 				.product(name: "ArgumentParser", package: "swift-argument-parser"),
-				"QRCodeGenerator",
+				"QRGen",
 			],
-			path: "QRGen"
+			path: "QRGen-cli"
 		),
 	]
 )

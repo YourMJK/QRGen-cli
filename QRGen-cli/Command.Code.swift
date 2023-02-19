@@ -1,12 +1,16 @@
 //
 //  Command.Code.swift
-//  QRGen
+//  QRGen-cli
 //
 //  Created by Max-Joseph on 17.01.23.
 //
 
 import Foundation
 import ArgumentParser
+import QRGen
+#if canImport(AppKit)
+import CoreImage
+#endif
 
 
 extension Command {
@@ -64,7 +68,7 @@ extension Command {
 		
 		struct StyleOptions: ParsableCommand {
 			@Option(name: .shortAndLong, help: "The QR code's style.")
-			var style: QRGenCode.Style = .standard
+			var style: QRGen.Style = .standard
 			
 			@Option(name: [.customShort("m"), .long], help: ArgumentHelp("Shrink the QR code's individual pixels by the specified percentage. Values >50 may produce unreadable results.", valueName: "percentage"))
 			var pixelMargin: UInt = 0
@@ -121,6 +125,19 @@ extension Command {
 		
 		
 		func run() throws {
+			#if canImport(CoreImage)
+			let generatorType: QRGen.GeneratorType = generalOptions.coreImage ? .coreImage : .nayuki
+			#else
+			let generatorType: QRGen.GeneratorType = .nayuki
+			#endif
+			#if canImport(AppKit)
+			let writePNG = generalOptions.png
+			#else
+			let writePNG = false
+			#endif
+			
+			
+			// Determine input
 			let (inputFile, inputText): (URL?, String?) = {
 				switch inputType {
 					case .bytes, .textFile:
@@ -130,41 +147,8 @@ extension Command {
 						return (nil, self.input)
 				}
 			}()
-			let outputURL =
-				outputPath.map(URL.init(fileURLWithPath:)) ??
-				inputFile?.deletingPathExtension() ??
-				URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
 			
-			#if canImport(CoreImage)
-			let generatorType: QRGenCode.GeneratorType = generalOptions.coreImage ? .coreImage : .nayuki
-			#else
-			let generatorType: QRGenCode.GeneratorType = .nayuki
-			#endif
-			#if canImport(AppKit)
-			let writePNG = generalOptions.png
-			#else
-			let writePNG = false
-			#endif
-			
-			
-			// Run program
-			let qrGenCode = QRGenCode(
-				outputURL: outputURL,
-				generatorType: generatorType,
-				correctionLevel: generatorOptions.level,
-				minVersion: generatorOptions.minVersion,
-				maxVersion: generatorOptions.maxVersion,
-				optimize: generatorOptions.optimize,
-				strict: generatorOptions.strict,
-				style: styleOptions.style,
-				pixelMargin: styleOptions.pixelMargin,
-				cornerRadius: styleOptions.cornerRadius,
-				ignoreSafeAreas: styleOptions.styleAll,
-				writePNG: writePNG,
-				noShapeOptimization: generalOptions.noShapeOptimization
-			)
-			
-			let input: QRGenCode.Input = try {
+			let input: QRGen.Input = try {
 				switch inputType {
 					case .bytes:
 						guard let inputFile = inputFile else {
@@ -187,7 +171,72 @@ extension Command {
 						return .text(inputText!)
 				}
 			}()
-			try qrGenCode.generate(with: input)
+			
+			
+			// Generate output file URLs
+			let outputURL =
+				outputPath.map(URL.init(fileURLWithPath:)) ??
+				inputFile?.deletingPathExtension() ??
+				URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+			
+			let suffix = "QR-\(generatorOptions.level)"
+			var suffixStyled = suffix
+			
+			func addNameTag(_ tag: String, _ condition: Bool) {
+				guard condition else { return }
+				suffixStyled += "-" + tag
+			}
+			addNameTag("\(styleOptions.style)", styleOptions.style != .standard)
+			addNameTag("m\(styleOptions.pixelMargin)", styleOptions.pixelMargin != 0)
+			addNameTag("r\(styleOptions.cornerRadius)", styleOptions.cornerRadius != 100 && styleOptions.style != .standard)
+			addNameTag("all", styleOptions.styleAll)
+			#if canImport(CoreImage)
+			addNameTag("CI", generalOptions.coreImage)
+			#endif
+			
+			let baseName = !outputURL.hasDirectoryPath ? outputURL.lastPathComponent : {
+				let formatter = DateFormatter()
+				formatter.locale = Locale(identifier: "en_US_POSIX")
+				formatter.dateFormat = "yyyy-MM-dd_HH-mm-ss"
+				return formatter.string(from: Date())
+			}()
+			let name = "\(baseName)_\(suffix)"
+			let nameStyled = "\(baseName)_\(suffixStyled)"
+			
+			let baseURL = outputURL.hasDirectoryPath ? outputURL : outputURL.deletingLastPathComponent()
+			let pngURL = baseURL.appendingPathComponent(name).appendingPathExtension("png")
+			let svgURL = baseURL.appendingPathComponent(nameStyled).appendingPathExtension("svg")
+			
+			
+			// Generate QR code
+			let qrGen = QRGen(
+				generatorType: generatorType,
+				correctionLevel: generatorOptions.level,
+				minVersion: generatorOptions.minVersion,
+				maxVersion: generatorOptions.maxVersion,
+				optimize: generatorOptions.optimize,
+				strict: generatorOptions.strict,
+				style: styleOptions.style,
+				pixelMargin: styleOptions.pixelMargin,
+				cornerRadius: styleOptions.cornerRadius,
+				ignoreSafeAreas: styleOptions.styleAll,
+				noShapeOptimization: generalOptions.noShapeOptimization
+			)
+			let qrCode = try qrGen.generate(with: input)
+			
+			
+			// Create PNG file (1px scale)
+			#if canImport(AppKit)
+			if writePNG {
+				let cicontext = CIContext()
+				let ciimage = qrGen.createRasterImage(qrCode: qrCode)
+				try cicontext.writePNGRepresentation(of: ciimage, to: pngURL, format: .RGBA8, colorSpace: ciimage.colorSpace!)
+			}
+			#endif
+			
+			// Create SVG file
+			let svg = qrGen.createSVG(qrCode: qrCode)
+			try svg.write(to: svgURL, atomically: true, encoding: .utf8)
 		}
 	}
 }

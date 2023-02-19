@@ -1,6 +1,6 @@
 //
 //  CommandLineUtils.swift
-//  QRGen
+//  QRGen-cli
 //
 //  Created by Max-Joseph on 24.10.18.
 //
