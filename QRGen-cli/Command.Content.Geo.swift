@@ -31,7 +31,7 @@ extension Command.Content {
 		var altitude: Int?
 		
 		func run() throws {
-			let content = QRGenContent.geo(coordinates: .init(latitude: latitude, longitude: longitude), altitude: altitude)
+			let content = QRContent.geo(coordinates: .init(latitude: latitude, longitude: longitude), altitude: altitude)
 			stdout(content, terminator: "")
 		}
 	}

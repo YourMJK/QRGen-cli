@@ -35,10 +35,10 @@ extension Command.Content {
 		@Option(name: .long, help: ArgumentHelp("The location of the event, e.g. a street address."))
 		var location: String?
 		@Option(name: .long, help: ArgumentHelp("Geographical coordinates (latitude and longitude) of the event's location. If latitude is negative, provide the value using \"=\", e.g. \"--coordinates=-45.67890,12.34567\"", valueName: "latitude,longitude"))
-		var coordinates: QRGenContent.GeoCoordinates?
+		var coordinates: QRContent.GeoCoordinates?
 		
 		func run() throws {
-			let content = QRGenContent.event(
+			let content = QRContent.event(
 				name: name,
 				start: start,
 				end: end,

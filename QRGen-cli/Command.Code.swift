@@ -68,7 +68,7 @@ extension Command {
 		
 		struct StyleOptions: ParsableCommand {
 			@Option(name: .shortAndLong, help: "The QR code's style.")
-			var style: QRGenCode.Style = .standard
+			var style: QRGen.Style = .standard
 			
 			@Option(name: [.customShort("m"), .long], help: ArgumentHelp("Shrink the QR code's individual pixels by the specified percentage. Values >50 may produce unreadable results.", valueName: "percentage"))
 			var pixelMargin: UInt = 0
@@ -126,9 +126,9 @@ extension Command {
 		
 		func run() throws {
 			#if canImport(CoreImage)
-			let generatorType: QRGenCode.GeneratorType = generalOptions.coreImage ? .coreImage : .nayuki
+			let generatorType: QRGen.GeneratorType = generalOptions.coreImage ? .coreImage : .nayuki
 			#else
-			let generatorType: QRGenCode.GeneratorType = .nayuki
+			let generatorType: QRGen.GeneratorType = .nayuki
 			#endif
 			#if canImport(AppKit)
 			let writePNG = generalOptions.png
@@ -148,7 +148,7 @@ extension Command {
 				}
 			}()
 			
-			let input: QRGenCode.Input = try {
+			let input: QRGen.Input = try {
 				switch inputType {
 					case .bytes:
 						guard let inputFile = inputFile else {
@@ -209,7 +209,7 @@ extension Command {
 			
 			
 			// Generate QR code
-			let qrGenCode = QRGenCode(
+			let qrGen = QRGen(
 				generatorType: generatorType,
 				correctionLevel: generatorOptions.level,
 				minVersion: generatorOptions.minVersion,
@@ -222,20 +222,20 @@ extension Command {
 				ignoreSafeAreas: styleOptions.styleAll,
 				noShapeOptimization: generalOptions.noShapeOptimization
 			)
-			let qrCode = try qrGenCode.generate(with: input)
+			let qrCode = try qrGen.generate(with: input)
 			
 			
 			// Create PNG file (1px scale)
 			#if canImport(AppKit)
 			if writePNG {
 				let cicontext = CIContext()
-				let ciimage = qrGenCode.createRasterImage(qrCode: qrCode)
+				let ciimage = qrGen.createRasterImage(qrCode: qrCode)
 				try cicontext.writePNGRepresentation(of: ciimage, to: pngURL, format: .RGBA8, colorSpace: ciimage.colorSpace!)
 			}
 			#endif
 			
 			// Create SVG file
-			let svg = qrGenCode.createSVG(qrCode: qrCode)
+			let svg = qrGen.createSVG(qrCode: qrCode)
 			try svg.write(to: svgURL, atomically: true, encoding: .utf8)
 		}
 	}
