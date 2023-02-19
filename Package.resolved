@@ -14,8 +14,8 @@
         "package": "QRGen",
         "repositoryURL": "https://github.com/YourMJK/QRGen",
         "state": {
-          "branch": "module-cli-separation",
-          "revision": "3a4ef58e5b8029614374a3b41b5e89f66986f664",
+          "branch": "master",
+          "revision": "65314cc0fafa08b3439011f0cbbcca090e2d50a4",
           "version": null
         }
       },

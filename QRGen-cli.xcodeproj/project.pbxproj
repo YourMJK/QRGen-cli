@@ -349,7 +349,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/YourMJK/QRGen";
 			requirement = {
-				branch = "module-cli-separation";
+				branch = master;
 				kind = branch;
 			};
 		};
