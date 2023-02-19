@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		182F7F3E28A1770F00E72E4D /* CommandLineUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F3D28A1770F00E72E4D /* CommandLineUtils.swift */; };
 		182F7F4B28A44C4000E72E4D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 182F7F4A28A44C4000E72E4D /* ArgumentParser */; };
-		18FA519629A14C0F0085E2C8 /* QRGen in Frameworks */ = {isa = PBXBuildFile; productRef = 18FA519529A14C0F0085E2C8 /* QRGen */; };
+		18722E6529A1A4E200539542 /* QRGen in Frameworks */ = {isa = PBXBuildFile; productRef = 18722E6429A1A4E200539542 /* QRGen */; };
 		18FB9AAB29771433006FC433 /* Command.Code.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FB9AAA29771433006FC433 /* Command.Code.swift */; };
 		18FB9AAD29771644006FC433 /* Command.Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FB9AAC29771644006FC433 /* Command.Content.swift */; };
 		18FB9AAF29771DE9006FC433 /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FB9AAE29771DE9006FC433 /* Command.swift */; };
@@ -35,7 +35,6 @@
 		182F7F3328A176C800E72E4D /* QRGen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = QRGen; sourceTree = BUILT_PRODUCTS_DIR; };
 		182F7F3D28A1770F00E72E4D /* CommandLineUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandLineUtils.swift; sourceTree = "<group>"; };
 		182F7F4028A17EBE00E72E4D /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
-		18FA519229A14A820085E2C8 /* QRGen */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = QRGen; path = ../QRGen; sourceTree = "<group>"; };
 		18FB9AAA29771433006FC433 /* Command.Code.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.Code.swift; sourceTree = "<group>"; };
 		18FB9AAC29771644006FC433 /* Command.Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.Content.swift; sourceTree = "<group>"; };
 		18FB9AAE29771DE9006FC433 /* Command.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
@@ -50,7 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				18FA519629A14C0F0085E2C8 /* QRGen in Frameworks */,
+				18722E6529A1A4E200539542 /* QRGen in Frameworks */,
 				182F7F4B28A44C4000E72E4D /* ArgumentParser in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -61,7 +60,6 @@
 		182F7F2A28A176C700E72E4D = {
 			isa = PBXGroup;
 			children = (
-				18FA519129A14A820085E2C8 /* Packages */,
 				182F7F4028A17EBE00E72E4D /* Config.xcconfig */,
 				182F7F3528A176C800E72E4D /* QRGen-cli */,
 				182F7F3428A176C800E72E4D /* Products */,
@@ -92,14 +90,6 @@
 			path = "QRGen-cli";
 			sourceTree = "<group>";
 		};
-		18FA519129A14A820085E2C8 /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				18FA519229A14A820085E2C8 /* QRGen */,
-			);
-			name = Packages;
-			sourceTree = "<group>";
-		};
 		18FA519429A14C0F0085E2C8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -125,7 +115,7 @@
 			name = "QRGen-cli";
 			packageProductDependencies = (
 				182F7F4A28A44C4000E72E4D /* ArgumentParser */,
-				18FA519529A14C0F0085E2C8 /* QRGen */,
+				18722E6429A1A4E200539542 /* QRGen */,
 			);
 			productName = QRGen;
 			productReference = 182F7F3328A176C800E72E4D /* QRGen */;
@@ -157,7 +147,7 @@
 			mainGroup = 182F7F2A28A176C700E72E4D;
 			packageReferences = (
 				182F7F4928A44C4000E72E4D /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
-				18FA519329A14B2B0085E2C8 /* XCRemoteSwiftPackageReference "QRGen" */,
+				18722E6329A1A4E200539542 /* XCRemoteSwiftPackageReference "QRGen" */,
 			);
 			productRefGroup = 182F7F3428A176C800E72E4D /* Products */;
 			projectDirPath = "";
@@ -355,9 +345,9 @@
 				kind = branch;
 			};
 		};
-		18FA519329A14B2B0085E2C8 /* XCRemoteSwiftPackageReference "QRGen" */ = {
+		18722E6329A1A4E200539542 /* XCRemoteSwiftPackageReference "QRGen" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = ../QRGen;
+			repositoryURL = "https://github.com/YourMJK/QRGen";
 			requirement = {
 				branch = "module-cli-separation";
 				kind = branch;
@@ -371,9 +361,9 @@
 			package = 182F7F4928A44C4000E72E4D /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
 			productName = ArgumentParser;
 		};
-		18FA519529A14C0F0085E2C8 /* QRGen */ = {
+		18722E6429A1A4E200539542 /* QRGen */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 18FA519329A14B2B0085E2C8 /* XCRemoteSwiftPackageReference "QRGen" */;
+			package = 18722E6329A1A4E200539542 /* XCRemoteSwiftPackageReference "QRGen" */;
 			productName = QRGen;
 		};
 /* End XCSwiftPackageProductDependency section */

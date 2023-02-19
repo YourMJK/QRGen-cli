@@ -12,7 +12,7 @@
       },
       {
         "package": "QRGen",
-        "repositoryURL": "/Users/max-joseph/Projects/Code/QRGen",
+        "repositoryURL": "https://github.com/YourMJK/QRGen",
         "state": {
           "branch": "module-cli-separation",
           "revision": "3a4ef58e5b8029614374a3b41b5e89f66986f664",
