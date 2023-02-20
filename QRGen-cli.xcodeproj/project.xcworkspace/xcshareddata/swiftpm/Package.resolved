@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "intgeometry",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/YourMJK/IntGeometry",
+      "state" : {
+        "branch" : "main",
+        "revision" : "0686c14ae7d1f7d05526d105f3a308f0ecd33fb5"
+      }
+    },
+    {
       "identity" : "qrcodegenerator",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/YourMJK/QRCodeGenerator",
@@ -15,7 +24,7 @@
       "location" : "https://github.com/YourMJK/QRGen",
       "state" : {
         "branch" : "master",
-        "revision" : "65314cc0fafa08b3439011f0cbbcca090e2d50a4"
+        "revision" : "b5fa1682522d8c0d55f54b8a4f4a52fc8f0a45a3"
       }
     },
     {
