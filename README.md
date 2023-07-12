@@ -74,7 +74,7 @@ SUBCOMMANDS:
   event                   QR code content for a calendar event in the vEvent format.
   geo                     QR code content for geographical coordinates.
 
-  See 'QRGen content help <subcommand>' for detailed help.
+  See 'QRGen help content <subcommand>' for detailed help.
 ```
 
 ## Prerequisites
