@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CommandLineTool
 import ArgumentParser
 import QRGen
 

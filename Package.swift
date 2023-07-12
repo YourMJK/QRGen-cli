@@ -9,14 +9,14 @@ let package = Package(
 		.executable(name: "QRGen-cli", targets: ["QRGen-cli"]),
 	],
 	dependencies: [
-		.package(url: "https://github.com/YourMJK/swift-argument-parser", branch: "main"),
+		.package(url: "https://github.com/YourMJK/CommandLineTool", from: "1.0.0"),
 		.package(url: "https://github.com/YourMJK/QRGen", from: "1.0.0"),
 	],
 	targets: [
 		.executableTarget(
 			name: "QRGen-cli",
 			dependencies: [
-				.product(name: "ArgumentParser", package: "swift-argument-parser"),
+				"CommandLineTool",
 				"QRGen",
 			],
 			path: "QRGen-cli"

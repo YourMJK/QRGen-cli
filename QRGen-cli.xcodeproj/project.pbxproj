@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		182F7F3E28A1770F00E72E4D /* CommandLineUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182F7F3D28A1770F00E72E4D /* CommandLineUtils.swift */; };
-		182F7F4B28A44C4000E72E4D /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 182F7F4A28A44C4000E72E4D /* ArgumentParser */; };
+		1887C4212A5F1A8600739695 /* CommandLineTool in Frameworks */ = {isa = PBXBuildFile; productRef = 1887C4202A5F1A8600739695 /* CommandLineTool */; };
 		18722E6529A1A4E200539542 /* QRGen in Frameworks */ = {isa = PBXBuildFile; productRef = 18722E6429A1A4E200539542 /* QRGen */; };
 		18FB9AAB29771433006FC433 /* Command.Code.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FB9AAA29771433006FC433 /* Command.Code.swift */; };
 		18FB9AAD29771644006FC433 /* Command.Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FB9AAC29771644006FC433 /* Command.Content.swift */; };
@@ -33,7 +32,6 @@
 
 /* Begin PBXFileReference section */
 		182F7F3328A176C800E72E4D /* QRGen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = QRGen; sourceTree = BUILT_PRODUCTS_DIR; };
-		182F7F3D28A1770F00E72E4D /* CommandLineUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommandLineUtils.swift; sourceTree = "<group>"; };
 		182F7F4028A17EBE00E72E4D /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		18FB9AAA29771433006FC433 /* Command.Code.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.Code.swift; sourceTree = "<group>"; };
 		18FB9AAC29771644006FC433 /* Command.Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.Content.swift; sourceTree = "<group>"; };
@@ -50,7 +48,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				18722E6529A1A4E200539542 /* QRGen in Frameworks */,
-				182F7F4B28A44C4000E72E4D /* ArgumentParser in Frameworks */,
+				1887C4212A5F1A8600739695 /* CommandLineTool in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,7 +83,6 @@
 				18FB9AB329772014006FC433 /* Command.Content.Event.swift */,
 				18FB9AB529772036006FC433 /* Command.Content.Geo.swift */,
 				18FB9AB729772114006FC433 /* ExpressibleByArgument.swift */,
-				182F7F3D28A1770F00E72E4D /* CommandLineUtils.swift */,
 			);
 			path = "QRGen-cli";
 			sourceTree = "<group>";
@@ -114,7 +111,7 @@
 			);
 			name = "QRGen-cli";
 			packageProductDependencies = (
-				182F7F4A28A44C4000E72E4D /* ArgumentParser */,
+				1887C4202A5F1A8600739695 /* CommandLineTool */,
 				18722E6429A1A4E200539542 /* QRGen */,
 			);
 			productName = QRGen;
@@ -146,7 +143,7 @@
 			);
 			mainGroup = 182F7F2A28A176C700E72E4D;
 			packageReferences = (
-				182F7F4928A44C4000E72E4D /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
+				1887C41F2A5F1A8600739695 /* XCRemoteSwiftPackageReference "CommandLineTool" */,
 				18722E6329A1A4E200539542 /* XCRemoteSwiftPackageReference "QRGen" */,
 			);
 			productRefGroup = 182F7F3428A176C800E72E4D /* Products */;
@@ -168,7 +165,6 @@
 				18FB9AAD29771644006FC433 /* Command.Content.swift in Sources */,
 				18FB9AB829772114006FC433 /* ExpressibleByArgument.swift in Sources */,
 				18FB9AAF29771DE9006FC433 /* Command.swift in Sources */,
-				182F7F3E28A1770F00E72E4D /* CommandLineUtils.swift in Sources */,
 				18FB9AAB29771433006FC433 /* Command.Code.swift in Sources */,
 				18FB9AB429772014006FC433 /* Command.Content.Event.swift in Sources */,
 			);
@@ -337,12 +333,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		182F7F4928A44C4000E72E4D /* XCRemoteSwiftPackageReference "swift-argument-parser" */ = {
+		1887C41F2A5F1A8600739695 /* XCRemoteSwiftPackageReference "CommandLineTool" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/YourMJK/swift-argument-parser";
+			repositoryURL = "https://github.com/YourMJK/CommandLineTool";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
 			};
 		};
 		18722E6329A1A4E200539542 /* XCRemoteSwiftPackageReference "QRGen" */ = {
@@ -356,10 +352,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		182F7F4A28A44C4000E72E4D /* ArgumentParser */ = {
+		1887C4202A5F1A8600739695 /* CommandLineTool */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 182F7F4928A44C4000E72E4D /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
-			productName = ArgumentParser;
+			package = 1887C41F2A5F1A8600739695 /* XCRemoteSwiftPackageReference "CommandLineTool" */;
+			productName = CommandLineTool;
 		};
 		18722E6429A1A4E200539542 /* QRGen */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CommandLineTool
 import ArgumentParser
 
 
@@ -13,7 +14,7 @@ import ArgumentParser
 struct Command: ParsableCommand {
 	static var configuration: CommandConfiguration {
 		CommandConfiguration(
-			commandName: ProgramName,
+			commandName: executableName,
 			subcommands: [Code.self, Content.self],
 			//defaultSubcommand: Code.self,
 			alwaysCompactUsageOptions: true

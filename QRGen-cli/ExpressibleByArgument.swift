@@ -10,9 +10,6 @@ import ArgumentParser
 import QRGen
 
 
-typealias ArgumentEnum = ExpressibleByArgument & CaseIterable
-
-
 extension Date: ExpressibleByArgument {
 	public init?(argument: String) {
 		guard let date = ISO8601DateFormatter().date(from: argument) else { return nil }
