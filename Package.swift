@@ -10,7 +10,7 @@ let package = Package(
 	],
 	dependencies: [
 		.package(url: "https://github.com/YourMJK/swift-argument-parser", branch: "main"),
-		.package(url: "https://github.com/YourMJK/QRGen", branch: "master"),
+		.package(url: "https://github.com/YourMJK/QRGen", from: "1.0.0"),
 	],
 	targets: [
 		.executableTarget(
