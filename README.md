@@ -53,6 +53,7 @@ GENERAL OPTIONS:
                                         touching shapes. This may result in anti-aliasing
                                         artifacts (thin lines) between neighboring pixels when
                                         viewing the SVG!
+  --version                             Show the version.
   -h, --help                            Show help information.
 
 EXAMPLES:
@@ -67,6 +68,7 @@ OVERVIEW:  Generate different kinds of content for a QR code.
 USAGE:  QRGen content <subcommand>
 
 GENERAL OPTIONS:
+  --version               Show the version.
   -h, --help              Show help information.
 
 SUBCOMMANDS:

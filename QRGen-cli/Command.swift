@@ -15,6 +15,7 @@ struct Command: ParsableCommand {
 	static var configuration: CommandConfiguration {
 		CommandConfiguration(
 			commandName: executableName,
+			version: "1.3.3",
 			subcommands: [Code.self, Content.self],
 			//defaultSubcommand: Code.self,
 			alwaysCompactUsageOptions: true
