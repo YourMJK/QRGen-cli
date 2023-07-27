@@ -338,7 +338,7 @@
 			repositoryURL = "https://github.com/YourMJK/CommandLineTool";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				minimumVersion = 1.1.0;
 			};
 		};
 		18722E6329A1A4E200539542 /* XCRemoteSwiftPackageReference "QRGen" */ = {

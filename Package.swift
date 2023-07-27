@@ -9,7 +9,7 @@ let package = Package(
 		.executable(name: "QRGen-cli", targets: ["QRGen-cli"]),
 	],
 	dependencies: [
-		.package(url: "https://github.com/YourMJK/CommandLineTool", from: "1.0.0"),
+		.package(url: "https://github.com/YourMJK/CommandLineTool", from: "1.1.0"),
 		.package(url: "https://github.com/YourMJK/QRGen", from: "1.0.0"),
 	],
 	targets: [
