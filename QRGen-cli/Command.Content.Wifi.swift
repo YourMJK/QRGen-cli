@@ -27,7 +27,7 @@ extension Command.Content {
 		var ssid: String
 		@Argument(help: ArgumentHelp("The password of the WiFi network."))
 		var password: String?
-		@Argument(help: ArgumentHelp("The encryption method used by the WiFi network. (values: \(QRContent.WifiEncryption.allCases.map(\.rawValue).joined(separator: " | ")))"))
+		@Argument(help: ArgumentHelp("The encryption method used by the WiFi network. (values: \(QRContent.WifiEncryption.allCasesRegexString))"))
 		var encryption: QRContent.WifiEncryption = .wpa
 		
 		func run() throws {

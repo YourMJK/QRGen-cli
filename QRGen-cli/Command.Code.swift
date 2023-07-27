@@ -115,7 +115,7 @@ extension Command {
 		@OptionGroup
 		var generalOptions: GeneralOptions
 		
-		@Argument(help: ArgumentHelp("The type of input used in the <input> argument. (values: \(InputType.allCases.map(\.rawValue).joined(separator: " | ")))", valueName: "input type"))
+		@Argument(help: ArgumentHelp("The type of input used in the <input> argument. (values: \(InputType.allCasesRegexString))", valueName: "input type"))
 		var inputType: InputType
 		
 		@Argument(help: ArgumentHelp("The input used to build the QR code's data. For input type \"\(InputType.text)\" specify a string, for \"\(InputType.textFile)\" and \"\(InputType.bytes)\" a file path or \"-\" for stdin.", valueName: "input"))
