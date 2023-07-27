@@ -79,20 +79,35 @@ SUBCOMMANDS:
   See 'QRGen help content <subcommand>' for detailed help.
 ```
 
-## Prerequisites
+## Download compiled binaries
 
-The Swift toolchain version 5.5 or higher needs to be installed.  
-- For macOS either [download Xcode from the AppStore](https://apps.apple.com/us/app/xcode/id497799835) or run `xcode-select --install` to just get the Command Line Tools. Swift 5.5 requires at least Xcode 13 and macOS 11.3 Big Sur.
-- For Linux [download Swift from swift.org](https://www.swift.org/download/) for your distro and follow the installation guide further down the page.
+Instead of building the tool yourself, you can download a compiled binary for macOS and Linux from the [**latest&nbsp;release**](https://github.com/YourMJK/pwgen/releases/latest).
 
+The Linux binaries are statically linked with the Swift stdlib and thus no installation of Swift is required.  
 On Linux, the `--coreimage` and `--png` options are removed due to Apple's `CoreImage` framework being unavailable.
 
-## How to build
+## Build prerequisites
 
-- **Variant 1**:  
-Run `make` to build the Swift Package.
-- **Variant 2** (macOS only):  
+To build the package, the Swift toolchain version 5.5 or higher needs to be installed.
+- For macOS either [download Xcode from the AppStore](https://apps.apple.com/us/app/xcode/id497799835) or run `xcode-select --install` to just get the Command Line Tools.  
+Swift 5.5 requires at least Xcode 13 and macOS 11.3 Big Sur.
+- For Linux [download Swift from swift.org](https://www.swift.org/download/) for your distro and follow the installation guide further down the page.
+
+## Build with `make`
+
+Build the Swift Package and copy executable to `bin/`:
+```
+$ make
+```
+Automatically install executable into `/usr/local/bin/`:
+```
+$ make install
+```
+
+## Build with Xcode (macOS only):  
 Open the Xcode project and go to *Product > Build* (⌘B).
 
-After using one of these two variants to build the binary, you can either run it directly from `build/QRGen` or install it to your PATH location, e.g.:  
-`$ cp build/QRGen /usr/local/bin/`
+After that, either run it directly from `bin/pwgen` or install it to your PATH location by manually copying it, e.g.:
+```
+$ cp bin/QRGen /usr/local/bin/
+```
